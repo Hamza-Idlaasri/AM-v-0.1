@@ -5071,14 +5071,17 @@ input[type=button].btn-block {
 
 .badge {
     display: inline-block;
-    padding: 0.25em 0.4em;
-    font-size: 75%;
+    /* padding: 0.25em 0.4em; */
+    /* font-size: 75%; */
+    /* margin: 2px; */
+    padding: 5px 8px;
     font-weight: 700;
     line-height: 1;
     text-align: center;
     white-space: nowrap;
     vertical-align: baseline;
-    border-radius: 0.25rem;
+    /* border-radius: 0.25rem; */
+    border-radius: 5px;
     transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
@@ -5145,6 +5148,11 @@ a.badge-secondary.focus {
 .badge-success {
     color: #fff;
     background-color: #38c172;
+}
+
+.badge-unknown {
+    color: #fff;
+    background-color: rgb(151, 4, 230);
 }
 
 a.badge-success:hover,

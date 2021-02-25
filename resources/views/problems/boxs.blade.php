@@ -3,29 +3,26 @@
 @section('content')
 
 <div class="container">
-   
-    @include('inc.searchbar',['route' => 'monitoring.hosts'])
+
+    @include('inc.searchbar',['route' => 'problems.boxs'])
 
     <table class="table table-striped table-bordered table-hover">
         <tr class="bg-primary text-light text-center">
-            <th>Host</th>
+            <th>Box</th>
             <th>Adresse IP</th>
             <th>Status</th>
             <th>Dernier verification</th>
             <th>Description</th>
         </tr>
-    
-        @forelse ($hosts as $host)
+
+        @forelse ($boxs_problems as $boxs_problem)
 
             <tr>
-                <td>{{$host->display_name}}</td>
-                <td>{{$host->address}}</td>
+                <td>{{$boxs_problem->display_name}}</td>
+                <td>{{$boxs_problem->address}}</td>
                 
-                @switch($host->current_state)
+                @switch($boxs_problem->current_state)
                 
-                    @case(0)
-                        <td><span class="badge badge-success">Up</span></td>
-                        @break
 
                     @case(1)
                         <td><span class="badge badge-danger">Down</span></td>
@@ -39,10 +36,10 @@
                         
                 @endswitch
                 
-                <td>{{$host->last_check}}</td>
-                <td class="description">{{$host->output}}</td>
+                <td>{{$boxs_problem->last_check}}</td>
+                <td class="description">{{$boxs_problem->output}}</td>
             </tr>
-        
+    
 
         @empty
 
@@ -51,9 +48,10 @@
             </tr>
 
         @endforelse
+
     </table>
 
-    {{$hosts->appends(['search' => request()->query('search')])->links('vendor.pagination.bootstrap-4')}}
+    {{$boxs_problems->appends(['search' => request()->query('search')])->links('vendor.pagination.bootstrap-4')}}
 
 </div>
 

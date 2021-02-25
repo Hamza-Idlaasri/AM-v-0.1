@@ -3,26 +3,26 @@
 @section('content')
 
 <div class="container">
-   
-    @include('inc.searchbar',['route' => 'monitoring.hosts'])
+
+    @include('inc.searchbar',['route' => 'historic.boxs'])
 
     <table class="table table-striped table-bordered table-hover">
         <tr class="bg-primary text-light text-center">
-            <th>Host</th>
+            <th>Box</th>
             <th>Adresse IP</th>
             <th>Status</th>
             <th>Dernier verification</th>
             <th>Description</th>
         </tr>
     
-        @forelse ($hosts as $host)
+        @forelse ($boxs_history as $box_history)
 
             <tr>
-                <td>{{$host->display_name}}</td>
-                <td>{{$host->address}}</td>
+                <td>{{$box_history->display_name}}</td>
+                <td>{{$box_history->address}}</td>
                 
-                @switch($host->current_state)
-                
+                @switch($box_history->state)
+                    
                     @case(0)
                         <td><span class="badge badge-success">Up</span></td>
                         @break
@@ -34,15 +34,15 @@
                     @case(2)
                         <td><span class="badge badge-unknown">Ureachable</span></td>
                         @break
-
+                    
                     @default
                         
                 @endswitch
                 
-                <td>{{$host->last_check}}</td>
-                <td class="description">{{$host->output}}</td>
+                <td>{{$box_history->state_time}}</td>
+                <td class="description">{{$box_history->output}}</td>
             </tr>
-        
+
 
         @empty
 
@@ -51,10 +51,12 @@
             </tr>
 
         @endforelse
-    </table>
 
-    {{$hosts->appends(['search' => request()->query('search')])->links('vendor.pagination.bootstrap-4')}}
+    </table>
+    
+    {{$boxs_history->appends(['search' => request()->query('search')])->links('vendor.pagination.bootstrap-4')}}
 
 </div>
+
 
 @endsection

@@ -4,40 +4,30 @@
 
 <div class="container">
 
-    @include('inc.searchbar',['route' => 'monitoring.equipements'])
+    @include('inc.searchbar',['route' => 'historic.services'])
 
     <table class="table table-striped table-bordered table-hover">
 
-        <tr class="bg-primary text-light text-center">
-
-            <th>Box</th>
-            <th>Equipement</th>
+        <tr  class="bg-primary text-light text-center">
+            <th>Host</th>
+            <th>Service</th>
             <th>Status</th>
             <th>Dernier verification</th>
             <th>Description</th>
         </tr>
     
-        <?php $check = 0 ?>
 
-        @forelse ($equipements as $equipement)
+        @forelse ($services_history as $service_history)
 
-
-        <tr>
-           
-            @if ($check == 0 || $equipement->host_object_id != $check)
-
-                <td>{{$equipement->host_name}}</td> 
-
-                <?php $check = $equipement->host_object_id ?>
+        
+        <tr>        
                
-            @else
-                <td></td>
-            @endif
+            <td>{{$service_history->host_name}}</td> 
+
+            <td>{{$service_history->service_name}}</td>
             
-            <td>{{$equipement->service_name}}</td>
-            
-            @switch($equipement->current_state)
-             
+            @switch($service_history->state)
+                
                 @case(0)
                     <td><span class="badge badge-success">Ok</span></td>
                     @break
@@ -54,9 +44,8 @@
                     
             @endswitch
             
-            <td>{{$equipement->last_check}}</td>
-            <td class="description">{{$equipement->output}}</td>
-
+            <td>{{$service_history->state_time}}</td>
+            <td class="description">{{$service_history->output}}</td>
         </tr>
  
         @empty
@@ -65,11 +54,11 @@
                 <td colspan="5">No result found <strong>{{ request()->query('search') }}</strong></td>
             </tr>
 
-        @endforelse     
-
+        @endforelse
+        
     </table>
 
-    {{$equipements->appends(['search' => request()->query('search')])->links('vendor.pagination.bootstrap-4')}}
+    {{$services_history->appends(['search' => request()->query('search')])->links('vendor.pagination.bootstrap-4')}}
 
 </div>
 

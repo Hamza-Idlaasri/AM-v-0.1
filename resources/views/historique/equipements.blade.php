@@ -4,11 +4,11 @@
 
 <div class="container">
 
-    @include('inc.searchbar',['route' => 'monitoring.equipements'])
+    @include('inc.searchbar',['route' => 'historic.equipements'])
 
     <table class="table table-striped table-bordered table-hover">
 
-        <tr class="bg-primary text-light text-center">
+        <tr  class="bg-primary text-light text-center">
 
             <th>Box</th>
             <th>Equipement</th>
@@ -16,28 +16,19 @@
             <th>Dernier verification</th>
             <th>Description</th>
         </tr>
+
     
-        <?php $check = 0 ?>
-
-        @forelse ($equipements as $equipement)
-
+    
+        @forelse ($equipements_history as $equipement_history)
 
         <tr>
-           
-            @if ($check == 0 || $equipement->host_object_id != $check)
+   
+            <td>{{$equipement_history->host_name}}</td> 
 
-                <td>{{$equipement->host_name}}</td> 
+            <td>{{$equipement_history->service_name}}</td>
+            
+            @switch($equipement_history->state)
 
-                <?php $check = $equipement->host_object_id ?>
-               
-            @else
-                <td></td>
-            @endif
-            
-            <td>{{$equipement->service_name}}</td>
-            
-            @switch($equipement->current_state)
-             
                 @case(0)
                     <td><span class="badge badge-success">Ok</span></td>
                     @break
@@ -54,9 +45,8 @@
                     
             @endswitch
             
-            <td>{{$equipement->last_check}}</td>
-            <td class="description">{{$equipement->output}}</td>
-
+            <td>{{$equipement_history->state_time}}</td>
+            <td class="description">{{$equipement_history->output}}</td>
         </tr>
  
         @empty
@@ -65,11 +55,11 @@
                 <td colspan="5">No result found <strong>{{ request()->query('search') }}</strong></td>
             </tr>
 
-        @endforelse     
-
+        @endforelse
+        
     </table>
 
-    {{$equipements->appends(['search' => request()->query('search')])->links('vendor.pagination.bootstrap-4')}}
+    {{$equipements_history->appends(['search' => request()->query('search')])->links('vendor.pagination.bootstrap-4')}}
 
 </div>
 

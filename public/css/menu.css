@@ -7,8 +7,7 @@ body {
     font-family: Verdana, Arial, Helvetica, sans-serif;
     font-size: 0.7em;
     color: #000;
-    /* background: #ededed url(../../images/interface/menu_body.gif) top left repeat-y; */
-    background-color: turquoise;
+    background-color: white;
 }
 
 img {
@@ -49,7 +48,7 @@ ul {
 
 #menu ul li a:first-child {
     padding-left: 12px;
-    background: url(../../images/interface/menu_li1.gif) 0 0.4em no-repeat;
+    /* background: url(../../images/interface/menu_li1.gif) 0 0.4em no-repeat; */
 }
 
 #menu ul li a:link,
@@ -123,6 +122,12 @@ a {
     transition: all 0.4s ease-out;
 }
 
+.dropdownlink:hover {
+    background-color: rgb(221, 221, 221);
+    border-left: 3px solid rgb(0, 119, 255);
+    transition-duration: .2s;
+}
+
 .dropdownlink .fa-chevron-down {
     right: 12px;
     left: auto;
@@ -155,4 +160,74 @@ a {
     /* background-color: rgba(236, 236, 236, 0.699); */
     background-color: rgba(0, 119, 255, 0.171);
     text-decoration: none;
+}
+
+
+/*********** Toggle **********/
+
+.toggle-on {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+}
+
+.tg-btn-on {
+    outline: none;
+    border: 0;
+    padding: 10px;
+    background-color: transparent;
+    color: #777777;
+    font-size: 16px;
+}
+
+.tg-btn-on:focus {
+    outline: none;
+}
+
+.tg-btn-on:hover {
+    color: rgb(0, 119, 255);
+}
+
+.toggle-off {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    visibility: hidden;
+}
+
+.tg-btn-off {
+    padding: 5px 10px;
+    border-radius: 2px;
+    box-shadow: 0px 0px 5px grey;
+    outline: none;
+    border: 0;
+    background-color: rgb(236, 235, 235);
+    color: #777777;
+}
+
+.tg-btn-off:focus {
+    outline: none;
+}
+
+.tg-btn-off:hover {
+    background-color: rgb(221, 221, 221);
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+.dropdownlink b {
+    margin-left: 20px;
+}
+
+
+/*********** overview *********/
+
+#overview {
+    text-decoration: none;
+}
+
+#overview div {
+    color: rgb(0, 119, 255);
 }

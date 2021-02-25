@@ -3,26 +3,26 @@
 @section('content')
 
 <div class="container">
-   
-    @include('inc.searchbar',['route' => 'monitoring.hosts'])
+
+
 
     <table class="table table-striped table-bordered table-hover">
         <tr class="bg-primary text-light text-center">
-            <th>Host</th>
+            <th>Box</th>
             <th>Adresse IP</th>
             <th>Status</th>
             <th>Dernier verification</th>
             <th>Description</th>
         </tr>
     
-        @forelse ($hosts as $host)
+        @forelse ($boxs_statistic as $box_statistic)
 
             <tr>
-                <td>{{$host->display_name}}</td>
-                <td>{{$host->address}}</td>
+                <td>{{$box_statistic->display_name}}</td>
+                <td>{{$box_statistic->address}}</td>
                 
-                @switch($host->current_state)
-                
+                @switch($box_statistic->state)
+                    
                     @case(0)
                         <td><span class="badge badge-success">Up</span></td>
                         @break
@@ -34,27 +34,29 @@
                     @case(2)
                         <td><span class="badge badge-unknown">Ureachable</span></td>
                         @break
-
+                    
                     @default
                         
                 @endswitch
                 
-                <td>{{$host->last_check}}</td>
-                <td class="description">{{$host->output}}</td>
+                <td>{{$box_statistic->state_time}}</td>
+                <td class="description">{{$box_statistic->output}}</td>
             </tr>
-        
+
 
         @empty
 
             <tr>
-                <td colspan="5">No result found <strong>{{ request()->query('search') }}</strong></td>
+                <td colspan="5">No result found </td>
             </tr>
 
         @endforelse
-    </table>
 
-    {{$hosts->appends(['search' => request()->query('search')])->links('vendor.pagination.bootstrap-4')}}
+    </table>
+    
+    
 
 </div>
+
 
 @endsection

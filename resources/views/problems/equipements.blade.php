@@ -4,11 +4,11 @@
 
 <div class="container">
 
-    @include('inc.searchbar',['route' => 'monitoring.equipements'])
+    @include('inc.searchbar',['route' => 'problems.equipements'])
 
     <table class="table table-striped table-bordered table-hover">
 
-        <tr class="bg-primary text-light text-center">
+        <tr  class="bg-primary text-light text-center">
 
             <th>Box</th>
             <th>Equipement</th>
@@ -16,31 +16,28 @@
             <th>Dernier verification</th>
             <th>Description</th>
         </tr>
+
+        <?php $check_box = 0 ?>
     
-        <?php $check = 0 ?>
-
-        @forelse ($equipements as $equipement)
-
+        @forelse ($equipement_problems as $equipement_problem)
 
         <tr>
-           
-            @if ($check == 0 || $equipement->host_object_id != $check)
 
-                <td>{{$equipement->host_name}}</td> 
+            @if ($check_box == 0 || $equipement_problem->host_object_id != $check_box)
 
-                <?php $check = $equipement->host_object_id ?>
-               
+    
+                <td>{{$equipement_problem->host_name}}</td> 
+            
+                <?php $check_box = $equipement_problem->host_object_id ?>
+                
             @else
                 <td></td>
             @endif
+
+            <td>{{$equipement_problem->service_name}}</td>
             
-            <td>{{$equipement->service_name}}</td>
-            
-            @switch($equipement->current_state)
-             
-                @case(0)
-                    <td><span class="badge badge-success">Ok</span></td>
-                    @break
+            @switch($equipement_problem->current_state)
+        
                 @case(1)
                     <td><span class="badge badge-warning">Warning</span></td>
                     @break
@@ -54,22 +51,22 @@
                     
             @endswitch
             
-            <td>{{$equipement->last_check}}</td>
-            <td class="description">{{$equipement->output}}</td>
-
+            <td>{{$equipement_problem->last_check}}</td>
+            <td class="description">{{$equipement_problem->output}}</td>
         </tr>
- 
+    
         @empty
 
             <tr>
                 <td colspan="5">No result found <strong>{{ request()->query('search') }}</strong></td>
             </tr>
 
-        @endforelse     
+        @endforelse
 
     </table>
 
-    {{$equipements->appends(['search' => request()->query('search')])->links('vendor.pagination.bootstrap-4')}}
+   
+    {{$equipement_problems->appends(['search' => request()->query('search')])->links('vendor.pagination.bootstrap-4')}}
 
 </div>
 

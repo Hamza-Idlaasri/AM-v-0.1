@@ -3,6 +3,9 @@
 @section('content')
 
 <div class="container">
+
+    @include('inc.searchbar',['route' => 'monitoring.boxs'])
+
     <table class="table table-striped table-bordered table-hover">
         <tr class="bg-primary text-light text-center">
             <th>Box</th>
@@ -12,34 +15,45 @@
             <th>Description</th>
         </tr>
     
-        @foreach ($boxs as $box)
+        @forelse ($boxs as $box)
 
-        @if ($box->alias == 'box')
             <tr>
                 <td>{{$box->display_name}}</td>
                 <td>{{$box->address}}</td>
                 
                 @switch($box->current_state)
+                
                     @case(0)
-                        <td class="bg-success">Up</td>
+                        <td><span class="badge badge-success">Up</span></td>
                         @break
+
                     @case(1)
-                        <td class="bg-danger">Down</td>
+                        <td><span class="badge badge-danger">Down</span></td>
                         @break
+                        
                     @case(2)
-                        <td style="background-color: violet">Ureachable</td>
+                        <td><span class="badge badge-unknown">Ureachable</span></td>
                         @break
+                    
                     @default
                         
                 @endswitch
                 
                 <td>{{$box->last_check}}</td>
-                <td>{{$box->output}}</td>
+                <td class="description">{{$box->output}}</td>
             </tr>
-        @endif
+        
+        @empty
 
-        @endforeach
+            <tr>
+                <td colspan="5">No result found <strong>{{ request()->query('search') }}</strong></td>
+            </tr>
+
+        @endforelse
+
     </table>
+
+    {{$boxs->appends(['search' => request()->query('search')])->links('vendor.pagination.bootstrap-4')}}
 </div>
 
 @endsection

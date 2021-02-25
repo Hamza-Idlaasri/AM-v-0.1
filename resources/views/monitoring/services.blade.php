@@ -2,8 +2,14 @@
 
 @section('content')
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 <div class="container">
+
+    @include('inc.searchbar',['route' => 'monitoring.services'])
+
     <table class="table table-striped table-bordered table-hover">
+
         <tr  class="bg-primary text-light text-center">
             <th>Host</th>
             <th>Service</th>
@@ -13,60 +19,62 @@
         </tr>
 
         <?php $check = 0 ?>
+
         
-        @foreach ($services as $service)        
-        
-        @if ($service->alias == 'host')
+        @forelse ($services as $service)        
         
         <tr>
 
-            @if ($check == 0 || $service->host_object_id != $check)
+            @if ($check == 0 || $service->host_object_id != $check)       
+                
+                    <td>{{$service->host_name}}</td> 
 
-                @for ($i=0; $i < sizeof($hosts); $i++) 
-                    
-                @if($service->host_object_id == $hosts[$i]->host_object_id)
-                    <td>{{$hosts[$i]->display_name}}</td> 
                     <?php $check = $service->host_object_id ?>
-                @endif
-
-                @endfor
+                
             @else
                 <td></td>
             @endif
             
 
 
-            <td>{{$service->display_name}}</td>
+            <td>{{$service->service_name}}</td>
             
             @switch($service->current_state)
                 @case(0)
-                    <td class="bg-success">Ok</td>
+                    <td><span class="badge badge-success">Ok</span></td>
                     @break
                 @case(1)
-                    <td class="bg-warning">Warning</td>
+                    <td><span class="badge badge-warning">Warning</span></td>
                     @break
                 @case(2)
-                    <td class="bg-danger">Critical</td>
+                    <td><span class="badge badge-danger">Critical</span></td>
                     @break
                 @case(3)
-                    <td style="background-color: violet">Ureachable</td>
+                    <td><span class="badge badge-unknown">Ureachable</span></td>
                     @break
                 @default
                     
             @endswitch
             
             <td>{{$service->last_check}}</td>
-            <td>{{$service->output}}</td>
+            <td class="description">{{$service->output}}</td>
         </tr>
- 
-        @endif
             
 
-        @endforeach
+        @empty
 
+            <tr>
+                <td colspan="5">No result found <strong>{{ request()->query('search') }}</strong></td>
+            </tr>
+
+        @endforelse
 
         
     </table>
+
+    
+    {{$services->appends(['search' => request()->query('search')])->links('vendor.pagination.bootstrap-4')}}
+
 </div>
 
 
