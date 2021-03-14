@@ -180,3 +180,16 @@ table img {
     left: -20px;
     z-index: 0;
 }
+
+
+/******** Top Bar *******/
+
+.usertools i {
+    width: 20px;
+    color: rgb(0, 151, 211);
+}
+
+.usertools i:hover {
+    color: grey;
+    transition: .5s;
+}

@@ -6,7 +6,7 @@
     
     @include('inc.searchbar',['route' => 'problems.hosts'])
 
-    <table class="table table-striped table-bordered table-hover">
+    <table class="table table-striped table-bordered">
         <tr class="bg-primary text-light text-center">
             <th>Host</th>
             <th>Adresse IP</th>
@@ -18,7 +18,14 @@
         @forelse ($host_problems as $host_problem)
 
             <tr>
-                <td>{{$host_problem->display_name}}</td>
+                <td>
+                    <a href="/problems/boxs/{{$host_problem->host_id}}">{{$host_problem->display_name}}</a>
+                    
+                    @if ($host_problem->is_flapping)
+                        <span class="float-right text-danger" title="This Host is flapping"><i class="fas fa-retweet"></i></span>
+                    @endif
+                </td>
+                
                 <td>{{$host_problem->address}}</td>
                 
                 @switch($host_problem->current_state)

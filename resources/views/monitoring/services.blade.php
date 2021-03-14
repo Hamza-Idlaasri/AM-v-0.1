@@ -8,7 +8,7 @@
 
     @include('inc.searchbar',['route' => 'monitoring.services'])
 
-    <table class="table table-striped table-bordered table-hover">
+    <table class="table table-striped table-bordered">
 
         <tr  class="bg-primary text-light text-center">
             <th>Host</th>
@@ -27,7 +27,7 @@
 
             @if ($check == 0 || $service->host_object_id != $check)       
                 
-                    <td>{{$service->host_name}}</td> 
+                    <td><a href="/monitoring/hosts/{{$service->host_id}}">{{$service->host_name}}</a></td> 
 
                     <?php $check = $service->host_object_id ?>
                 
@@ -37,7 +37,7 @@
             
 
 
-            <td>{{$service->service_name}}</td>
+            <td><a href="/monitoring/services/{{$service->service_id}}">{{$service->service_name}}</a></td>
             
             @switch($service->current_state)
                 @case(0)

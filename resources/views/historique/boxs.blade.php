@@ -3,10 +3,27 @@
 @section('content')
 
 <div class="container">
+    <!-- Search bar -->
+    {{-- <div class="float-right">
+        @include('inc.searchbar',['route' => 'historic.boxs'])
+    </div> --}}
+    
+    {{-- Filter --}}
+    <div class="float-right text-primary">
+        @include('inc.filter',['names' => $boxs_name,'route' => 'historic.boxs','type' => 'Box'])
+    </div>
 
-    @include('inc.searchbar',['route' => 'historic.boxs'])
+    <!-- Download button -->
+    <div class="float-left">
+        @include('inc.download')
+    </div>
 
-    <table class="table table-striped table-bordered table-hover">
+</div>
+
+<div class="container">
+    
+
+    <table class="table table-striped table-bordered">
         <tr class="bg-primary text-light text-center">
             <th>Box</th>
             <th>Adresse IP</th>
@@ -47,14 +64,14 @@
         @empty
 
             <tr>
-                <td colspan="5">No result found <strong>{{ request()->query('search') }}</strong></td>
+                <td colspan="5">No result found</td>
             </tr>
 
         @endforelse
 
     </table>
     
-    {{$boxs_history->appends(['search' => request()->query('search')])->links('vendor.pagination.bootstrap-4')}}
+    {{$boxs_history->appends(['status' => request()->query('status'),'from' => request()->query('from'),'to' => request()->query('to'),'name' => request()->query('name')])->links('vendor.pagination.bootstrap-4')}}
 
 </div>
 

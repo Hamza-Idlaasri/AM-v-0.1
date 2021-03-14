@@ -6,7 +6,7 @@
    
     @include('inc.searchbar',['route' => 'monitoring.hosts'])
 
-    <table class="table table-striped table-bordered table-hover">
+    <table class="table table-striped table-bordered">
         <tr class="bg-primary text-light text-center">
             <th>Host</th>
             <th>Adresse IP</th>
@@ -15,10 +15,18 @@
             <th>Description</th>
         </tr>
     
+        
         @forelse ($hosts as $host)
 
             <tr>
-                <td>{{$host->display_name}}</td>
+                <td>
+                    <a href="/monitoring/hosts/{{$host->host_id}}">{{$host->display_name}}</a> 
+
+                    @if ($host->is_flapping)
+                        <span class="float-right text-danger" title="This Host is flapping"><i class="fas fa-retweet"></i></span>
+                    @endif
+                    
+                </td>
                 <td>{{$host->address}}</td>
                 
                 @switch($host->current_state)

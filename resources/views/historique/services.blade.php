@@ -3,10 +3,26 @@
 @section('content')
 
 <div class="container">
+    <!-- Search bar -->
+    {{-- <div class="float-right">
+        @include('inc.searchbar',['route' => 'historic.services'])
+    </div> --}}
+    
+    <!-- Filter -->
+    <div class="float-right text-primary">
+        @include('inc.filter',['names' => $services_name ,'route' => 'historic.services','type' => 'Service'])
+    </div>
 
-    @include('inc.searchbar',['route' => 'historic.services'])
+    <!-- Download button -->
+    <div class="float-left">
+        @include('inc.download')
+    </div>
 
-    <table class="table table-striped table-bordered table-hover">
+</div>
+
+<div class="container">    
+
+    <table class="table table-striped table-bordered">
 
         <tr  class="bg-primary text-light text-center">
             <th>Host</th>
@@ -51,14 +67,14 @@
         @empty
 
             <tr>
-                <td colspan="5">No result found <strong>{{ request()->query('search') }}</strong></td>
+                <td colspan="5">No result found</td>
             </tr>
 
         @endforelse
         
     </table>
 
-    {{$services_history->appends(['search' => request()->query('search')])->links('vendor.pagination.bootstrap-4')}}
+    {{$services_history->appends(['status' => request()->query('status'),'from' => request()->query('from'),'to' => request()->query('to'),'name' => request()->query('name')])->links('vendor.pagination.bootstrap-4')}}
 
 </div>
 

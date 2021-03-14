@@ -8,6 +8,11 @@ use Illuminate\Support\Facades\DB;
 
 class ServicesController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth']);
+    }
+    
     public function show()
     {
 
@@ -15,22 +20,13 @@ class ServicesController extends Controller
 
         if($search)
         {
-            $services = DB::table('nagios_hosts')
+            $services = $this->getServices()
             ->where('nagios_hosts.display_name','like', '%'.$search.'%')
-            ->join('nagios_services','nagios_hosts.host_object_id','=','nagios_services.host_object_id')
-            ->join('nagios_servicestatus','nagios_services.service_object_id','=','nagios_servicestatus.service_object_id')
-            ->where('alias','host')
-            ->select('nagios_hosts.display_name as host_name','nagios_hosts.*','nagios_services.display_name as service_name','nagios_services.*','nagios_servicestatus.*')
             ->paginate(10);
 
         } else {
 
-            $services = DB::table('nagios_hosts')
-            ->join('nagios_services','nagios_hosts.host_object_id','=','nagios_services.host_object_id')
-            ->join('nagios_servicestatus','nagios_services.service_object_id','=','nagios_servicestatus.service_object_id')
-            ->where('alias','host')
-            ->select('nagios_hosts.display_name as host_name','nagios_hosts.*','nagios_services.display_name as service_name','nagios_services.*','nagios_servicestatus.*')
-            ->paginate(10);
+            $services = $this->getServices()->paginate(10);
         }
        
         
@@ -44,23 +40,15 @@ class ServicesController extends Controller
 
         if($search)
         {
-            $service_problems = DB::table('nagios_hosts')
-            ->where('alias','host')
+            $service_problems = $this->getServcies()
             ->where('nagios_hosts.display_name','like', '%'.$search.'%')
-            ->join('nagios_services','nagios_hosts.host_object_id','=','nagios_services.host_object_id')
-            ->join('nagios_servicestatus','nagios_services.service_object_id','=','nagios_servicestatus.service_object_id')
             ->where('current_state','<>','0')
-            ->select('nagios_hosts.display_name as host_name','nagios_hosts.*','nagios_services.display_name as service_name','nagios_services.*','nagios_servicestatus.*')
             ->paginate(10);
 
         } else {
 
-            $service_problems = DB::table('nagios_hosts')
-            ->where('alias','host')
-            ->join('nagios_services','nagios_hosts.host_object_id','=','nagios_services.host_object_id')
-            ->join('nagios_servicestatus','nagios_services.service_object_id','=','nagios_servicestatus.service_object_id')
+            $service_problems = $this->getServices()
             ->where('current_state','<>','0')
-            ->select('nagios_hosts.display_name as host_name','nagios_hosts.*','nagios_services.display_name as service_name','nagios_services.*','nagios_servicestatus.*')
             ->paginate(10);
 
         }
@@ -73,29 +61,74 @@ class ServicesController extends Controller
     public function historic()
     {
         $search = request()->query('search');
+        $status = request()->query('status');
+        $name = request()->query('name');
+        $dateFrom = request()->query('from');
+        $dateTo = request()->query('to');
 
-        if($search)
+        if($status || $name || $dateFrom || $dateTo)
         {
+            $services_history = $this->getServicesHistory();
 
-            $services_history = DB::table('nagios_hosts')
-            ->where('alias','host')
-            ->where('nagios_hosts.display_name','like', '%'.$search.'%')
-            ->join('nagios_services','nagios_hosts.host_object_id','=','nagios_services.host_object_id')
-            ->join('nagios_statehistory','nagios_services.service_object_id','=','nagios_statehistory.object_id')
-            ->select('nagios_hosts.display_name as host_name','nagios_hosts.*','nagios_services.display_name as service_name','nagios_services.*','nagios_statehistory.*')
-            ->paginate(10);
+            if($name)
+            {
+                $services_history = $services_history->where('nagios_services.display_name', $name);
+            }
 
-        }else{
+            if($dateFrom || $dateTo)
+            {
+                if(!$dateFrom)
+                {
+                    $dateFrom = json_encode(DB::table('nagios_statehistory')->select('state_time')->first(),true);
 
-            $services_history = DB::table('nagios_hosts')
-            ->where('alias','host')
-            ->join('nagios_services','nagios_hosts.host_object_id','=','nagios_services.host_object_id')
-            ->join('nagios_statehistory','nagios_services.service_object_id','=','nagios_statehistory.object_id')
-            ->select('nagios_hosts.display_name as host_name','nagios_hosts.*','nagios_services.display_name as service_name','nagios_services.*','nagios_statehistory.*')
-            ->paginate(10);
+                }
+
+
+                if(!$dateTo)
+                    $dateTo = date('Y-m-d');
+
+                $services_history = $services_history
+                    ->where('nagios_statehistory.state_time','>=', $dateFrom)
+                    ->where('nagios_statehistory.state_time','<=', $dateTo);
+            }
+
+            if($status)
+            {
+                switch ($status) {
+                    case 'ok':
+                        $services_history = $services_history->where('state','0');
+                        break;
+                    
+                    case 'warning':
+                        $services_history = $services_history->where('state','1');
+                        break;
+                    
+                    case 'critical':
+                        $services_history = $services_history->where('state','2');
+                        break;
+                    
+                    case 'unreachable':
+                        $services_history = $services_history->where('state','3');
+                        break;
+                    
+                }
+            }
+
+            $services_history = $services_history->paginate(10);
+
+        } else{
+
+            $services_history = $this->getServicesHistory()->paginate(10);
+
         }
         
-        return view('historique.services',compact('services_history'));
+        $services_name = DB::table('nagios_hosts')
+            ->where('alias','host')
+            ->join('nagios_services','nagios_hosts.host_object_id','=','nagios_services.host_object_id')
+            ->select('nagios_services.display_name')
+            ->get();
+            
+        return view('historique.services',compact('services_history','services_name'));
 
     }
 
@@ -216,4 +249,49 @@ class ServicesController extends Controller
         return view('statistique.services',compact('Piechart','Barchart'));
     }
 
+    public function details($service_id)
+    {
+        $details = $this->getServices()
+        ->where('service_id','=',$service_id)
+        ->get();
+
+        return view('details.serviceORequip',compact('details'));
+    }
+
+    public function getServicesHistory()
+    {
+        return DB::table('nagios_hosts')
+            ->where('alias','host')
+            ->join('nagios_services','nagios_hosts.host_object_id','=','nagios_services.host_object_id')
+            ->join('nagios_statehistory','nagios_services.service_object_id','=','nagios_statehistory.object_id')
+            ->select('nagios_hosts.display_name as host_name','nagios_hosts.*','nagios_services.display_name as service_name','nagios_services.*','nagios_statehistory.*')
+            ->orderByDesc('state_time');
+    }
+
+    public function getServices()
+    {
+        return DB::table('nagios_hosts')
+            ->where('alias','host')
+            ->join('nagios_services','nagios_hosts.host_object_id','=','nagios_services.host_object_id')
+            ->join('nagios_servicestatus','nagios_services.service_object_id','=','nagios_servicestatus.service_object_id')
+            ->select('nagios_hosts.display_name as host_name','nagios_hosts.*','nagios_services.display_name as service_name','nagios_services.*','nagios_servicestatus.*');
+    }
+
+    public function index()
+    {
+        $search = request()->query('search');
+
+        if ($search) {
+            $services = $this->getServices()->where('nagios_hosts.display_name','like','%'.$search.'%')->paginate(10);
+        } else {
+            $services = $this->getServices()->paginate(10);
+        }
+    
+        return view('config.services', compact('services'));
+    }
+
+    public function delete($service_id)
+    {
+        dd($service_id);
+    }
 }

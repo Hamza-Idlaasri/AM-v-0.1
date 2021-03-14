@@ -18,13 +18,13 @@
         </div>
         <ul class="submenuItems">
             <li>
-                <a href="/monitoring/hosts"><img src="{{asset('images/interface/Hosts.png')}}" alt=""> Hosts</a>
+                <a href="/monitoring/hosts"><i class="fas fa-desktop"></i> Hosts</a>
             </li>
             <li>
                 <a href="/monitoring/services" ><i class="fas fa-cog"></i> Services</a>
             </li>
             <li>
-                <a href="/monitoring/boxs"><img src="{{asset('images/interface/Boxs.png')}}" alt=""> Boxs</a>
+                <a href="/monitoring/boxs"><i class="fas fa-microchip"></i> Boxs</a>
             </li>
             <li>
                 <a href="/monitoring/equipements"><img src="{{asset('images/interface/Equipement.png')}}" alt=""> Equipements</a>
@@ -40,51 +40,64 @@
         </div>
         <ul class="submenuItems">
             <li>
-                <a href="/problems/hosts"><img src="{{asset('images/interface/Hosts.png')}}" alt=""> Hosts</a>
+                <a href="/problems/hosts"><i class="fas fa-desktop"></i> Hosts</a>
             </li>
             <li>
                 <a href="/problems/services" ><i class="fas fa-cog"></i> Services</a>
             </li>
             <li>
-                <a href="/problems/boxs"><img src="{{asset('images/interface/Boxs.png')}}" alt=""> Boxs</a>
+                <a href="/problems/boxs"><i class="fas fa-microchip"></i> Boxs</a>
             </li>
             <li>
                 <a href="/problems/equipements"><img src="{{asset('images/interface/Equipement.png')}}" alt=""> Equipements</a>
             </li>
         </ul>
     </li>
+
+    @if (auth()->user()->hasRole('agent'))
+
     <li onclick="droped()">
-        <div class="dropdownlink"><i class="fas fa-tools"></i><b> Configuration</b>
-            
+        <div class="dropdownlink">
+            <i class="fas fa-tools"></i><b> Configuration</b>
         </div>
+        
         <ul class="submenuItems">
+            
             <li>
-                <a href="#"><i class="fal fa-sitemap"></i> HostGroups</a>
+                <a href="/configuration/hosts"><i class="fas fa-desktop"></i> Hosts</a>
             </li>
             <li>
-                <a href="#"><img src="{{asset('images/interface/Hosts.png')}}" alt=""> Hosts</a>
+                <a href="/configuration/services"><i class="fas fa-cog"></i> Services</a>
             </li>
             <li>
-                <a href="#"><i class="fas fa-cog"></i> Services</a>
+                <a href="/configuration/boxs"><i class="fas fa-microchip"></i> Boxs</a>
             </li>
             <li>
-                <a href="#"><img src="{{asset('images/interface/sites.png')}}" alt=""> Sites</a>
-            </li>
-            <li><a href="#">Lieux</a></li>
-            <li>
-                <a href="#"><img src="{{asset('images/interface/equipgroup.png')}}" alt=""> EquipGroups</a>
-            </li>
-            <li>
-                <a href="#"><img src="{{asset('images/interface/Equipement.png')}}" alt=""> Equipements</a>
-            </li>
-            <li>
-                <a href="#"><img src="{{asset('images/interface/Boxs.png')}}" alt=""> Boxs</a>
+                <a href="/configuration/equipements"><img src="{{asset('images/interface/Equipement.png')}}" alt=""> Equipements</a>
             </li>
             <li>
                 <a href="#"><img src="{{asset('images/interface/pins.png')}}" alt=""> Pins</a>
             </li>
+            
             <li>
-                <a href="#"><i class="fas fa-users"></i> Users</a>
+                <a href="#"><i class="fal fa-sitemap"></i> HostGroups</a>
+            </li>
+            <li>
+                <a href="#">{{--<img src="{{asset('images/interface/servicegroup.png')}}" alt="">--}}
+                   <i class="fas fa-cogs"></i> ServiceGroups</a> 
+            </li>
+            <li>
+                <a href="#"><img src="{{asset('images/interface/equipgroup.png')}}" alt=""> EquipGroups</a>
+            </li>
+
+            <li>
+                <a href="#">{{--<img src="{{asset('images/interface/sites.png')}}" alt=""> --}}
+                    <i class="fas fa-building"></i> Sites</a>
+            </li>
+            <li><a href="#">Lieux</a></li>
+            
+            <li>
+                <a href="/configuration/users"><i class="fas fa-users"></i> Users</a>
             </li>
             <li>
                 <a href="#"><img src="{{asset('images/interface/Problemes.png')}}" alt=""> Alarmes</a>
@@ -95,18 +108,19 @@
             <li>
                 <a href="#"><img src="{{asset('images/interface/notif.png')}}" alt=""> Notifications</a>
             </li>
-            <li>
-                <a href="#"><img src="{{asset('images/interface/servicegroup.png')}}" alt=""> ServiceGroups</a>
-            </li>
+            
         </ul>
     </li>
+
+    @endif
+    
     <li onclick="droped()">
         <div class="dropdownlink"><i class="far fa-chart-bar"></i><b> Statistiques</b>
             
         </div>
         <ul class="submenuItems">
             <li>
-                <a href="/statistiques/hosts"><img src="{{asset('images/interface/Hosts.png')}}" alt=""> Hosts</a>
+                <a href="/statistiques/hosts"><i class="fas fa-desktop"></i> Hosts</a>
             </li>
             <li>
                 <a href="/statistiques/services"><i class="fas fa-cog"></i> Services</a>
@@ -141,13 +155,13 @@
         </div>
         <ul class="submenuItems">
             <li>
-                <a href="/historiques/hosts"><img src="{{asset('images/interface/Hosts.png')}}" alt=""> Hosts</a>
+                <a href="/historiques/hosts"><i class="fas fa-desktop"></i> Hosts</a>
             </li>
             <li>
                 <a href="/historiques/services"><i class="fas fa-cog"></i> Services</a>
             </li>
             <li>
-                <a href="/historiques/boxs"><img src="{{asset('images/interface/Boxs.png')}}" alt=""> Boxs</a>
+                <a href="/historiques/boxs"><i class="fas fa-microchip"></i> Boxs</a>
             </li>
             <li>
                 <a href="/historiques/equipements"><img src="{{asset('images/interface/Equipement.png')}}" alt=""> Equipements</a>

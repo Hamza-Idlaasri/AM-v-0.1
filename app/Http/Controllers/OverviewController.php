@@ -7,6 +7,11 @@ use Illuminate\Support\Facades\DB;
 
 class OverviewController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth']);
+    }
+    
     public function overview()
     {
         $hosts_summary = DB::table('nagios_hoststatus')

@@ -6,7 +6,7 @@
 
     @include('inc.searchbar',['route' => 'problems.services'])
 
-    <table class="table table-striped table-bordered table-hover">
+    <table class="table table-striped table-bordered">
 
         <tr  class="bg-primary text-light text-center">
             <th>Host</th>
@@ -24,7 +24,7 @@
 
             @if ($check_host == 0 || $service_problem->host_object_id != $check_host)
        
-                <td>{{$service_problem->host_name}}</td> 
+                <td><a href="/problems/hosts/{{$service_problem->host_id}}">{{$service_problem->host_name}}</a></td> 
 
                 <?php $check_host = $service_problem->host_object_id ?>
               
@@ -32,7 +32,7 @@
                 <td></td>
             @endif
 
-            <td>{{$service_problem->service_name}}</td>
+            <td><a href="/problems/services/{{$service_problem->service_id}}">{{$service_problem->service_name}}</a></td>
             
             @switch($service_problem->current_state)
         

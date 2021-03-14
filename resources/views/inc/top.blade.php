@@ -15,14 +15,14 @@
             
             <!-- Username -->
 
-            <td colspan="3" class="text-primary">user name</td>
+            <td colspan="3" class="text-primary font-weight-bold">{{ auth()->user()->name }}</td>
 
             <td></td>
             
             <!-- Hosts summary -->
 
             <td title="Hosts">
-                <img src="{{asset('images/interface/Hosts.png')}}" alt="" >
+                <i class="fas fa-desktop text-muted"></i>
             </td>
             
             <td title="total des hosts : {{ $total_hosts }}">
@@ -76,18 +76,23 @@
         <tr>
 
             <!-- User profile -->
-            <td title="User Profile">
-                <img src="{{asset('images/interface/user.png')}}" alt="" style="width: auto">
+            <td title="User Profile" class="usertools">
+                <a href="/user/profile"><i class="fas fa-user fa-lg"></i></a>
             </td>
 
             <!-- Edit password -->
-            <td title="Modify Password">
-                <img src="{{asset('images/interface/key.png')}}" alt="" style="width: auto">
+            <td title="Modify Password" class="usertools">
+                <a href="/user/edit-password"><i class="fas fa-key fa-lg"></i></a>
             </td>
 
             <!-- Logout -->
             <td title="Logout">
-                <img src="{{asset('images/interface/power-button.png')}}" alt="" style="width: auto">
+                <form action="{{ route('logout') }}" method="post">
+                    @csrf
+                    <button type="submit" style="border:0;outline: none" class="usertools">
+                        <i class="fas fa-power-off fa-lg"></i>
+                    </button>
+                </form>
             </td>
 
             <td></td>
@@ -96,7 +101,7 @@
             <!-- Services summary -->
 
             <td title="Services">
-                <img src="{{asset('images/interface/settings-(1).png')}}" alt="services">
+                <i class="fas fa-cog fa-lg text-muted"></i>
             </td>
 
             <td title="total des services : {{ $total_services }}">

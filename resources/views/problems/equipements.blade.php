@@ -6,7 +6,7 @@
 
     @include('inc.searchbar',['route' => 'problems.equipements'])
 
-    <table class="table table-striped table-bordered table-hover">
+    <table class="table table-striped table-bordered">
 
         <tr  class="bg-primary text-light text-center">
 
@@ -26,7 +26,7 @@
             @if ($check_box == 0 || $equipement_problem->host_object_id != $check_box)
 
     
-                <td>{{$equipement_problem->host_name}}</td> 
+                <td><a href="/problems/boxs/{{$equipement_problem->host_id}}">{{$equipement_problem->host_name}}</a></td> 
             
                 <?php $check_box = $equipement_problem->host_object_id ?>
                 
@@ -34,7 +34,7 @@
                 <td></td>
             @endif
 
-            <td>{{$equipement_problem->service_name}}</td>
+            <td><a href="/problems/equipements/{{$equipement_problem->service_id}}">{{$equipement_problem->service_name}}</a></td>
             
             @switch($equipement_problem->current_state)
         
