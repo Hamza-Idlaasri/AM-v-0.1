@@ -6,15 +6,17 @@
    
     @include('inc.searchbar',['route' => 'monitoring.hosts'])
 
-    <table class="table table-striped table-bordered">
-        <tr class="bg-primary text-light text-center">
-            <th>Host</th>
-            <th>Adresse IP</th>
-            <th>Status</th>
-            <th>Dernier verification</th>
-            <th>Description</th>
-        </tr>
-    
+    <table class="table table-bordered">
+        
+        <thead class="thead-light text-center">
+            <tr>
+                <th>Host</th>
+                <th>Adresse IP</th>
+                <th>Status</th>
+                <th>Dernier verification</th>
+                <th>Description</th>
+            </tr>
+        </thead>
         
         @forelse ($hosts as $host)
 
@@ -59,6 +61,7 @@
             </tr>
 
         @endforelse
+
     </table>
 
     {{$hosts->appends(['search' => request()->query('search')])->links('vendor.pagination.bootstrap-4')}}

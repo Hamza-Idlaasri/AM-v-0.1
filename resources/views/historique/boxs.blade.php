@@ -10,7 +10,7 @@
     
     {{-- Filter --}}
     <div class="float-right text-primary">
-        @include('inc.filter',['names' => $boxs_name,'route' => 'historic.boxs','type' => 'Box'])
+        @include('inc.filter',['names' => $boxs_name,'route' => 'historic.boxs','type' => 'Box','from' => 'historic'])
     </div>
 
     <!-- Download button -->

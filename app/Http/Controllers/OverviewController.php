@@ -144,7 +144,7 @@ class OverviewController extends Controller
             [
                 
                 'backgroundColor' => ['#6ccf01', 'crimson', '#C200FF'],
-                'hoverBackgroundColor' => ['#519b01', 'red', 'rgb(151, 4, 230)'],
+                // 'hoverBackgroundColor' => ['#519b01', 'red', 'rgb(151, 4, 230)'],
                 'data' => [$hosts_up, $hosts_down, $hosts_unreachable],
                 
             ]
@@ -182,7 +182,7 @@ class OverviewController extends Controller
             [
                 
                 'backgroundColor' => ['#6ccf01', 'yellow', 'crimson', '#C200FF'],
-                'hoverBackgroundColor' => ['#519b01', 'rgb(255, 208, 0)', 'red', 'rgb(151, 4, 230)'],
+                // 'hoverBackgroundColor' => ['#519b01', 'rgb(255, 208, 0)', 'red', 'rgb(151, 4, 230)'],
                 'data' => [$equipements_ok, $equipements_warning, $equipements_critical, $equipements_unknown],
                 
             ]
@@ -221,7 +221,7 @@ class OverviewController extends Controller
             [
                 
                 'backgroundColor' => ['#6ccf01', 'yellow', 'crimson', '#C200FF'],
-                'hoverBackgroundColor' => ['#519b01', 'rgb(255, 208, 0)', 'red', 'rgb(151, 4, 230)'],
+                // 'hoverBackgroundColor' => ['#519b01', 'rgb(255, 208, 0)', 'red', 'rgb(151, 4, 230)'],
                 'data' => [$services_ok, $services_warning, $services_critical, $services_unknown],
                 
             ]
@@ -259,7 +259,7 @@ class OverviewController extends Controller
             [
                 
                 'backgroundColor' => ['#6ccf01', 'yellow', 'crimson', '#C200FF'],
-                'hoverBackgroundColor' => ['#519b01', 'rgb(255, 208, 0)', 'red', 'rgb(151, 4, 230)'],
+                // 'hoverBackgroundColor' => ['#519b01', 'rgb(255, 208, 0)', 'red', 'rgb(151, 4, 230)'],
                 'data' => [0,0 , 0, 0],
                 
             ]

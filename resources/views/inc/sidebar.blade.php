@@ -33,8 +33,7 @@
         </ul>
     </li>
     <li onclick="droped()">
-        <div class="dropdownlink"><img src="{{asset('images/interface/Problemes.png')}}" alt="">
-            <b style="margin: 0"> Problémes</b>
+        <div class="dropdownlink"><i class="fas fa-exclamation-triangle"></i><b> Problémes</b>
             
             
         </div>
@@ -94,7 +93,7 @@
                 <a href="#">{{--<img src="{{asset('images/interface/sites.png')}}" alt=""> --}}
                     <i class="fas fa-building"></i> Sites</a>
             </li>
-            <li><a href="#">Lieux</a></li>
+            <li><a href="#"><i class="fas fa-map-marker-alt"></i> Lieux</a></li>
             
             <li>
                 <a href="/configuration/users"><i class="fas fa-users"></i> Users</a>
@@ -115,7 +114,7 @@
     @endif
     
     <li onclick="droped()">
-        <div class="dropdownlink"><i class="far fa-chart-bar"></i><b> Statistiques</b>
+        <div class="dropdownlink"><i class="fas fa-chart-bar"></i><b> Statistiques</b>
             
         </div>
         <ul class="submenuItems">
@@ -136,13 +135,13 @@
         </div>
         <ul class="submenuItems">
             <li>
-                <a href="/cartes/automap"><img src="{{asset('images/interface/automap.png')}}" alt=""> AutoMap</a>
+                <a href="/cartes/automap"><i class="fas fa-chart-network"></i> AutoMap</a>
             </li>
             <li>
-                <a href="#"><img src="{{asset('images/interface/automap.png')}}" alt=""> AutoMap 2</a>
+                <a href="#"><i class="fas fa-chart-network"></i> AutoMap 2</a>
             </li>
             <li>
-                <a href="#"><img src="{{asset('images/interface/automap.png')}}" alt=""> AutoMap 3</a>
+                <a href="#"><i class="fas fa-chart-network"></i> AutoMap 3</a>
             </li>
             <li>
                 <a href="/cartes/carte"><i class="far fa-map"></i> Cartes</a>

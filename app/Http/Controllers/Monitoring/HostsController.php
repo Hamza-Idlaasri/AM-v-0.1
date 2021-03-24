@@ -131,150 +131,91 @@ class HostsController extends Controller
         
         return view('historique.hosts',compact('hosts_history','hosts_name'));
     }
+
+    // Statistic
     
     public function statistic()
     {
-        $hosts = DB::table('nagios_hosts')
-            ->where('alias','host')
-            ->join('nagios_hoststatus','nagios_hosts.host_object_id','=','nagios_hoststatus.host_object_id')
-            ->get();
+                
+        $name = request()->query('name');
+        $dateFrom = request()->query('from');
+        $dateTo = request()->query('to');
+
+        $all_hosts_names = $this->getHostsName()->get();
+
+        $last_24_h = date('Y-m-d', strtotime('-1 day'));
+        $last_week = date('Y-m-d', strtotime('-1 week'));
+        $last_month = date('Y-m-d', strtotime('-1 month'));
+        $last_year = date('Y-m-d', strtotime('-1 year'));
 
         $hosts_up = 0;
         $hosts_down = 0;
         $hosts_unreachable = 0;
 
-        foreach ($hosts as $host) {        
-    
-            
-                switch ($host->current_state) {
-                    case 0:
-                        $hosts_up++;
-                        break;
-                        
-                    case 1:
-                        $hosts_down++;
-                        break;
-                        
-                    case 2:
-                        $hosts_unreachable++;
-                        break;
-                    default:
-                            
-                        break;
-                }
-        
-                 
-        
+        $hosts_name = $this->getHostsName();
+
+        if($name)
+        {
+            $hosts_name = $hosts_name->where('display_name',$name);
         }
 
-        $Piechart = app()->chartjs
-        ->name('hosts')
-        ->type('pie')
-        ->size(['width' => 400, 'height' => 200])
-        ->labels(['Up', 'Down', 'Unreachable'])
-        ->datasets([
-            [
-             
-                'backgroundColor' => ['#6ccf01', 'crimson', '#C200FF'],
-                'hoverBackgroundColor' => ['#519b01', 'red', 'rgb(151, 4, 230)'],
-                'data' => [$hosts_up, $hosts_down, $hosts_unreachable],
-             
-            ]
-        ])
-        ->options([
-            // 'title'=> [
-            //     'display' => true,
-            //     'text' => 'Porcentage des alarmes Host',
-            //     'position' => 'top',
-            // ],
-            'legend' => [
-                'position' => 'right',
-                'labels' => [
-                    'boxWidth' => 15,
-                ]
-            ],
-         
-                    'plugins' => [
-                'labels' => [
-                    'fontColor' => '#fff',
-                    'fontSize' => 13,
-                ]
-            ]
-         
-            ]);
 
+        $hosts_name = $hosts_name->get();
+       
+        $cas = [];
+        $hosts_status = [];
+        $range = [];
 
-        // Barchart : 
+        foreach ($hosts_name as $host) {
 
-        $Barchart = app()->chartjs
-         ->name('barChartTest')
-         ->type('bar')
-         ->size(['width' => 400, 'height' => 200])
-         ->labels(['Up','Down','Unreachable'])
-         ->datasets([
-             [
-                //  "label" => ['dataset'],
-                'backgroundColor' => ['#6ccf01','crimson','#C200FF'],
-                'data' => [$hosts_up, $hosts_down, $hosts_unreachable],
-              
-             ],
-          
-         ])
-         ->options([
-            'responsive'=> true,
-            'scales'=> [
-                'yAxes'=> [[
-                    'ticks'=> [
-                        'beginAtZero'=> true,
-                        'stepSize'=> 1,
-                        // 'max' => 4,
-                    ]
-                ]],
-                'xAxes'=> [[
-                    'barPercentage'=> 0.4
-                ]]
-            ],
+            $hosts_checks = $this->getHostsChecks()
+                ->where('nagios_hostchecks.host_object_id','=',$host->host_object_id);
 
-         
-         ]);
+            if($dateFrom || $dateTo)
+            {
+                if(!$dateFrom)
+                {
+                    $dateFrom = "2000-01-01";
+                }
 
-        // Line chart
+                if(!$dateTo)
+                    $dateTo = date('Y-m-d');
 
-        $lineChart = app()->chartjs
-        ->name('lineChartTest')
-        ->type('line')
-        ->size(['width' => 400, 'height' => 120])
-        ->labels(['January', 'February', 'March', 'April', 'May', 'June', 'July'])
-        ->datasets([
-            [
-                "label" => "My First dataset",
-                // 'backgroundColor' => "rgba(38, 185, 154, 0.31)",
-                'borderColor' => "rgba(38, 185, 154, 0.7)",
-                "pointBorderColor" => "rgba(38, 185, 154, 0.7)",
-                "pointBackgroundColor" => "rgba(38, 185, 154, 0.7)",
-                "pointHoverBackgroundColor" => "#fff",
-                "pointHoverBorderColor" => "rgba(220,220,220,1)",
-                'data' => [0,1,2,3,1,0,2],
-                'lineTension' => 0,
-                
-            ],
-            [
-                "label" => "My Second dataset",
-                // 'backgroundColor' => "rgba(38, 185, 154, 0.31)",
-                'borderColor' => "rgba(38, 185, 154, 0.7)",
-                "pointBorderColor" => "rgba(38, 185, 154, 0.7)",
-                "pointBackgroundColor" => "rgba(38, 185, 154, 0.7)",
-                "pointHoverBackgroundColor" => "#fff",
-                "pointHoverBorderColor" => "rgba(220,220,220,1)",
-                'data' => [1, 3, 4, 4, 5, 2, 0],
-                'lineTension' => 0,
-                
-            ]
-        ])
-        ->options([]);
+                $hosts_checks = $hosts_checks
+                    ->where('nagios_hostchecks.start_time','>=',$dateFrom)
+                    ->where('nagios_hostchecks.end_time','<=',$dateTo);
 
-        return view('statistique.hosts',compact('Piechart','Barchart'));
+            }
+
+            $hosts_checks = $hosts_checks->get();
+
+            foreach ($hosts_checks as $host_checks) {
+                array_push($cas,$host_checks->state);
+                array_push($range,$host_checks->end_time);
+            }
+
+            
+            if(sizeof($cas) == 0)
+            {
+                $case = 'No data found';
+                return view('statistique.hosts', compact('all_hosts_names','case','cas'));
+
+            } else
+                array_push($hosts_status,$this->getStatus($cas, $host->display_name));
+           
+        }
+
+        foreach ($hosts_status as $status) {
+            
+            $hosts_up += $status->up;
+            $hosts_down += $status->down;
+            $hosts_unreachable += $status->unreachable;
+        }
+        
+
+        return view('statistique.hosts', compact('all_hosts_names','cas','range','hosts_up','hosts_down','hosts_unreachable'));
     }
+
 
     public function details($host_id)
     {
@@ -284,31 +225,6 @@ class HostsController extends Controller
         
         return view('details.hostORbox',compact('details'));
         
-    }
-
-    public function getHostsHistory()
-    {
-        return DB::table('nagios_hosts')
-            ->where('alias','host')
-            ->join('nagios_statehistory','nagios_hosts.host_object_id','=','nagios_statehistory.object_id')
-            ->orderByDesc('state_time');
-    }
-
-    public function getHosts()
-    {
-        return DB::table('nagios_hosts')
-            ->where('alias','host')
-            ->join('nagios_hoststatus','nagios_hosts.host_object_id','=','nagios_hoststatus.host_object_id');
-    }
-
-    public function getServices()
-    {
-        return DB::table('nagios_hosts')
-            ->where('alias','host')
-            ->join('nagios_services','nagios_hosts.host_object_id','=','nagios_services.host_object_id')
-            ->join('nagios_servicestatus','nagios_services.service_object_id','=','nagios_servicestatus.service_object_id')
-            ->select('nagios_hosts.display_name as host_name','nagios_hosts.*','nagios_services.display_name as service_name','nagios_services.*','nagios_servicestatus.*')
-            ;
     }
 
     // Configuration :
@@ -350,4 +266,105 @@ class HostsController extends Controller
                 4: restart nagios by run this command line "service nagios restart"';
 
     }
+
+    /************************ Helpers ****************************/
+
+    public function getHostsHistory()
+    {
+        return DB::table('nagios_hosts')
+            ->where('alias','host')
+            ->join('nagios_statehistory','nagios_hosts.host_object_id','=','nagios_statehistory.object_id')
+            ->orderByDesc('state_time');
+    }
+
+    public function getHosts()
+    {
+        return DB::table('nagios_hosts')
+            ->where('alias','host')
+            ->join('nagios_hoststatus','nagios_hosts.host_object_id','=','nagios_hoststatus.host_object_id');
+    }
+
+    public function getServices()
+    {
+        return DB::table('nagios_hosts')
+            ->where('alias','host')
+            ->join('nagios_services','nagios_hosts.host_object_id','=','nagios_services.host_object_id')
+            ->join('nagios_servicestatus','nagios_services.service_object_id','=','nagios_servicestatus.service_object_id')
+            ->select('nagios_hosts.display_name as host_name','nagios_hosts.*','nagios_services.display_name as service_name','nagios_services.*','nagios_servicestatus.*');
+    }
+
+    public function getHostsChecks()
+    {
+
+        return DB::table('nagios_hostchecks')
+            ->select('nagios_hosts.display_name','nagios_hosts.alias','nagios_hosts.host_object_id','nagios_hostchecks.*')
+            ->join('nagios_hosts','nagios_hosts.host_object_id','=','nagios_hostchecks.host_object_id')
+            ->where('alias','host')
+            ->where('is_raw_check','=',0);
+        
+    }
+
+    public function getHostsName()
+    {
+        return DB::table('nagios_hosts')
+            ->where('alias','host')
+            ->select('nagios_hosts.display_name','nagios_hosts.host_object_id');
+    }
+
+    public function getStatus($cas, $name)
+    {
+        $hosts_up = 0;
+        $hosts_down = 0;
+        $hosts_unreachable = 0;
+        
+        for ($i=0; $i < sizeof($cas) ; $i++) { 
+
+            if (sizeof($cas) != $i+1) {
+            
+                if($cas[$i] == $cas[$i+1])
+                {
+                    continue;
+
+                } else {
+
+                    switch ($cas[$i]) {
+                        
+                        case 0:
+                            $hosts_up++;
+                            break;
+
+                        case 1:
+                            $hosts_down++;
+                            break;
+
+                        case 2:
+                            $hosts_unreachable++;
+                            break;
+                        
+                    }
+                }
+            }
+        }
+
+        switch ($cas[sizeof($cas)-1]) {
+                        
+            case 0:
+                $hosts_up++;
+                break;
+
+            case 1:
+                $hosts_down++;
+                break;
+
+            case 2:
+                $hosts_unreachable++;
+                break;
+            
+        }
+
+
+        return (object)['host'=>$name,'up'=>$hosts_up,'down'=>$hosts_down,'unreachable'=>$hosts_unreachable];
+        
+    }
+
 }

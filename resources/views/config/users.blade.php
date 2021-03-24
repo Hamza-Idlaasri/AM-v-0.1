@@ -9,6 +9,7 @@
     <table class="table table-bordered">
         <thead class="text-center text-primary">
             <tr>
+                <th>ID</th>
                 <th>Username</th>
                 <th>Email</th>
                 <th>User Type</th>
@@ -18,8 +19,10 @@
         </thead>
         
         @forelse ($users as $user)
-            
+            @if (auth()->user() != $user)
+
             <tr>
+                <td>{{ $user->id }}</td>
                 <td>{{ $user->name }}</td>
                 <td>{{ $user->email }}</td>
 
@@ -42,7 +45,7 @@
                             </div>
                         @else
                             <div class="float-left">
-                                <form action="{{ route('user.upgrade', $user->id) }}" method="post">
+                                <form action="{{ route('user.upgrade', $user->id) }}" method="get">
                                     <div class="check">
                                         <input type="checkbox" name="upgrade">
                                     </div>
@@ -63,6 +66,7 @@
                     
                 </td>
             </tr>
+            @endif
         @empty
             <tr>
                 <td>No result found</td>
@@ -71,6 +75,23 @@
         
 
     </table>
+    
+    {{-- <div class="bg-white shadow rounded w-25 p-2" id="d-popup">
+        <p>You are shoore </p>
+        <div class="d-inline">
+            <form action="{{ route('user.delete', $user->id) }}" method="post">
+                @csrf
+                @method('DELETE')
+                {{$user->id}}
+                <button type="submit" title="delete" class="btn btn-danger">Yes</button>
+            </form>
+        </div>
+
+        <div class="d-inline">
+            <button class="btn btn-light">No</button>
+        </div>
+    </div> --}}
+    
 </div>
 
 @endsection

@@ -10,7 +10,7 @@
     
     {{-- Filter --}}
     <div class="float-right text-primary">
-        @include('inc.filter',['names' => $equipements_name,'route' => 'historic.equipements','type' => 'Equipement'])
+        @include('inc.filter',['names' => $equipements_name,'route' => 'historic.equipements','type' => 'Equipement','from' => 'historic'])
     </div>
 
     <!-- Download button -->

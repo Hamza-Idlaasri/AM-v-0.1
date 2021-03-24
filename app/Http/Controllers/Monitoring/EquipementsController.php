@@ -137,130 +137,88 @@ class EquipementsController extends Controller
 
     public function statistic()
     {
-        $equipements = DB::table('nagios_hosts')
-            ->where('alias','box')
-            ->join('nagios_services','nagios_hosts.host_object_id','=','nagios_services.host_object_id')
-            ->join('nagios_servicestatus','nagios_services.service_object_id','=','nagios_servicestatus.service_object_id')
-            ->get();
+        // dd($this->getServicesName()->get());
+
+        $name = request()->query('name');
+        $dateFrom = request()->query('from');
+        $dateTo = request()->query('to');
+
+        $all_equips_names = $this->getEquipsName()->get();
         
-        $equipements_ok = 0;
-        $equipements_warning = 0;
-        $equipements_critical = 0;
-        $equipements_unknown = 0;
+        // $last_24_h = date('Y-m-d', strtotime('-1 day'));
+        // $last_week = date('Y-m-d', strtotime('-1 week'));
+        // $last_month = date('Y-m-d', strtotime('-1 month'));
+        // $last_year = date('Y-m-d', strtotime('-1 year'));
 
-        foreach ($equipements as $equipement) {
-            
-            // Servcies :
-            
-                switch ($equipement->current_state) {
-                    case 0:
-                        $equipements_ok++;
-                        break;
-                    
-                    case 1:
-                        $equipements_warning++;
-                        break;
-                    
-                    case 2:
-                        $equipements_critical++;
-                        break;
-                        
-                    case 3:
-                        $equipements_unknown++;
-                        break;
+        $equips_ok = 0;
+        $equips_warning = 0;
+        $equips_critical = 0;
+        $equips_unknown = 0;
 
-                    default:
-                        
-                        break;
+        $equips_name = $this->getEquipsName();
+
+        if($name)
+        {
+            $equips_name = $equips_name->where('nagios_services.display_name',$name);
+        }
+
+
+        $equips_name = $equips_name->get();
+       
+        $cas = [];
+        $equips_status = [];
+        $range = [];
+
+        foreach ($equips_name as $equip) {
+
+            $equips_checks = $this->getEquipsChecks()
+                ->where('nagios_servicechecks.service_object_id','=',$equip->service_object_id);
+
+            if($dateFrom || $dateTo)
+            {
+                if(!$dateFrom)
+                {
+                    $dateFrom = "2000-01-01";
                 }
 
-            
-        };
+                if(!$dateTo)
+                    $dateTo = date('Y-m-d');
 
-        $Piechart = app()->chartjs
-        ->name('equipements')
-        ->type('pie')
-        ->size(['width' => 400, 'height' => 200])
-        ->labels(['Ok', 'Warning', 'Critical', 'Unknown'])
-        ->datasets([
-            [
-                
-                'backgroundColor' => ['#6ccf01', 'yellow', 'crimson', '#C200FF'],
-                'hoverBackgroundColor' => ['#519b01', 'rgb(255, 208, 0)', 'red', 'rgb(151, 4, 230)'],
-                'data' => [$equipements_ok, $equipements_warning, $equipements_critical, $equipements_unknown],
-                
-            ]
-        ])
-        ->options([
-            // 'title'=> [
-            //     'display' => true,
-            //     'text' => 'Porcentage des alarmes equipements',
-            //     'position' => 'top',
-            // ],
-            'legend' => [
-                'position' => 'right',
-                'labels' => [
-                    'boxWidth' => 15,
-                ]
-            ],
-            
-            
-            'plugins' => [
-                'labels' => [
-                    'fontColor' => ['#fff','#212529','#fff','#fff'],
-                    'fontSize' => 13,
-                ]
-            ],
+                $equips_checks = $equips_checks
+                    ->where('nagios_servicechecks.start_time','>=',$dateFrom)
+                    ->where('nagios_servicechecks.end_time','<=',$dateTo);
+
+            }
+
+            $equips_checks = $equips_checks->get();
+
+            foreach ($equips_checks as $equip_checks) {
+                array_push($cas,$equip_checks->state);
+                array_push($range,$equip_checks->end_time);
+            }
 
             
-                
-            
-        ]);
+            if(sizeof($cas) == 0)
+            {
+                $cas_is_empty = 'No data found';
+                return view('statistique.equipements', compact('all_equips_names','cas_is_empty','cas'));
 
-        // Barchart : 
+            } else
+                array_push($equips_status,$this->getStatus($cas, $equip->display_name));
+           
+        }
 
-        $Barchart = app()->chartjs
-        ->name('barChartTest')
-        ->type('bar')
-        ->size(['width' => 400, 'height' => 200])
-        ->labels(['Ok', 'Warning', 'Critical', 'Unknown'])
-        ->datasets([
-            [
-                //  "label" => ['dataset'],
-                'backgroundColor' => ['#6ccf01', 'yellow', 'crimson', '#C200FF'],
-                'data' =>  [$equipements_ok, $equipements_warning, $equipements_critical, $equipements_unknown],
+        foreach ($equips_status as $status) {
             
-            ],
+            $equips_ok += $status->ok;
+            $equips_warning += $status->warning;
+            $equips_critical += $status->critical;
+            $equips_unknown += $status->unknown;
+        }
         
-        ])
-        ->options([
-            'responsive'=> true,
-            'scales'=> [
-                'yAxes'=> [[
-                    'ticks'=> [
-                        'beginAtZero'=> true,
-                        'stepSize'=> 1,
-                        // 'max' => 4,
-                    ]
-                ]],
-                'xAxes'=> [[
-                    'barPercentage'=> 0.4
-                ]]
-            ],
 
-            'layouts'=>[
-                'padding'=> [
-                    'left'=> 0,
-                    'right'=> 0,
-                    'top'=> 30,
-                    'bottom'=> 0
-                ]
-            ]
-
-        
-        ]);
-
-        return view('statistique.equipements',compact('Piechart','Barchart'));
+        return view('statistique.equipements', compact('all_equips_names','cas','range','equips_ok','equips_warning','equips_critical','equips_unknown'));
+    
     }
 
     public function download()
@@ -289,6 +247,21 @@ class EquipementsController extends Controller
     
     }
 
+    public function index()
+    {
+        $search = request()->query('search');
+
+        if ($search) {
+            $equipements = $this->getEquipements()->where('nagios_hosts.display_name','like','%'.$search.'%')->paginate(10);
+        } else {
+            $equipements = $this->getEquipements()->paginate(10);
+        }
+        
+        
+
+        return view('config.equipements', compact('equipements'));
+    }
+
     public function getEquipHistory()
     {
         return DB::table('nagios_hosts')
@@ -308,18 +281,83 @@ class EquipementsController extends Controller
         ->select('nagios_hosts.display_name as host_name','nagios_hosts.*','nagios_services.display_name as service_name','nagios_services.*','nagios_servicestatus.*');
     }
 
-    public function index()
+    public function getEquipsName()
     {
-        $search = request()->query('search');
+        return DB::table('nagios_hosts')
+            ->where('alias','box')
+            ->join('nagios_services','nagios_hosts.host_object_id','=','nagios_services.host_object_id')
+            ->select('nagios_services.display_name','nagios_services.service_object_id');
+    }
 
-        if ($search) {
-            $equipements = $this->getEquipements()->where('nagios_hosts.display_name','like','%'.$search.'%')->paginate(10);
-        } else {
-            $equipements = $this->getEquipements()->paginate(10);
+    public function getEquipsChecks()
+    {
+        return DB::table('nagios_servicechecks')
+        ->select('nagios_hosts.alias','nagios_hosts.host_object_id','nagios_services.display_name','nagios_services.service_object_id','nagios_servicechecks.*')
+        ->join('nagios_services','nagios_services.service_object_id','=','nagios_servicechecks.service_object_id')
+        ->join('nagios_hosts','nagios_hosts.host_object_id','=','nagios_services.host_object_id')
+        ->where('alias','box');
+    }
+
+    public function getStatus($cas, $name)
+    {
+        $equips_ok = 0;
+        $equips_warning = 0;
+        $equips_critical = 0;
+        $equips_unknown = 0;
+        
+        for ($i=0; $i < sizeof($cas) ; $i++) { 
+
+            if (sizeof($cas) != $i+1) {
+            
+                if($cas[$i] == $cas[$i+1])
+                {
+                    continue;
+
+                } else {
+
+                    switch ($cas[$i]) {
+                        
+                        case 0:
+                            $equips_ok++;
+                            break;
+
+                        case 1:
+                            $equips_warning++;
+                            break;
+
+                        case 2:
+                            $equips_critical++;
+                            break;
+                        case 3:
+                            $equips_unknown++;
+                            break;
+                        
+                    }
+                }
+            }
         }
-        
-        
 
-        return view('config.equipements', compact('equipements'));
+        switch ($cas[sizeof($cas)-1]) {
+                        
+            case 0:
+                $equips_ok++;
+                break;
+
+            case 1:
+                $equips_warning++;
+                break;
+
+            case 2:
+                $equips_critical++;
+                break;
+            case 3:
+                $equips_unknown++;
+                break;
+            
+        }
+
+
+        return (object)['equip'=>$name,'ok'=>$equips_ok,'warning'=>$equips_warning,'critical'=>$equips_critical, 'unknown' => $equips_unknown];
+        
     }
 }

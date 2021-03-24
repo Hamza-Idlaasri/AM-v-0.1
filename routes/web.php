@@ -133,13 +133,13 @@ Route::prefix('configuration')->group(function () {
 Route::prefix('statistiques')->group(function () {
 
     /** Hosts */
-    Route::get('/hosts',[HostsController::class,'statistic']);
+    Route::get('/hosts',[HostsController::class,'statistic'])->name('statistic.hosts');
     /** Services */
-    Route::get('/services',[ServicesController::class,'statistic']);
+    Route::get('/services',[ServicesController::class,'statistic'])->name('statistic.services');
     /** Equipements */
-    Route::get('/equipements',[EquipementsController::class,'statistic']);
+    Route::get('/equipements',[EquipementsController::class,'statistic'])->name('statistic.equips');
     /** Boxs */
-    Route::get('/boxs',[BoxsController::class,'statistic']);
+    // Route::get('/boxs',[BoxsController::class,'statistic']);
 
 });
 

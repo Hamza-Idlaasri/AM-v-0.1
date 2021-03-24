@@ -126,15 +126,15 @@ class BoxsController extends Controller
         return view('historique.boxs',compact('boxs_history','boxs_name'));
     }
 
-    public function statistic()
-    {
-        $boxs_statistic = DB::table('nagios_hosts')
-        ->where('alias','box')
-        ->join('nagios_statehistory','nagios_hosts.host_object_id','=','nagios_statehistory.object_id')
-        ->get();
+    // public function statistic()
+    // {
+    //     $boxs_statistic = DB::table('nagios_hosts')
+    //     ->where('alias','box')
+    //     ->join('nagios_statehistory','nagios_hosts.host_object_id','=','nagios_statehistory.object_id')
+    //     ->get();
 
-        return view('example',compact('boxs_statistic'));
-    }
+    //     return view('example',compact('boxs_statistic'));
+    // }
 
     public function details($host_id)
     {
