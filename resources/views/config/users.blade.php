@@ -4,7 +4,7 @@
 
 <link rel="stylesheet" href="{{ asset('css/users.css') }}">
 
-<div class="container my-3">
+<div class="container my-3 back">
 
     <table class="table table-bordered">
         <thead class="text-center text-primary">
@@ -17,10 +17,10 @@
                 <th>Edit</th>
             </tr>    
         </thead>
-        
+        <?php $i=0?>
         @forelse ($users as $user)
             @if (auth()->user() != $user)
-
+            <?php $i++ ?>
             <tr>
                 <td>{{ $user->id }}</td>
                 <td>{{ $user->name }}</td>
@@ -45,21 +45,24 @@
                             </div>
                         @else
                             <div class="float-left">
-                                <form action="{{ route('user.upgrade', $user->id) }}" method="get">
-                                    <div class="check">
-                                        <input type="checkbox" name="upgrade">
-                                    </div>
-                                </form>
+                                <div class="check">
+                                    <input type="checkbox" name="upgrade[]" value="{{$user->id}}">
+                                </div>
                             </div>
                         @endif
                         
+                        {{-- Delete User --}}
+                        <button title="delete" class="btn text-danger" onclick="show({{$i}})"><i class="fas fa-trash"></i></button>
                         
-                        <div class="float-right">
-                            <form action="{{ route('user.delete', $user->id) }}" method="post">
+                        <div class="popup{{$i}} container p-3 bg-white shadow rounded pop" style="opacity:1">
+                            <h6><b>Are you sure?</b></h6>
+                            <p>Do you really you want to delete the user <b>"{{$user->name}}"</b> ?</p>
+                            <form action="{{ route('user.delete', $user->id) }}" method="post" class="d-inline">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" title="delete" class="btn text-danger"><i class="fas fa-trash"></i></button>
+                                <button type="submit" title="delete" class="btn btn-danger">Delete</button>
                             </form>
+                            <button type="submit" title="Cancel" class="btn btn-light border border-secondary d-inline" onclick="cancel({{$i}})">Cancel</button>
                         </div>
                         
                     </div>
@@ -76,22 +79,25 @@
 
     </table>
     
-    {{-- <div class="bg-white shadow rounded w-25 p-2" id="d-popup">
-        <p>You are shoore </p>
-        <div class="d-inline">
-            <form action="{{ route('user.delete', $user->id) }}" method="post">
-                @csrf
-                @method('DELETE')
-                {{$user->id}}
-                <button type="submit" title="delete" class="btn btn-danger">Yes</button>
-            </form>
-        </div>
-
-        <div class="d-inline">
-            <button class="btn btn-light">No</button>
-        </div>
-    </div> --}}
+    <form action="{{ route('user.upgrade') }}" method="post">
+        @csrf
+        <input type="checkbox" name="upgrade[]" value="1">
+        <input type="checkbox" name="upgrade[]" value="2">
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
     
 </div>
+
+<script>
+    
+show = (i) => {
+    document.querySelector('.popup'+i).style.display = 'block';
+}
+
+cancel = (i) => {
+    document.querySelector('.popup'+i).style.display = 'none';
+}
+
+</script>
 
 @endsection

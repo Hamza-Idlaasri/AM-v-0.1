@@ -1,21 +1,22 @@
+<link rel="stylesheet" type="text/css" href="{{ asset('css/app.css') }}" />
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/common.css') }}" />
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/app.css') }}" />
-</head>
-<body>
-    
-<div class="container">
+<style>
 
-    {{-- <table class="table table-striped table-bordered table-hover">
+body{
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
+}
 
-        <tr  class="bg-primary text-light text-center">
+@page{
+    margin: 10px 50px;
+    padding: 0;
+}
+
+</style>
+
+    <h4 class="text-center">Equipements History</h4>
+    <br>
+    <table class="table table-striped table-bordered table-hover text-center">
+        <tr class="bg-primary text-light">
 
             <th>Box</th>
             <th>Equipement</th>
@@ -26,7 +27,7 @@
 
     
     
-        @forelse ($equipements_history as $equipement_history)
+        @foreach ($equipements_history as $equipement_history)
 
         <tr>
    
@@ -55,24 +56,7 @@
             <td>{{$equipement_history->state_time}}</td>
             <td class="description">{{$equipement_history->output}}</td>
         </tr>
+        @endforeach
+    </table>
  
-        @empty
-
-            <tr>
-                <td colspan="5">No result found </td>
-            </tr>
-
-        @endforelse
-        
-    </table> --}}
-
-    <h1>Downloaded</h1>
-    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Rerum consequuntur a necessitatibus explicabo, dolor facilis nam incidunt quidem reprehenderit, iusto pariatur tempora? Rem itaque nesciunt ipsa, quos modi provident iusto!</p>
-</div>
-
-    
-
-</body>
-</html>
-    
 

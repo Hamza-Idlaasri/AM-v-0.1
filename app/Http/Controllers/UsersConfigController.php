@@ -37,11 +37,10 @@ class UsersConfigController extends Controller
 
     }
 
-    public function upgrade()
+    public function upgrade(Request $request)
     {
-        if( Request::input('upgrade') ){
-            return redirect()->route('overview');
-        }
+        $users = $request->input('upgarde');
+        dd($users);
     }
 
     

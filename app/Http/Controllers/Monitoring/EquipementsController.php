@@ -224,14 +224,10 @@ class EquipementsController extends Controller
     public function download()
     {
 
-        // $equipements_history = DB::table('nagios_hosts')
-        //     ->where('alias','box')
-        //     ->join('nagios_services','nagios_hosts.host_object_id','=','nagios_services.host_object_id')
-        //     ->join('nagios_statehistory','nagios_services.service_object_id','=','nagios_statehistory.object_id')
-        //     ->select('nagios_hosts.display_name as host_name','nagios_hosts.*','nagios_services.display_name as service_name','nagios_services.*','nagios_statehistory.*')
-        //     ->get();
+        $equipements_history = $this->getEquipHistory()->get();
         
-        $pdf = PDF::loadView('download');
+        $pdf = PDF::loadView('download.equips', compact('equipements_history'))->setPaper('a4', 'landscape');
+
         return $pdf->stream('equip.pdf');
         
     }

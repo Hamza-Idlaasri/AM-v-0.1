@@ -1,29 +1,21 @@
-@extends('layouts.app')
+<link rel="stylesheet" type="text/css" href="{{ asset('css/app.css') }}" />
 
-@section('content')
+<style>
 
-<div class="container">
-    <!-- Search bar -->
-    {{-- <div class="float-right">
-        @include('inc.searchbar',['route' => 'historic.hosts'])
-    </div> --}}
-    
-    {{-- Filter --}}
-    <div class="float-right text-primary">
-        @include('inc.filter',['names' => $hosts_name,'route' => 'historic.hosts','type' => 'Host','from' => 'historic'])
-    </div>
+body{
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
+}
 
-    <!-- Download button -->
-    <div class="float-left">
-        @include('inc.download', ['route' => 'hosts.pdf'])
-    </div>
+@page{
+    margin: 10px 50px;
+    padding: 0;
+}
 
-</div>
+</style>
 
-<div class="container back">
-
-
-    <table class="table table-striped table-bordered">
+    <h4 class="text-center">Hosts History</h4>
+    <br>
+    <table class="table table-striped table-bordered text-center">
         <tr class="bg-primary text-light text-center">
             <th>Host</th>
             <th>Adresse IP</th>
@@ -67,13 +59,5 @@
 
         @endforelse
     </table>
+ 
 
-    {{$hosts_history->appends(['status' => request()->query('status'),'from' => request()->query('from'),'to' => request()->query('to'),'name' => request()->query('name')])->links('vendor.pagination.bootstrap-4')}}
-
-</div>
-
-<script>
-    const back = document.querySelector('.back');
-</script>
-
-@endsection

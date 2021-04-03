@@ -2,7 +2,20 @@
 
 @section('content')
 
-<div class="container">
+<style>
+
+.popup{
+    display: none;
+    width: 350px;
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+</style>
+
+<div class="container back">
 
 <div class="container my-3">
     <div class="container w-50">
@@ -21,11 +34,7 @@
             
             <a href="{{ route('edit-info') }}" class="d-inline text-info p-2"><i class="fas fa-pen"></i></a>
             
-            <form action="{{ route('deleteMyAccount', $userProfile->id) }}" method="post" class="d-inline">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="btn text-danger"><i class="fas fa-trash"></i></button>
-            </form>
+            <button type="submit" class="btn text-danger remove"><i class="fas fa-trash"></i></button>
             
         </div>
     </div>
@@ -60,5 +69,36 @@
 </div>
 
 </div>
+
+<div class="container p-3 bg-white shadow rounded text-center popup">
+    <h6><b>Are you sure?</b></h6>
+    <P>Are you sure you want to delete your account? If you delete it there's no going back.</P>
+    <form action="{{ route('deleteMyAccount', $userProfile->id) }}" method="post" class="d-inline">
+        @csrf
+        @method('DELETE')
+        <button type="submit" class="btn btn-danger">Delete</button>
+    </form>
+
+    <button type="submit" class="btn btn-light border border-secondary d-inline cancel" >Cancel</button>
+</div>
+
+<script>
+
+const remove = document.querySelector('.remove');
+const cancel = document.querySelector('.cancel');
+const popup = document.querySelector('.popup');
+const back = document.querySelector('.back');
+
+remove.onclick = () => {
+    popup.style.display = 'block';
+    back.style.opacity = '.2';
+}
+
+cancel.onclick = () => {
+    popup.style.display = 'none';
+    back.style.opacity = '1';
+}
+
+</script>
 
 @endsection

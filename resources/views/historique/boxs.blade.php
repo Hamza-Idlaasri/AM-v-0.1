@@ -20,7 +20,7 @@
 
 </div>
 
-<div class="container">
+<div class="container back">
     
 
     <table class="table table-striped table-bordered">
@@ -75,5 +75,8 @@
 
 </div>
 
+<script>
+    const back = document.querySelector('.back');
+</script>
 
 @endsection

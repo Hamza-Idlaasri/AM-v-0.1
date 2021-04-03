@@ -138,7 +138,7 @@ class OverviewController extends Controller
         $hosts = app()->chartjs
         ->name('hosts')
         ->type('pie')
-        ->size(['width' => 400, 'height' => 200])
+        ->size(['width' => 350, 'height' => 150])
         ->labels(['Up', 'Down', 'Unreachable'])
         ->datasets([
             [
@@ -176,7 +176,7 @@ class OverviewController extends Controller
         $equipements = app()->chartjs
         ->name('equipements')
         ->type('pie')
-        ->size(['width' => 400, 'height' => 200])
+        ->size(['width' => 350, 'height' => 150])
         ->labels(['Ok', 'Warning', 'Critical', 'Unknown'])
         ->datasets([
             [
@@ -215,7 +215,7 @@ class OverviewController extends Controller
         $services = app()->chartjs
         ->name('services')
         ->type('pie')
-        ->size(['width' => 400, 'height' => 200])
+        ->size(['width' => 350, 'height' => 150])
         ->labels(['Ok', 'Warning', 'Critical', 'Unknown'])
         ->datasets([
             [
@@ -253,7 +253,7 @@ class OverviewController extends Controller
         $contacts = app()->chartjs
         ->name('contacts')
         ->type('pie')
-        ->size(['width' => 400, 'height' => 200])
+        ->size(['width' => 350, 'height' => 150])
         ->labels(['Ok', 'Warning', 'Critical', 'Unknown'])
         ->datasets([
             [

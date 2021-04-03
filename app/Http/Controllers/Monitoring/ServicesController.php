@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Monitoring;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use PDF;
 
 class ServicesController extends Controller
 {
@@ -79,8 +80,7 @@ class ServicesController extends Controller
             {
                 if(!$dateFrom)
                 {
-                    $dateFrom = json_encode(DB::table('nagios_statehistory')->select('state_time')->first(),true);
-
+                    $dateFrom = '2000-01-01';
                 }
 
 
@@ -122,7 +122,7 @@ class ServicesController extends Controller
 
         }
         
-        $services_name = $this->getServicesName();
+        $services_name = $this->getServicesName()->get();
             
         return view('historique.services',compact('services_history','services_name'));
 
@@ -214,6 +214,17 @@ class ServicesController extends Controller
     
     }
 
+    public function download()
+    {
+
+        $services_history = $this->getServicesHistory()->get();
+        
+        $pdf = PDF::loadView('download.services', compact('services_history'))->setPaper('a4', 'landscape');
+
+        return $pdf->stream('services_history.pdf');
+        
+    }
+    
     public function details($service_id)
     {
         $details = $this->getServices()

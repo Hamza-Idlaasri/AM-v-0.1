@@ -96,7 +96,7 @@ Route::prefix('configuration')->group(function () {
 
         Route::get('/',[UsersConfigController::class,'users'])->name('config.users');
         Route::delete('/{user}',[UsersConfigController::class,'delete'])->name('user.delete');
-        Route::post('/{user}',[UsersConfigController::class,'upgrade'])->name('user.upgrade');
+        Route::post('/upgrade',[UsersConfigController::class,'upgrade'])->name('user.upgrade');
 
     });
 
@@ -166,7 +166,10 @@ Route::get('/cartes/carte',[MapController::class,'carte']);
 
 // Download PDF / CVS :
 
-Route::get('/download',[EquipementsController::class,'download']);
+Route::get('/historiques/hosts/download-PDF',[HostsController::class,'download'])->name('hosts.pdf');
+Route::get('/historiques/services/download-PDF',[ServicesController::class,'download'])->name('services.pdf');
+Route::get('/historiques/equipements/download-PDF',[EquipementsController::class,'download'])->name('equips.pdf');
+
 
 // Login & Registration :
 

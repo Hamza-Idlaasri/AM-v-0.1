@@ -159,9 +159,9 @@
             <li>
                 <a href="/historiques/services"><i class="fas fa-cog"></i> Services</a>
             </li>
-            <li>
+            {{-- <li>
                 <a href="/historiques/boxs"><i class="fas fa-microchip"></i> Boxs</a>
-            </li>
+            </li> --}}
             <li>
                 <a href="/historiques/equipements"><img src="{{asset('images/interface/Equipement.png')}}" alt=""> Equipements</a>
             </li>

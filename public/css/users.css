@@ -41,10 +41,11 @@ input:hover[type="checkbox"]:before {
     background: rgb(240, 240, 240);
 }
 
-
-/* #d-popup {
+.pop {
+    display: none;
+    width: 350px;
     position: absolute;
-    background: blue;
-    top: 20%;
-    left: 35%;
-} */
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}

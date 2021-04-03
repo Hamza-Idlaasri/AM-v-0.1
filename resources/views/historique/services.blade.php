@@ -15,12 +15,12 @@
 
     <!-- Download button -->
     <div class="float-left">
-        @include('inc.download')
+        @include('inc.download', ['route' => 'services.pdf'])
     </div>
 
 </div>
 
-<div class="container">    
+<div class="container back">    
 
     <table class="table table-striped table-bordered">
 
@@ -77,5 +77,9 @@
     {{$services_history->appends(['status' => request()->query('status'),'from' => request()->query('from'),'to' => request()->query('to'),'name' => request()->query('name')])->links('vendor.pagination.bootstrap-4')}}
 
 </div>
+
+<script>
+    const back = document.querySelector('.back');
+</script>
 
 @endsection

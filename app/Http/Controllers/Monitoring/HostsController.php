@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Monitoring;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use PDF;
 
 class HostsController extends Controller
 {
@@ -216,6 +217,16 @@ class HostsController extends Controller
         return view('statistique.hosts', compact('all_hosts_names','cas','range','hosts_up','hosts_down','hosts_unreachable'));
     }
 
+    public function download()
+    {
+
+        $hosts_history = $this->getHostsHistory()->get();
+        
+        $pdf = PDF::loadView('download.hosts', compact('hosts_history'))->setPaper('a4', 'landscape');
+
+        return $pdf->stream('hosts_history.pdf');
+        
+    }
 
     public function details($host_id)
     {
