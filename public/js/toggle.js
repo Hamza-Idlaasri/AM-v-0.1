@@ -23,17 +23,24 @@ togleOff.onclick = () => {
     togleOff.style.visibility = 'hidden';
 };
 
-function droped() {
+let checked = 0;
 
-    togleOn.classList.toggle('hidden');
-    togleOn.style.transitionDelay = '0s';
+function droped(i) {
+
+    if (checked != i) {
+
+        togleOn.classList.add('hidden');
+        togleOn.style.transitionDelay = '0s';
+        checked = i;
+
+    } else {
+        togleOn.classList.toggle('hidden');
+        togleOn.style.transitionDelay = '0s';
+    }
 
     if (!togleOn.classList.contains('hidden'))
         togleOn.style.transitionDelay = '.3s';
 
-    if (sidebar.clientHeight == sidebar.scrollHeight) {
-        console.log('pas scroll');
-    }
 
 }
 

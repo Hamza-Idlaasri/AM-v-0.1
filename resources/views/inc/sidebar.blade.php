@@ -1,20 +1,16 @@
-
+<div class="test">
 <ul class="accordion-menu">
     <li>
         <a href="/overview" id="overview">
             <div class="dropdownlink">
-
                 <b><i class="far fa-globe"></i> Overview</b>
-            
             </div>
         </a>
-       
     </li>
 
-    <li onclick="droped()">
+    <li onclick="droped(1)">
         <div class="dropdownlink">
             <b><i class="far fa-eye"></i> Monitoring</b>
-            
         </div>
         <ul class="submenuItems">
             <li>
@@ -32,7 +28,7 @@
             
         </ul>
     </li>
-    <li onclick="droped()">
+    <li onclick="droped(2)">
         <div class="dropdownlink"><i class="fas fa-exclamation-triangle"></i><b> Problémes</b>
             
             
@@ -55,7 +51,7 @@
 
     @if (auth()->user()->hasRole('agent'))
 
-    <li onclick="droped()">
+    <li onclick="droped(3)">
         <div class="dropdownlink">
             <i class="fas fa-tools"></i><b> Configuration</b>
         </div>
@@ -90,7 +86,7 @@
             </li>
 
             <li>
-                <a href="#">{{--<img src="{{asset('images/interface/sites.png')}}" alt=""> --}}
+                <a href="/configuration/sites">{{--<img src="{{asset('images/interface/sites.png')}}" alt=""> --}}
                     <i class="fas fa-building"></i> Sites</a>
             </li>
             <li><a href="#"><i class="fas fa-map-marker-alt"></i> Lieux</a></li>
@@ -101,11 +97,11 @@
             <li>
                 <a href="#"><img src="{{asset('images/interface/Problemes.png')}}" alt=""> Alarmes</a>
             </li>
-            <li>
+            {{-- <li>
                 <a href="#"><img src="{{asset('images/interface/commands.png')}}" alt=""> Commandes</a>
-            </li>
+            </li> --}}
             <li>
-                <a href="#"><img src="{{asset('images/interface/notif.png')}}" alt=""> Notifications</a>
+                <a href="/configuration/notifications"><img src="{{asset('images/interface/notif.png')}}" alt=""> Notifications</a>
             </li>
             
         </ul>
@@ -113,7 +109,7 @@
 
     @endif
     
-    <li onclick="droped()">
+    <li onclick="droped(4)">
         <div class="dropdownlink"><i class="fas fa-chart-bar"></i><b> Statistiques</b>
             
         </div>
@@ -129,7 +125,7 @@
             </li>
         </ul>
     </li>
-    <li onclick="droped()">
+    <li onclick="droped(5)">
         <div class="dropdownlink"><i class="far fa-map-marked-alt"></i><b> Cartes</b>
             
         </div>
@@ -137,20 +133,20 @@
             <li>
                 <a href="/cartes/automap"><i class="fas fa-chart-network"></i> AutoMap</a>
             </li>
-            <li>
+            {{-- <li>
                 <a href="#"><i class="fas fa-chart-network"></i> AutoMap 2</a>
             </li>
             <li>
                 <a href="#"><i class="fas fa-chart-network"></i> AutoMap 3</a>
-            </li>
+            </li> --}}
             <li>
                 <a href="/cartes/carte"><i class="far fa-map"></i> Cartes</a>
             </li>
         </ul>
     </li>
-    <li onclick="droped()">
-        <div class="dropdownlink"><i class="far fa-calendar-alt"></i><b> Historiques</b>
-            
+    <li onclick="droped(6)">
+        <div class="dropdownlink">
+            <i class="far fa-calendar-alt"></i><b> Historiques</b>
         </div>
         <ul class="submenuItems">
             <li>
@@ -167,8 +163,10 @@
             </li>
         </ul>
     </li>
+    <li>
+        <div class="toggle-on">
+            <button class="tg-btn-on"><i class="fas fa-chevron-left"></i></button>
+        </div>
+    </li>
 </ul>
-
-<div class="toggle-on">
-    <button class="tg-btn-on"><i class="fas fa-chevron-left"></i></button>
 </div>

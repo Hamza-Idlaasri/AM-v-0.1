@@ -72,10 +72,10 @@
                         <button type="submit" class="btn btn-primary w-100 font-weight-bold">Register</button>
                     </div>
                 </form>
-                <hr>
+                {{-- <hr>
                 <div class="text-center">
                     <p>j'ai deja un compte?<a href="{{ route('login') }}">  Login</a></p>
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>

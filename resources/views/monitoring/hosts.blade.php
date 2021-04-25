@@ -6,9 +6,9 @@
    
     @include('inc.searchbar',['route' => 'monitoring.hosts'])
 
-    <table class="table table-bordered">
+    <table class="table table-bordered text-center">
         
-        <thead class="thead-light text-center">
+        <thead class="bg-primary text-white">
             <tr>
                 <th>Host</th>
                 <th>Adresse IP</th>

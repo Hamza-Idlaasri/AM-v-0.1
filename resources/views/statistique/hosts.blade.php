@@ -95,7 +95,8 @@
                 labels:{
                     boxWidth:15,
                 }
-            }
+            },
+            // maintainAspectRatio: false,
         },
         
     });

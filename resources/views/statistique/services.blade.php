@@ -13,7 +13,7 @@
 
     @if (sizeof($cas) == 0)
         <div class="container w-25 mt-5">
-            <h4>{{$case}}</h4>
+            <h4>{{$cas_is_empty}}</h4>
         </div>
     @else
         <div class="d-flex flex-wrap justify-content-around">

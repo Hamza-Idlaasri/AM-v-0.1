@@ -159,33 +159,4 @@ class BoxsController extends Controller
         
     }
 
-    public function index()
-    {
-        $search = request()->query('search');
-
-        if ($search) {
-            $boxs = $this->getBoxs()->where('display_name','like','%'.$search.'%')->paginate(10);
-        } else {
-            $boxs = $this->getBoxs()->paginate(10);
-        }
-        
-        return view('config.boxs', compact('boxs'));
-    }
-
-    public function delete($box_id)
-    {
-        // 1: get the box you want delete
-        // 2: delete its cfg file from /usr/local/nagios/etc/objects/file_name.cfg
-        // 3: remove the line of its declaration from /usr/local/nagios/etc/nagios.cfg (who's like this: "cfg_file=/usr/local/nagios/etc/objects/file_name.cfg")
-        // 4: restart nagios by run this command line "service nagios restart"
-
-        return '1: get the box you want delete (this is its id in nagios_hosts table : '.$box_id.')
-                <br>
-                2: delete its cfg file from /usr/local/nagios/etc/objects/file_name.cfg
-                <br>
-                3: remove the line of its declaration from /usr/local/nagios/etc/nagios.cfg (who is like this: "cfg_file=/usr/local/nagios/etc/objects/file_name.cfg")
-                <br>
-                4: restart nagios by run this command line "service nagios restart"';
-
-    }
 }

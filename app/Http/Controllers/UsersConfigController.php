@@ -39,11 +39,7 @@ class UsersConfigController extends Controller
 
     public function upgrade(Request $request)
     {
-        $users = $request->input('upgarde');
-        dd($users);
+        
     }
 
-    
-
-    
 }

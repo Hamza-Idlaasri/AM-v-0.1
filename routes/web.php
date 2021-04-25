@@ -9,6 +9,9 @@ use App\Http\Controllers\Monitoring\BoxsController;
 use App\Http\Controllers\Monitoring\ServicesController;
 use App\Http\Controllers\Monitoring\EquipementsController;
 
+use App\Http\Controllers\Config\Hosts;
+use App\Http\Controllers\Config\Boxs;
+
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LogoutController;
@@ -16,6 +19,8 @@ use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\MapController;
 use App\Http\Controllers\UsersConfigController;
 use App\Http\Controllers\UserProfileController;
+
+use App\Http\Controllers\NotificationsController;
 
 
 
@@ -101,18 +106,23 @@ Route::prefix('configuration')->group(function () {
     });
 
     // Hosts : 
-    Route::get('/hosts', [HostsController::class,'index'])->name('configHosts');
-    Route::get('/hosts/{host_id}', [HostsController::class,'delete'])->name('deleteHost');
-    Route::get('/hosts/edit/{host_object_id}', [HostsController::class,'edit'])->name('editHost');
-    Route::get('/hosts/add', [HostsController::class,'add'])->name('addHost');
+    Route::get('/hosts', [Hosts::class,'index'])->name('configHosts');
+    Route::get('/hosts/types', [Hosts::class,'types'])->name('hostType');
+    Route::get('/hosts/delete/{host_id}', [Hosts::class,'delete'])->name('deleteHost');
+    Route::get('/hosts/edit/{host_object_id}', [Hosts::class,'edit'])->name('editHost');
+    Route::get('/hosts/add/manage/{type}',[Hosts::class,'manage'])->name('manageHost');
+    Route::get('/hosts/add/{type}', [Hosts::class,'add'])->name('addHost');
     
     // Boxs : 
-    Route::get('/boxs', [BoxsController::class,'index'])->name('configBoxs');
-    Route::get('/boxs/{box_id}', [BoxsController::class,'delete'])->name('deleteBox');
-    Route::get('/boxs/{box_id}/edit/', [BoxsController::class,'edit'])->name('editBox');
-    Route::get('/boxs/add', [BoxsController::class,'add'])->name('addBox');
+    Route::get('/boxs', [Boxs::class,'index'])->name('configBoxs');
+    Route::get('/boxs/add/manage/new', [Boxs::class,'add'])->name('addBox');
+    Route::get('/boxs/add/manage',[Boxs::class,'manage'])->name('manageBox');
     
-    // Servcies : 
+    Route::get('/boxs/delete/{box_id}', [Boxs::class,'delete'])->name('deleteBox');
+    Route::get('/boxs/edit/{box_id}/edit/', [Boxs::class,'edit'])->name('editBox');
+    
+    
+    // Services : 
     Route::get('/services', [ServicesController::class,'index'])->name('configServices');
     Route::get('/services/{service_id}', [ServicesController::class,'delete'])->name('deleteService');
     Route::get('/services/{servcie_id}/edit/', [ServicesController::class,'edit'])->name('editService');
@@ -123,6 +133,21 @@ Route::prefix('configuration')->group(function () {
     Route::get('/equipements/{equip_id}', [EquipementsController::class,'delete'])->name('deleteEquip');
     Route::get('/equipements/{equip_id}/edit/', [EquipementsController::class,'edit'])->name('editEquip');
     Route::get('/equipements/add', [EquipementsController::class,'add'])->name('addEquip');
+
+    Route::get('/notifications', [NotificationsController::class,'index']);
+
+    Route::view('/sites','config.sites');
+
+    Route::get('/sites/{site}', function($site){
+
+        return view('config.site', compact('site'));
+
+    })->name('site');
+
+    Route::view('/sites/{site}/hosts','config.test.hosts');
+    Route::view('/sites/{site}/boxs','config.test.boxs');
+    Route::view('/sites/{site}/services','config.test.services');
+    Route::view('/sites/{site}/equip','config.test.equip');
 
 
 });

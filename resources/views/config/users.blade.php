@@ -4,6 +4,10 @@
 
 <link rel="stylesheet" href="{{ asset('css/users.css') }}">
 
+<div class="container my-2">
+    <a href="{{ route('register') }}" class="btn btn-success"><i class="fas fa-plus"></i> Add User</a>
+</div>
+
 <div class="container my-3 back">
 
     <table class="table table-bordered">
@@ -37,16 +41,14 @@
                     <div>
                         @if ($user->hasRole('agent'))
                             <div class="float-left">
-                                <form action="" method="">
-                                    <div class="check">
-                                        <input type="checkbox" name="" id="" checked>
-                                    </div>
-                                </form>
+                                <div class="check">
+                                    <input type="checkbox" name="{{ $user->id }}" checked>
+                                </div>
                             </div>
                         @else
                             <div class="float-left">
                                 <div class="check">
-                                    <input type="checkbox" name="upgrade[]" value="{{$user->id}}">
+                                    <input type="checkbox" name="{{ $user->id }}">
                                 </div>
                             </div>
                         @endif
@@ -79,14 +81,13 @@
 
     </table>
     
-    <form action="{{ route('user.upgrade') }}" method="post">
-        @csrf
-        <input type="checkbox" name="upgrade[]" value="1">
-        <input type="checkbox" name="upgrade[]" value="2">
-        <button type="submit" class="btn btn-primary">Save</button>
-    </form>
-    
+<form action="{{ route('user.upgrade') }}" method="post">
+    @csrf
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>
+
 </div>
+
 
 <script>
     

@@ -65,9 +65,9 @@
                             <label for="remember"> Remember Me</label>
                         </div>
 
-                        <div class="form-group float-right">  
+                        {{-- <div class="form-group float-right">  
                             <a href="" tabindex="5" class="forgot-password">Mot de pass oublie?</a>
-                        </div>
+                        </div> --}}
                     </div>
                     
 
@@ -77,10 +77,10 @@
 
                     
                 </form>
-                <hr>
+                {{-- <hr>
                 <div class="text-center">
                     <p>Vous n'avez pas un compte?<a href="{{ route('register') }}">  Inscrivez-vous</a></p>
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>

@@ -4,9 +4,9 @@
 
 <div class="mx-4 my-3">
 
-    <form action="" class="float-left">
+    {{-- <form action="" class="float-left">
         <button type="submit" class="btn btn-success"><i class="fas fa-plus"></i> Add New</button>
-    </form>
+    </form> --}}
 
     @include('inc.searchbar',['route' => 'configEquips'])
 </div>
@@ -18,7 +18,7 @@
             <th>Host</th>
             <th>Equipement</th>
             <th>Description</th>
-            <th>Check Commande</th>
+            <th>Check Command</th>
             <th>Check Interval</th>
             <th>Retry Interval</th>
             <th>Max Check</th>

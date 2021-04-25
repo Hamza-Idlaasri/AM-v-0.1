@@ -4,9 +4,9 @@
 
 <div class="container my-3">
 
-    <form action="" class="float-left">
+    {{-- <form action="" class="float-left">
         <button type="submit" class="btn btn-success"><i class="fas fa-plus"></i> Add New</button>
-    </form>
+    </form> --}}
 
     @include('inc.searchbar',['route' => 'configServices'])
 
@@ -19,7 +19,7 @@
             <th>Host</th>
             <th>Service</th>
             <th>Description</th>
-            <th>Check Commande</th>
+            <th>Check Command</th>
             <th>Check Interval</th>
             <th>Retry Interval</th>
             <th>Max Check</th>

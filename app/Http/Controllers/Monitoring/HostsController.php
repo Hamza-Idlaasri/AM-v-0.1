@@ -238,45 +238,6 @@ class HostsController extends Controller
         
     }
 
-    // Configuration :
-
-    public function index()
-    {
-        $search = request()->query('search');
-        
-        if ($search) {
-            $hosts = $this->getHosts()->where('display_name','like','%'.$search.'%')->paginate(10);
-        } else{
-            $hosts = $this->getHosts()->paginate(10);
-        }
-        
-        return view('config.hosts', compact('hosts'));
-    }
-
-    public function edit($host_object_id)
-    {
-        $host = $this->getHosts()->where('nagios_hosts.host_object_id', $host_object_id)->get();
-        $services = $this->getServices()->where('nagios_services.host_object_id', $host_object_id)->get();
-
-        return view('config.edit.host', compact('host','services'));
-    }
-
-    public function delete($host_id)
-    {
-        // 1: get the host you want delete
-        // 2: delete its cfg file from /usr/local/nagios/etc/objects/file_name.cfg
-        // 3: remove the line of its declaration from /usr/local/nagios/etc/nagios.cfg (who's like this: "cfg_file=/usr/local/nagios/etc/objects/file_name.cfg")
-        // 4: restart nagios by run this command line "service nagios restart"
-
-        return '1: get the host you want delete (this is its id in nagios_hosts table : '.$host_id.')
-                <br>
-                2: delete its cfg file from /usr/local/nagios/etc/objects/file_name.cfg
-                <br>
-                3: remove the line of its declaration from /usr/local/nagios/etc/nagios.cfg (who is like this: "cfg_file=/usr/local/nagios/etc/objects/file_name.cfg")
-                <br>
-                4: restart nagios by run this command line "service nagios restart"';
-
-    }
 
     /************************ Helpers ****************************/
 

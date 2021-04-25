@@ -4,9 +4,7 @@
 
 <div class="container my-3">
 
-    <form action="" class="float-left">
-        <button type="submit" class="btn btn-success"><i class="fas fa-plus"></i> Add New</button>
-    </form>
+    <a href="{{ route('manageBox') }}" class="btn btn-success float-left"><i class="fas fa-plus"></i> Add New</a>
 
     @include('inc.searchbar',['route' => 'configBoxs'])
 
@@ -19,7 +17,7 @@
             <th>Host</th>
             <th>Address</th>
             <th>Description</th>
-            <th>Check Commande</th>
+            <th>Check Command</th>
             <th>Check Interval</th>
             <th>Retry Interval</th>
             <th>Max Check</th>
