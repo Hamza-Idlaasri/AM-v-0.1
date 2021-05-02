@@ -33,8 +33,8 @@
         <a href="{{ route($route) }}" target="_blank" class="btn btn-danger fa-lg"><i class="fas fa-file-pdf"></i> PDF</a>
 
         {{-- Download Excel Button --}}
-        <form action="" method="get" >
-            <button type="submit" class="btn btn-success fa-lg"><i class="fas fa-file-excel"></i> Excel</button>
+        <form action="{{ route($csv) }}" method="get" >
+            <button type="submit" class="btn btn-success fa-lg"><i class="fas fa-file-excel"></i> CSV</button>
         </form>
     </div>
 

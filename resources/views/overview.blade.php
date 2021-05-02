@@ -7,28 +7,28 @@
     <div class="d-flex flex-wrap justify-content-around">
 
         <div class="chart">
-            <h6>Porcentage des alarmes Hosts</h6>
+            <h6>Porcentage des Hosts</h6>
                 <div>
                     {{ $hosts->render() }}
                 </div>
         </div>
 
         <div class="chart">
-            <h6>Porcentage des alarmes Equipements</h6>
+            <h6>Porcentage des Equipements</h6>
                 <div>
                     {{ $equipements->render() }}
                 </div>
         </div>
 
         <div class="chart">
-            <h6>Porcentage des alarmes Services</h6>
+            <h6>Porcentage des Services</h6>
                 <div>
                     {{ $services->render() }}
                 </div>
         </div>
 
         <div class="chart"> 
-            <h6>Porcentage des alarmes Contacts</h6>
+            <h6>Porcentage des Contacts</h6>
                 <div>
                     {{ $contacts->render() }}
                 </div>

@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Monitoring;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Exports\ExportCsvHosts;
+use Excel;
 use PDF;
 
 class HostsController extends Controller
@@ -226,6 +228,11 @@ class HostsController extends Controller
 
         return $pdf->stream('hosts_history.pdf');
         
+    }
+
+    public function csv()
+    {
+        return Excel::download(new ExportCsvHosts, 'hosts.csv');
     }
 
     public function details($host_id)

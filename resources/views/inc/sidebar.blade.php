@@ -75,7 +75,7 @@
             </li>
             
             <li>
-                <a href="#"><i class="fal fa-sitemap"></i> HostGroups</a>
+                <a href="/configuration/hostgroups"><i class="fal fa-sitemap"></i> HostGroups</a>
             </li>
             <li>
                 <a href="#">{{--<img src="{{asset('images/interface/servicegroup.png')}}" alt="">--}}

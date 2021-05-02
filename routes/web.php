@@ -11,6 +11,7 @@ use App\Http\Controllers\Monitoring\EquipementsController;
 
 use App\Http\Controllers\Config\Hosts;
 use App\Http\Controllers\Config\Boxs;
+use App\Http\Controllers\Config\GroupsController;
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
@@ -149,6 +150,8 @@ Route::prefix('configuration')->group(function () {
     Route::view('/sites/{site}/services','config.test.services');
     Route::view('/sites/{site}/equip','config.test.equip');
 
+    // HostGroups
+    Route::get('/hostgroups',[GroupsController::class,'hostgroups']);
 
 });
 
@@ -190,11 +193,14 @@ Route::get('/cartes/carte',[MapController::class,'carte']);
 
 
 // Download PDF / CVS :
-
+/** PDF */
 Route::get('/historiques/hosts/download-PDF',[HostsController::class,'download'])->name('hosts.pdf');
 Route::get('/historiques/services/download-PDF',[ServicesController::class,'download'])->name('services.pdf');
 Route::get('/historiques/equipements/download-PDF',[EquipementsController::class,'download'])->name('equips.pdf');
-
+/** CSV */
+Route::get('/historiques/hosts/CSV',[HostsController::class,'csv'])->name('hosts.csv');
+Route::get('/historiques/services/CSV',[ServicesController::class,'csv'])->name('services.csv');
+Route::get('/historiques/equipements/CSV',[EquipementsController::class,'csv'])->name('equips.csv');
 
 // Login & Registration :
 

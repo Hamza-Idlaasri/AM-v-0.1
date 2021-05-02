@@ -15,7 +15,7 @@
 
     <!-- Download button -->
     <div class="float-left">
-        @include('inc.download', ['route' => 'hosts.pdf'])
+        @include('inc.download', ['route' => 'hosts.pdf','csv' => 'hosts.csv'])
     </div>
 
 </div>

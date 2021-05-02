@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Monitoring;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Exports\ExportCsvEquips;
+use Excel;
 use PDF;
 use App\Http\Controllers\Controller\DetailsController;
 
@@ -230,6 +232,12 @@ class EquipementsController extends Controller
 
         return $pdf->stream('equip.pdf');
         
+    }
+
+    public function csv()
+    {
+        return Excel::download(new ExportCsvEquips, 'equipements.csv');
+
     }
 
     public function details($service_id)

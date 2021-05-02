@@ -2,70 +2,71 @@
 
 @section('content')
 
-<div class="container">
-   
-    @include('inc.searchbar',['route' => 'monitoring.hosts'])
+    <div class="container">
 
-    <table class="table table-bordered text-center">
-        
-        <thead class="bg-primary text-white">
-            <tr>
-                <th>Host</th>
-                <th>Adresse IP</th>
-                <th>Status</th>
-                <th>Dernier verification</th>
-                <th>Description</th>
-            </tr>
-        </thead>
-        
-        @forelse ($hosts as $host)
+        @include('inc.searchbar',['route' => 'monitoring.hosts'])
 
-            <tr>
-                <td>
-                    <a href="/monitoring/hosts/{{$host->host_id}}">{{$host->display_name}}</a> 
+        <table class="table table-bordered text-center">
 
-                    @if ($host->is_flapping)
-                        <span class="float-right text-danger" title="This Host is flapping"><i class="fas fa-retweet"></i></span>
-                    @endif
-                    
-                </td>
-                <td>{{$host->address}}</td>
-                
-                @switch($host->current_state)
-                
-                    @case(0)
-                        <td><span class="badge badge-success">Up</span></td>
+            <thead class="bg-primary text-white">
+                <tr>
+                    <th>Host</th>
+                    <th>Adresse IP</th>
+                    <th>Status</th>
+                    <th>Dernier verification</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+
+            @forelse ($hosts as $host)
+
+                <tr>
+                    <td>
+                        <a href="/monitoring/hosts/{{ $host->host_id }}">{{ $host->display_name }}</a>
+
+                        @if ($host->is_flapping)
+                            <span class="float-right text-danger" title="This Host is flapping"><i
+                                    class="fas fa-retweet"></i></span>
+                        @endif
+
+                    </td>
+                    <td>{{ $host->address }}</td>
+
+                    @switch($host->current_state)
+
+                        @case(0)
+                            <td><span class="badge badge-success">Up</span></td>
                         @break
 
-                    @case(1)
-                        <td><span class="badge badge-danger">Down</span></td>
-                        @break
-                            
-                    @case(2)
-                        <td><span class="badge badge-unknown">Ureachable</span></td>
+                        @case(1)
+                            <td><span class="badge badge-danger">Down</span></td>
                         @break
 
-                    @default
-                        
-                @endswitch
-                
-                <td>{{$host->last_check}}</td>
-                <td class="description">{{$host->output}}</td>
-            </tr>
-        
+                        @case(2)
+                            <td><span class="badge badge-unknown">Ureachable</span></td>
+                        @break
 
-        @empty
+                        @default
 
-            <tr>
-                <td colspan="5">No result found <strong>{{ request()->query('search') }}</strong></td>
-            </tr>
+                    @endswitch
 
-        @endforelse
+                    <td>{{ $host->last_check }}</td>
+                    <td class="description">{{ $host->output }}</td>
+                </tr>
 
-    </table>
 
-    {{$hosts->appends(['search' => request()->query('search')])->links('vendor.pagination.bootstrap-4')}}
+                @empty
 
-</div>
+                    <tr>
+                        <td colspan="5">No result found <strong>{{ request()->query('search') }}</strong></td>
+                    </tr>
+
+                @endforelse
+
+            </table>
+
+            {{ $hosts->appends(['search' => request()->query('search')])->links('vendor.pagination.bootstrap-4') }}
+
+        </div>
 
 @endsection

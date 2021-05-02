@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Monitoring;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Exports\ExportCsvServices;
+use Excel;
 use PDF;
 
 class ServicesController extends Controller
@@ -41,7 +43,7 @@ class ServicesController extends Controller
 
         if($search)
         {
-            $service_problems = $this->getServcies()
+            $service_problems = $this->getServices()
             ->where('nagios_hosts.display_name','like', '%'.$search.'%')
             ->where('current_state','<>','0')
             ->paginate(10);
@@ -223,6 +225,12 @@ class ServicesController extends Controller
 
         return $pdf->stream('services_history.pdf');
         
+    }
+
+    public function csv()
+    {
+        return Excel::download(new ExportCsvServices, 'services.csv');
+
     }
     
     public function details($service_id)

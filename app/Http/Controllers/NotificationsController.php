@@ -9,31 +9,43 @@ class NotificationsController extends Controller
 {
     public function index()
     {
-        // $services_notifs = DB::table('nagios_notifications')
-        //     ->join('nagios_services','nagios_services.service_object_id','=','nagios_notifications.object_id')
-        //     ->join('nagios_hosts','nagios_hosts.host_object_id','=','nagios_services.host_object_id')
-        //     ->select('nagios_services.display_name as service_name','nagios_hosts.display_name as host_name','nagios_notifications.*')
-        //     ->orderByDesc('start_time')
-        //     ->get();
+        $hosts = DB::table('nagios_notifications')
+            ->join('nagios_hosts','nagios_hosts.host_object_id','=','nagios_notifications.object_id')
+            ->where('nagios_hosts.alias','host')
+            ->select('nagios_hosts.display_name as host_name','nagios_notifications.*')
+            ->orderByDesc('start_time')
+            ->where('start_time','>',date('Y-m-d', strtotime('-1 day')))
+            ->get();
 
-        // $hosts_notifs = DB::table('nagios_notifications')
-        //     ->join('nagios_hosts','nagios_hosts.host_object_id','=','nagios_notifications.object_id')
-        //     ->select('nagios_hosts.display_name as host_name','nagios_notifications.*')
-        //     ->orderByDesc('start_time')
-        //     ->get();
-        
+        $services = DB::table('nagios_notifications')
+            ->join('nagios_services','nagios_services.service_object_id','=','nagios_notifications.object_id')
+            ->join('nagios_hosts','nagios_hosts.host_object_id','=','nagios_services.host_object_id')
+            ->where('nagios_hosts.alias','host')
+            ->select('nagios_services.display_name as service_name','nagios_hosts.display_name as host_name','nagios_notifications.*')
+            ->orderByDesc('start_time')
+            ->where('start_time','>',date('Y-m-d', strtotime('-1 day')))
+            ->get();
+
+        $boxs = DB::table('nagios_notifications')
+            ->join('nagios_hosts','nagios_hosts.host_object_id','=','nagios_notifications.object_id')
+            ->where('nagios_hosts.alias','box')
+            ->select('nagios_hosts.display_name as box_name','nagios_notifications.*')
+            ->orderByDesc('start_time')
+            ->where('start_time','>',date('Y-m-d', strtotime('-1 day')))
+            ->get();
+    
+        $equips = DB::table('nagios_notifications')
+            ->join('nagios_services','nagios_services.service_object_id','=','nagios_notifications.object_id')
+            ->join('nagios_hosts','nagios_hosts.host_object_id','=','nagios_services.host_object_id')
+            ->where('nagios_hosts.alias','box')
+            ->select('nagios_services.display_name as equip_name','nagios_hosts.display_name as box_name','nagios_notifications.*')
+            ->orderByDesc('start_time')
+            ->where('start_time','>',date('Y-m-d', strtotime('-1 day')))
+            ->get();
+
         // $notif =(object) array_merge_recursive((array)$services_notifs, (array)$hosts_notifs);
-        
-        // dd($notif);
 
-        $myfile = fopen('C:\Users\pc\Desktop\Laravel\test.txt', "w") or die("Unable to open file!");
-        $txt = "John Doe\t";
-        fwrite($myfile, $txt);
-        $txt = "test 12\n";
-        fwrite($myfile, $txt);
-        fclose($myfile);
-
-        return back();
+        return view('config.notifications', compact('hosts','services','boxs','equips'));
     }
 
    
