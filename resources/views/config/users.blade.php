@@ -42,15 +42,17 @@
                         @if ($user->hasRole('agent'))
                             <div class="float-left">
                                 <div class="check">
-                                    <input type="checkbox" name="{{ $user->id }}" checked>
+                                    <input type="checkbox" name="users[]" form="up" value="{{$user->id}}" checked>
                                 </div>
                             </div>
                         @else
+                           
                             <div class="float-left">
                                 <div class="check">
-                                    <input type="checkbox" name="{{ $user->id }}">
+                                    <input type="checkbox" name="users[]" form="up" value="{{$user->id}}">
                                 </div>
                             </div>
+                          
                         @endif
                         
                         {{-- Delete User --}}
@@ -81,7 +83,7 @@
 
     </table>
     
-<form action="{{ route('user.upgrade') }}" method="post">
+<form action="{{ route('user.upgrade') }}" method="post" id="up">
     @csrf
     <button type="submit" class="btn btn-primary">Save</button>
 </form>

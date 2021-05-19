@@ -39,7 +39,7 @@ class Boxs extends Controller
         $equipNames = $request->input('equipName');
         $equiINnbr = $request->input('inputNbr');
        
-        $file_name = "C:\Users\pc\Desktop\Laravel\\".$request->boxName.".txt";
+        $path = "C:\Users\pc\Desktop\Laravel\\".$request->boxName.".txt";
         
         // validation
         $this->validate($request,[
@@ -47,12 +47,15 @@ class Boxs extends Controller
             'boxName' => 'required',
             'addressIP' => 'required',
             'equipName.*' => 'required',
+            'inputNbr.*' => 'required',
+            
         ],[
             'addressIP.required' => 'the IP address field is empty',
-            'equipName.*.required' => 'the equipement name field is empty'
+            'equipName.*.required' => 'the equipement name field is empty',
+            'inputNbr.*.required' => 'the input number field is empty',
         ]);
 
-        $file = fopen($file_name, 'w') or die("Unable to open file!");    
+        $file = fopen($path, 'w') or die("Unable to open file!");    
 
         
         // Parent relationship

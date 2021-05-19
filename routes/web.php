@@ -93,6 +93,8 @@ Route::prefix('problems')->group(function () {
     
 });
 
+
+
 // Configuration Section: 
 
 Route::prefix('configuration')->group(function () {
@@ -152,9 +154,19 @@ Route::prefix('configuration')->group(function () {
 
     // HostGroups
     Route::get('/hostgroups',[GroupsController::class,'hostgroups']);
+    Route::get('/hostgroups/add-new', [GroupsController::class,'addHG'])->name('addHG');
+    Route::get('/hostgroups/add-new/create', [GroupsController::class,'createHG'])->name('createHG');
+    Route::get('/hostgroups/{id}',[GroupsController::class,'HGdetails'])->name('HGdetails');
+    
+    // ServiceGroups
+    Route::get('/servicegroups',[GroupsController::class,'servicegroups']);
+    Route::get('/servicegroups/{id}',[GroupsController::class,'SGdetails'])->name('SGdetails');
+    
+    // EquipGroups
+    Route::get('/equipgroups',[GroupsController::class,'equipgroups']);
+    Route::get('/equipgroups/{id}',[GroupsController::class,'EGdetails'])->name('EGdetails');
 
 });
-
 
 
 // Statistique Section:
@@ -171,6 +183,9 @@ Route::prefix('statistiques')->group(function () {
 
 });
 
+
+
+
 // Historique Section:
 Route::prefix('historiques')->group(function () {
 
@@ -184,6 +199,9 @@ Route::prefix('historiques')->group(function () {
     Route::get('/equipements',[EquipementsController::class,'historic'])->name('historic.equipements');
 
 });
+
+
+
 
 // Cartes Section : 
 /** Automap */

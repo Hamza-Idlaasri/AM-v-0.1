@@ -78,17 +78,18 @@
                 <a href="/configuration/hostgroups"><i class="fal fa-sitemap"></i> HostGroups</a>
             </li>
             <li>
-                <a href="#">{{--<img src="{{asset('images/interface/servicegroup.png')}}" alt="">--}}
+                <a href="/configuration/servicegroups">{{--<img src="{{asset('images/interface/servicegroup.png')}}" alt="">--}}
                    <i class="fas fa-cogs"></i> ServiceGroups</a> 
             </li>
             <li>
-                <a href="#"><img src="{{asset('images/interface/equipgroup.png')}}" alt=""> EquipGroups</a>
+                <a href="/configuration/equipgroups"><img src="{{asset('images/interface/equipgroup.png')}}" alt=""> EquipGroups</a>
             </li>
 
-            <li>
-                <a href="/configuration/sites">{{--<img src="{{asset('images/interface/sites.png')}}" alt=""> --}}
+            {{-- <li>
+                <a href="/configuration/sites">
                     <i class="fas fa-building"></i> Sites</a>
-            </li>
+            </li> --}}
+            
             <li><a href="#"><i class="fas fa-map-marker-alt"></i> Lieux</a></li>
             
             <li>

@@ -36,7 +36,6 @@
             @endif
             
 
-
             <td><a href="/monitoring/services/{{$service->service_id}}">{{$service->service_name}}</a></td>
             
             @switch($service->current_state)

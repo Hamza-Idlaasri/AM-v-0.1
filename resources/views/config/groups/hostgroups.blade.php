@@ -2,16 +2,19 @@
 
 @section('content')
 
-    <div class="container p-4 d-flex justify-content-center flex-wrap">
+    <div class="container p-3">
+        <a href="{{ route('addHG') }}" class="text-success"><i class="fas fa-plus"></i> Add New</a>
+    </div>
 
+    <div class="container p-4 d-flex justify-content-center flex-wrap">
         @forelse ($hostgroups as $group)
             <div class="container w-50">
-                <h5 class="text-center">{{ $group->alias }}</h5>
+                <h5 class="text-center"><a href="{{ route('HGdetails', $group->hostgroup_id) }}">{{ $group->alias }}</a></h5>
                 <table class="table table-bordered text-center">
                     <tr class="text-primary">
-                        <th>Hosts</th>
+                        <th>Host</th>
                         <th>Status</th>
-                        <th>Services</th>
+                        <th>Service</th>
                     </tr>
 
                     @forelse ($members as $member)
@@ -74,7 +77,7 @@
 
                         @empty
                             <tr>
-                                <td colspan="2">No members found</td>
+                                <td colspan="3">No members found</td>
                             </tr>
                         @endforelse
 

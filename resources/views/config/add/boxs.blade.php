@@ -7,26 +7,25 @@
     <form action="{{ route('addBox') }}" method="get">
         <div class="clearfix">
             <div class="container w-50 my-2 p-3 float-left rounded bg-white">
-                <div class="container p-3 rounded bg-white">
-                    <h4>Define Box :</h4>
-                    <label for="box_name"><b>Box name <span class="text-danger">*</span></b> </label>
-                    <input type="text" name="boxName" class="form-control @error('boxName') border-danger @enderror" id="box_name" value="{{ old('boxName') }}">
-                    @error('boxName')
-                        <div class="text-danger">
-                            {{ $message }}
-                        </div>
-                    @enderror
-
-                    <br>
-                    <label for="ip"><b>IP Address <span class="text-danger">*</span></b></label>
-                    <input type="text" name="addressIP" class="form-control @error('addressIP') border-danger @enderror" id="ip" minlength="7" maxlength="15" size="15" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" value="{{ old('addressIP') }}">
-                    @error('addressIP')
-                        <div class="text-danger">
-                            {{ $message }}
-                        </div>
-                    @enderror
-                </div>
                 
+                <h4>Define Box :</h4>
+                <label for="box_name"><b>Box name <span class="text-danger">*</span></b> </label>
+                <input type="text" name="boxName" class="form-control @error('boxName') border-danger @enderror" id="box_name" value="{{ old('boxName') }}">
+                @error('boxName')
+                    <div class="text-danger">
+                        {{ $message }}
+                    </div>
+                @enderror
+
+                <br>
+                <label for="ip"><b>IP Address <span class="text-danger">*</span></b></label>
+                <input type="text" name="addressIP" class="form-control @error('addressIP') border-danger @enderror" id="ip" minlength="7" maxlength="15" size="15" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" value="{{ old('addressIP') }}">
+                @error('addressIP')
+                    <div class="text-danger">
+                        {{ $message }}
+                    </div>
+                @enderror
+        
             </div>
 
             <div class="container w-50 my-0 p-3 float-right">
@@ -44,13 +43,15 @@
                     </div>
                 </div> --}}
                 
-                <div class="container rounded bg-white p-3">
+                <div class="container rounded bg-white p-3" style="height:250px">
                     <h4>Parent :</h4>
-                    <div class="sizing">
+                    <div class="sizing" style="height:200px;overflow: auto">
+                        
                         @foreach ($hosts as $host)
                             <input type="radio" name="hosts" value="{{$host->host_name}}"> {{$host->host_name}}
                             <br>
                         @endforeach
+                     
                     </div>
                 </div>
             </div>
@@ -71,8 +72,8 @@
 
                     <div class="w-50">
                         <label for="input"><b>Input Number <!--<span class="text-danger">*</span>--></b></label>
-                        <input  type="number" min="1" max="10" name="inputNbr[]" class="iNbr1 form-control w-75 @error('inputNbr1') border-danger @enderror" id="input" value="1">
-                        @error('inputNbr1')
+                        <input  type="number" min="1" max="10" name="inputNbr[]" class="iNbr1 form-control w-75 @error('inputNbr.*') border-danger @enderror" id="input" value="1">
+                        @error('inputNbr.*')
                             <div class="text-danger">
                                 {{ $message }}
                             </div>
@@ -80,7 +81,7 @@
                     </div>
                 </div>
             </div>
-            <span class="btn text-primary float-right add"><i class="fas fa-plus"></i></span>
+            <span class="btn text-primary float-right add" title="Add another equipement for monitoring"><i class="fas fa-plus"></i></span>
         </div>
         <br>
         <button type="submit" class="btn btn-primary">Create</button>

@@ -41,27 +41,27 @@ class Hosts extends Controller
 
     public function add($type,Request $request)
     {
-       
-        // validation
-        $this->validate($request,[
-            'hostName' => 'required',
-            'addressIP' => 'required',
-        ],[
-            'addressIP.required' => 'the IP address field is empty',
-        ]);
-
+    
         
         switch ($type) {
 
             case 'windows':
 
+                // validation
+                $this->validate($request,[
+                    'hostName' => 'required',
+                    'addressIP' => 'required',
+                ],[
+                    'addressIP.required' => 'the IP address field is empty',
+                ]);
+
                 $path = "C:\Users\pc\Desktop\Laravel\objects\windows\\".$request->hostName.".txt";
 
                 // Parent relationship
                 if($request->input('hosts'))
-                    $define_host = "define host {\n\tuse\t\t\twindows-server\n\thost_name\t\t".$request->hostName."\n\talias\t\t\tbox\n\taddress\t\t\t".$request->addressIP."\n\tparents\t\t\t".$request->input('hosts')."\n}\n\n";
+                    $define_host = "define host {\n\tuse\t\t\twindows-server\n\thost_name\t\t".$request->hostName."\n\talias\t\t\thost\n\taddress\t\t\t".$request->addressIP."\n\tparents\t\t\t".$request->input('hosts')."\n}\n\n";
                 else
-                    $define_host = "define host {\n\tuse\t\t\twindows-server\n\thost_name\t\t".$request->hostName."\n\talias\t\t\tbox\n\taddress\t\t\t".$request->addressIP."\n}\n\n";
+                    $define_host = "define host {\n\tuse\t\t\twindows-server\n\thost_name\t\t".$request->hostName."\n\talias\t\t\thost\n\taddress\t\t\t".$request->addressIP."\n}\n\n";
 
                 $define_services = [
                     "define service {\n\tuse\t\t\tgeneric-service\n\thost_name\t\t".$request->hostName."\n\tservice_description\tNSClient++ Version\n\tcheck_command\t\tcheck_nt!CLIENTVERSION\n}\n\n",
@@ -77,13 +77,21 @@ class Hosts extends Controller
 
             case 'linux':
 
+                // validation
+                $this->validate($request,[
+                    'hostName' => 'required',
+                    'addressIP' => 'required',
+                ],[
+                    'addressIP.required' => 'the IP address field is empty',
+                ]);
+
                 $path = "C:\Users\pc\Desktop\Laravel\objects\linux\\".$request->hostName.".txt";
 
                 // Parent relationship
                 if($request->input('hosts'))
-                    $define_host = "define host {\n\tuse\t\t\linux-server\n\thost_name\t\t".$request->hostName."\n\talias\t\t\tbox\n\taddress\t\t\t".$request->addressIP."\n\tparents\t\t\t".$request->input('hosts')."\n}\n\n";
+                    $define_host = "define host {\n\tuse\t\t\linux-server\n\thost_name\t\t".$request->hostName."\n\talias\t\t\thost\n\taddress\t\t\t".$request->addressIP."\n\tparents\t\t\t".$request->input('hosts')."\n}\n\n";
                 else
-                    $define_host = "define host {\n\tuse\t\t\linux-server\n\thost_name\t\t".$request->hostName."\n\talias\t\t\tbox\n\taddress\t\t\t".$request->addressIP."\n}\n\n";
+                    $define_host = "define host {\n\tuse\t\t\linux-server\n\thost_name\t\t".$request->hostName."\n\talias\t\t\thost\n\taddress\t\t\t".$request->addressIP."\n}\n\n";
 
                 $define_services = [
                     "define service {\n\tuse\t\t\tgeneric-service\n\thost_name\t\t".$request->hostName."\n\tservice_description\tPING\n\tcheck_command\t\tcheck_ping!100.0,20%!500.0,60%\n}\n\n",
@@ -97,18 +105,27 @@ class Hosts extends Controller
 
             case 'switch':
 
+                // validation
+                $this->validate($request,[
+                    'hostName' => 'required',
+                    'addressIP' => 'required',
+                    'community' => 'required'
+                ],[
+                    'addressIP.required' => 'the IP address field is empty',
+                ]);
+
                 $path = "C:\Users\pc\Desktop\Laravel\objects\switch\\".$request->hostName.".txt";
 
                 // Parent relationship
                 if($request->input('hosts'))
-                    $define_host = "define host {\n\tuse\t\t\tswitch-server\n\thost_name\t\t".$request->hostName."\n\talias\t\t\tbox\n\taddress\t\t\t".$request->addressIP."\n\tparents\t\t\t".$request->input('hosts')."\n}\n\n";
+                    $define_host = "define host {\n\tuse\t\t\tswitch-server\n\thost_name\t\t".$request->hostName."\n\talias\t\t\thost\n\taddress\t\t\t".$request->addressIP."\n\tparents\t\t\t".$request->input('hosts')."\n}\n\n";
                 else
-                    $define_host = "define host {\n\tuse\t\t\tswitch-server\n\thost_name\t\t".$request->hostName."\n\talias\t\t\tbox\n\taddress\t\t\t".$request->addressIP."\n}\n\n";
+                    $define_host = "define host {\n\tuse\t\t\tswitch-server\n\thost_name\t\t".$request->hostName."\n\talias\t\t\thost\n\taddress\t\t\t".$request->addressIP."\n}\n\n";
                 
                 $define_services = [
-                    "define service {\n\tuse\t\t\tgeneric-service\n\thost_name\t\t".$request->hostName."\n\tservice_description\tPING\n\tcheck_command\t\tcheck_ping!200.0,20%!600.0,60%\n\tnormal_check_interval\t\t5\nretry_check_interval\t\t1\n}\n\n",
-                    "define service {\n\tuse\t\t\tgeneric-service\n\thost_name\t\t".$request->hostName."\n\tservice_description\tPort 1 Link Status\n\tcheck_snmp!-C public -o ifOperStatus.1 -r 1 -m RFC1213-MIB\n}\n\n",
-                    "define service {\n\tuse\t\t\tgeneric-service\n\thost_name\t\t".$request->hostName."\n\tservice_description\tUptime\n\tcheck_snmp!-C public -o sysUpTime.0\n}\n\n",
+                    "define service {\n\tuse\t\t\tgeneric-service\n\thost_name\t\t".$request->hostName."\n\tservice_description\tPING\n\tcheck_command\t\tcheck_ping!200.0,20%!600.0,60%\n\tnormal_check_interval\t5\n\tretry_check_interval\t1\n}\n\n",
+                    "define service {\n\tuse\t\t\tgeneric-service\n\thost_name\t\t".$request->hostName."\n\tservice_description\tPort 1 Link Status\n\tcheck_command\t\tcheck_snmp!-C ".$request->community." -o ifOperStatus.1 -r 1 -m RFC1213-MIB\n}\n\n",
+                    "define service {\n\tuse\t\t\tgeneric-service\n\thost_name\t\t".$request->hostName."\n\tservice_description\tUptime\n\tcheck_command\t\tcheck_snmp!-C ".$request->community." -o sysUpTime.0\n}\n\n",
                     
                 ];
 
@@ -116,18 +133,27 @@ class Hosts extends Controller
 
             case 'router':
 
+                // validation
+                $this->validate($request,[
+                    'hostName' => 'required',
+                    'addressIP' => 'required',
+                    'community' => 'required'
+                ],[
+                    'addressIP.required' => 'the IP address field is empty',
+                ]);
+
                 $path = "C:\Users\pc\Desktop\Laravel\objects\\router\\".$request->hostName.".txt";
 
                 // Parent relationship
                 if($request->input('hosts'))
-                    $define_host = "define host {\n\tuse\t\t\trouter-server\n\thost_name\t\t".$request->hostName."\n\talias\t\t\tbox\n\taddress\t\t\t".$request->addressIP."\n\tparents\t\t\t".$request->input('hosts')."\n}\n\n";
+                    $define_host = "define host {\n\tuse\t\t\trouter-server\n\thost_name\t\t".$request->hostName."\n\talias\t\t\thost\n\taddress\t\t\t".$request->addressIP."\n\tparents\t\t\t".$request->input('hosts')."\n}\n\n";
                 else
-                    $define_host = "define host {\n\tuse\t\t\trouter-server\n\thost_name\t\t".$request->hostName."\n\talias\t\t\tbox\n\taddress\t\t\t".$request->addressIP."\n}\n\n";
+                    $define_host = "define host {\n\tuse\t\t\trouter-server\n\thost_name\t\t".$request->hostName."\n\talias\t\t\thost\n\taddress\t\t\t".$request->addressIP."\n}\n\n";
                 
                 $define_services = [
-                        "define service {\n\tuse\t\t\tgeneric-service\n\thost_name\t\t".$request->hostName."\n\tservice_description\tPING\n\tcheck_command\t\tcheck_ping!200.0,20%!600.0,60%\n\tnormal_check_interval\t\t5\nretry_check_interval\t\t1\n}\n\n",
-                        "define service {\n\tuse\t\t\tgeneric-service\n\thost_name\t\t".$request->hostName."\n\tservice_description\tPort 1 Link Status\n\tcheck_snmp!-C public -o ifOperStatus.1 -r 1 -m RFC1213-MIB\n}\n\n",
-                        "define service {\n\tuse\t\t\tgeneric-service\n\thost_name\t\t".$request->hostName."\n\tservice_description\tUptime\n\tcheck_snmp!-C public -o sysUpTime.0\n}\n\n",
+                        "define service {\n\tuse\t\t\tgeneric-service\n\thost_name\t\t".$request->hostName."\n\tservice_description\tPING\n\tcheck_command\t\tcheck_ping!200.0,20%!600.0,60%\n\tnormal_check_interval\t5\n\tretry_check_interval\t1\n}\n\n",
+                        "define service {\n\tuse\t\t\tgeneric-service\n\thost_name\t\t".$request->hostName."\n\tservice_description\tPort 1 Link Status\n\tcheck_command\t\tcheck_snmp!-C ".$request->community." -o ifOperStatus.1 -r 1 -m RFC1213-MIB\n}\n\n",
+                        "define service {\n\tuse\t\t\tgeneric-service\n\thost_name\t\t".$request->hostName."\n\tservice_description\tUptime\n\tcheck_command\t\tcheck_snmp!-C ".$request->community." -o sysUpTime.0\n}\n\n",
                         
                     ];
 
@@ -135,17 +161,26 @@ class Hosts extends Controller
 
             case 'printer':
 
+                // validation
+                $this->validate($request,[
+                    'hostName' => 'required',
+                    'addressIP' => 'required',
+                    'community' => 'required'
+                ],[
+                    'addressIP.required' => 'the IP address field is empty',
+                ]);
+                
                 $path = "C:\Users\pc\Desktop\Laravel\objects\printer\\".$request->hostName.".txt";
 
                 // Parent relationship
                 if($request->input('hosts'))
-                    $define_host = "define host {\n\tuse\t\t\tprinter-server\n\thost_name\t\t".$request->hostName."\n\talias\t\t\tbox\n\taddress\t\t\t".$request->addressIP."\n\tparents\t\t\t".$request->input('hosts')."\n}\n\n";
+                    $define_host = "define host {\n\tuse\t\t\tprinter-server\n\thost_name\t\t".$request->hostName."\n\talias\t\t\thost\n\taddress\t\t\t".$request->addressIP."\n\tparents\t\t\t".$request->input('hosts')."\n}\n\n";
                 else
-                    $define_host = "define host {\n\tuse\t\t\tprinter-server\n\thost_name\t\t".$request->hostName."\n\talias\t\t\tbox\n\taddress\t\t\t".$request->addressIP."\n}\n\n";
+                    $define_host = "define host {\n\tuse\t\t\tprinter-server\n\thost_name\t\t".$request->hostName."\n\talias\t\t\thost\n\taddress\t\t\t".$request->addressIP."\n}\n\n";
                 
                 $define_services = [
                         "define service {\n\tuse\t\t\tgeneric-service\n\thost_name\t\t".$request->hostName."\n\tservice_description\tPING\n\tcheck_command\t\tcheck_ping!3000.0,80%!5000.0,100%\n\tnormal_check_interval\t\t5\nretry_check_interval\t\t1\n}\n\n",
-                        "define service {\n\tuse\t\t\tgeneric-service\n\thost_name\t\t".$request->hostName."\n\tservice_description\tPrinter Status\n\tcheck_command\t\tcheck_hpjd!-C public\n\tnormal_check_interval\t\t5\nretry_check_interval\t\t1\n}\n\n",
+                        "define service {\n\tuse\t\t\tgeneric-service\n\thost_name\t\t".$request->hostName."\n\tservice_description\tPrinter Status\n\tcheck_command\t\tcheck_hpjd!-C ".$request->community."\n\tnormal_check_interval\t5\n\tretry_check_interval\t1\n}\n\n",
                     ];                
                 break;
             
@@ -155,15 +190,14 @@ class Hosts extends Controller
 
         fwrite($file, $define_host);
 
-        if($request->input('hostgroupName') || $request->input('groups'))
-        {
-            if($request->input('hostgroupName'))    
-                $define_hostgroup = "define hostgroup{\nhostgroup_name\t".$request->input('hostgroupName')."\nalias\t".$request->input('hostgroupName')."\nmembers\t".$request->boxName."\n}\n\n";
-            else if($request->input('groups'))
-                $define_hostgroup = "define hostgroup{\nhostgroup_name\t".$request->input('groups')."\nalias\t".$request->input('groups')."\nmembers\t".$request->boxName."\n}\n\n";
-         
-            fwrite($file, $define_hostgroup);
-        }
+        // if($request->input('hostgroupName') || $request->input('groups'))
+        // {
+        //     if($request->input('hostgroupName'))    
+        //         $define_hostgroup = "define hostgroup{\nhostgroup_name\t".$request->input('hostgroupName')."\nalias\t".$request->input('hostgroupName')."\nmembers\t".$request->hostName."\n}\n\n";
+        //     if($request->input('groups'))
+        //         $define_hostgroup = "define hostgroup{\nhostgroup_name\t".$request->input('groups')."\nalias\t".$request->input('groups')."\nmembers\t".$request->hostName."\n}\n\n";
+        //     fwrite($file, $define_hostgroup);
+        // }
         
 
         for ($i=0; $i < sizeof($define_services) ; $i++) { 
@@ -171,7 +205,7 @@ class Hosts extends Controller
         }
 
         fclose($file);
-
+        
         return redirect()->route('configHosts');
 
     }
