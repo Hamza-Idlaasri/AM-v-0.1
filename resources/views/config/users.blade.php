@@ -76,7 +76,7 @@
             @endif
         @empty
             <tr>
-                <td>No result found</td>
+                <td colspan="6">No result found</td>
             </tr>
         @endforelse
         

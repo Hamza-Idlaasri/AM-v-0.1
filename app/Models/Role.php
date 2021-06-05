@@ -7,6 +7,8 @@ use App\Models\User;
 
 class Role extends LaratrustRole
 {
+    protected $connection = "mysql2";
+    
     public $guarded = [];
 
 }

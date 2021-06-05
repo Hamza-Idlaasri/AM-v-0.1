@@ -211,7 +211,6 @@ class ServicesController extends Controller
             $services_unknown += $status->unknown;
         }
         
-
         return view('statistique.services', compact('all_services_names','cas','range','services_ok','services_warning','services_critical','services_unknown'));
     
     }

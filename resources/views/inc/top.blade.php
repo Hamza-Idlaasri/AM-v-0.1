@@ -49,7 +49,7 @@
             <!-- Equipements summary -->
 
             <td  title="Equipements">
-                <img src="{{asset('images/interface/Equipement.png')}}" alt="">
+                <i class="far fa-microchip text-muted"></i>
             </td>
 
             <td  title="total des equipements : {{ $total_equipements }}">

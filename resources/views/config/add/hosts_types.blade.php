@@ -21,7 +21,7 @@
 </style>
 
 <div class="container p-3 text-center">
-    <h4>Choose type of Host for monitoring </h4>
+    <h5 class="text-muted"><i>Choose type of Host for monitoring</i></h5>
 </div>
 
 <div class="container w-100 d-flex justify-content-center align-items-center" style="height: 50vh">

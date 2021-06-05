@@ -52,7 +52,7 @@
 
                 <td style="width: 80px">
                     {{-- Edit --}}
-                    <form action="{{ route('editHost', $host->host_object_id) }}" method="get" class="float-left">
+                    <form action="{{ route('hostDetails', $host->host_id) }}" method="get" class="float-left">
                         <button type="submit" class="text-primary btn"><i class="fas fa-pen"></i></button>
                     </form>
 

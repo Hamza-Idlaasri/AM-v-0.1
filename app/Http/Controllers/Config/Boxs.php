@@ -38,9 +38,7 @@ class Boxs extends Controller
     {
         $equipNames = $request->input('equipName');
         $equiINnbr = $request->input('inputNbr');
-       
-        $path = "C:\Users\pc\Desktop\Laravel\\".$request->boxName.".txt";
-        
+               
         // validation
         $this->validate($request,[
 
@@ -55,8 +53,12 @@ class Boxs extends Controller
             'inputNbr.*.required' => 'the input number field is empty',
         ]);
 
-        $file = fopen($path, 'w') or die("Unable to open file!");    
+        $box_dir = "C:\Users\pc\Desktop\Laravel\objects\boxs\\".$request->boxName;
 
+        if(!is_dir($box_dir))
+            mkdir($box_dir);
+    
+        $box_file = fopen($box_dir."\\".$request->boxName.".txt", 'w');    
         
         // Parent relationship
         if($request->input('hosts'))
@@ -64,7 +66,9 @@ class Boxs extends Controller
         else
             $define_host = "define host {\n\tuse\t\t\tlinux-server\n\thost_name\t\t".$request->boxName."\n\talias\t\t\tbox\n\taddress\t\t\t".$request->addressIP."\n}\n\n";
 
-        fwrite($file, $define_host);
+        fwrite($box_file, $define_host);
+
+        fclose($box_file);
 
         // if($request->input('hostgroupName') || $request->input('groups'))
         // {
@@ -80,11 +84,14 @@ class Boxs extends Controller
         for ($i=0; $i < sizeof($equipNames); $i++) {
 
             $define_service = "define service {\n\tuse\t\t\tbox-service\n\thost_name\t\t".$request->boxName."\n\tservice_description\t".$equipNames[$i]."\n\tcheck_command\t\tIN".$equiINnbr[$i]."\n}\n\n"; 
-            fwrite($file, $define_service);
+ 
+            $equip_file = fopen($box_dir."\\".$equipNames[$i].".txt", "w");
+ 
+            fwrite($equip_file, $define_service);
+            
+            fclose($equip_file);
 
         }
-
-        fclose($file);
 
         return redirect()->route('configBoxs');
     }

@@ -17,7 +17,7 @@ class UsersConfigController extends Controller
     {
         $users = User::all()->except(1);
 
-        // $users = DB::table('users')
+        // $users = DB::connection('mysql2')->table('users')
         //     ->join('role_user','users.id','=','role_user.user_id')
         //     ->get();
         
@@ -29,7 +29,7 @@ class UsersConfigController extends Controller
         $user = User::find($id);
         $user->delete();
 
-        $remove_role = DB::table('role_user')
+        $remove_role = DB::connection('mysql2')->table('role_user')
             ->where('user_id',$user->id)
             ->delete();
 

@@ -52,7 +52,7 @@
 
                 <td style="width: 100px">
                     {{-- Edit --}}
-                    <form action="" class="float-left">
+                    <form action="{{ route('equipDetails', $equipement->service_id) }}" class="float-left">
                         <button type="submit" class="text-primary btn"><i class="fas fa-pen"></i></button>
                     </form>
 

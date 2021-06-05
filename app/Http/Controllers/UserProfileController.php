@@ -34,7 +34,7 @@ class UserProfileController extends Controller
         $user = User::find($id);
         $user->delete();
 
-        $remove_role = DB::table('role_user')
+        $remove_role = DB::connection('mysql2')->table('role_user')
             ->where('user_id',$user->id)
             ->delete();
 

@@ -13,6 +13,11 @@ use App\Http\Controllers\Config\Hosts;
 use App\Http\Controllers\Config\Boxs;
 use App\Http\Controllers\Config\GroupsController;
 
+use App\Http\Controllers\Config\Edit\EditHost;
+use App\Http\Controllers\Config\Edit\EditBox;
+use App\Http\Controllers\Config\Edit\EditService;
+use App\Http\Controllers\Config\Edit\EditEquip;
+
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LogoutController;
@@ -112,7 +117,6 @@ Route::prefix('configuration')->group(function () {
     Route::get('/hosts', [Hosts::class,'index'])->name('configHosts');
     Route::get('/hosts/types', [Hosts::class,'types'])->name('hostType');
     Route::get('/hosts/delete/{host_id}', [Hosts::class,'delete'])->name('deleteHost');
-    Route::get('/hosts/edit/{host_object_id}', [Hosts::class,'edit'])->name('editHost');
     Route::get('/hosts/add/manage/{type}',[Hosts::class,'manage'])->name('manageHost');
     Route::get('/hosts/add/{type}', [Hosts::class,'add'])->name('addHost');
     
@@ -120,21 +124,19 @@ Route::prefix('configuration')->group(function () {
     Route::get('/boxs', [Boxs::class,'index'])->name('configBoxs');
     Route::get('/boxs/add/manage/new', [Boxs::class,'add'])->name('addBox');
     Route::get('/boxs/add/manage',[Boxs::class,'manage'])->name('manageBox');
-    
     Route::get('/boxs/delete/{box_id}', [Boxs::class,'delete'])->name('deleteBox');
-    Route::get('/boxs/edit/{box_id}/edit/', [Boxs::class,'edit'])->name('editBox');
     
     
     // Services : 
     Route::get('/services', [ServicesController::class,'index'])->name('configServices');
     Route::get('/services/{service_id}', [ServicesController::class,'delete'])->name('deleteService');
-    Route::get('/services/{servcie_id}/edit/', [ServicesController::class,'edit'])->name('editService');
+    // Route::get('/services/{servcie_id}/edit/', [ServicesController::class,'edit'])->name('editService');
     Route::get('/services/add', [ServicesController::class,'add'])->name('addService');
     
     // Equipements : 
     Route::get('/equipements', [EquipementsController::class,'index'])->name('configEquips');
-    Route::get('/equipements/{equip_id}', [EquipementsController::class,'delete'])->name('deleteEquip');
-    Route::get('/equipements/{equip_id}/edit/', [EquipementsController::class,'edit'])->name('editEquip');
+    // Route::get('/equipements/{equip_id}', [EquipementsController::class,'delete'])->name('deleteEquip');
+    // Route::get('/equipements/{equip_id}/edit/', [EquipementsController::class,'edit'])->name('editEquip');
     Route::get('/equipements/add', [EquipementsController::class,'add'])->name('addEquip');
 
     Route::get('/notifications', [NotificationsController::class,'index']);
@@ -166,6 +168,23 @@ Route::prefix('configuration')->group(function () {
     Route::get('/equipgroups',[GroupsController::class,'equipgroups']);
     Route::get('/equipgroups/{id}',[GroupsController::class,'EGdetails'])->name('EGdetails');
 
+    // Edit Host/Box/Service/Equip
+    /** Edit Host */
+    Route::get('/hosts/edit/{id}', [EditHost::class,'index'])->name('hostDetails');
+    Route::get('/hosts/edit/{id}/modify', [EditHost::class,'editHost'])->name('editHost');
+    
+    /** Edit Host */
+    Route::get('/boxs/edit/{id}', [EditBox::class,'index'])->name('boxDetails');
+    Route::get('/boxs/edit/{id}/modify', [EditBox::class,'editBox'])->name('editBox');
+    
+    /** Edit Service */
+    Route::get('/services/edit/{id}', [EditService::class,'index'])->name('serviceDetails');
+    Route::get('/services/edit/{id}/modify', [EditService::class,'editService'])->name('editService');
+    
+    /** Edit Equipement */
+    Route::get('/equipements/edit/{id}', [EditEquip::class,'index'])->name('equipDetails');
+    Route::get('/equipements/edit/{id}/modify', [EditEquip::class,'editEquip'])->name('editEquip');
+    
 });
 
 

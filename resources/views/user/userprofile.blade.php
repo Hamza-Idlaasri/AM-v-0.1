@@ -34,7 +34,9 @@
             
             <a href="{{ route('edit-info') }}" class="d-inline text-info p-2"><i class="fas fa-pen"></i></a>
             
-            <button type="submit" class="btn text-danger remove"><i class="fas fa-trash"></i></button>
+            @if ($userProfile->id != 1)
+                <button type="submit" class="btn text-danger remove"><i class="fas fa-trash"></i></button>
+            @endif
             
         </div>
     </div>

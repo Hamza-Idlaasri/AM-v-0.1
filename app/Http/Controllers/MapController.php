@@ -23,7 +23,7 @@ class MapController extends Controller
         ->join('nagios_host_parenthosts','nagios_hosts.host_id','=','nagios_host_parenthosts.host_id')
         ->get();
 
-        return view('cartes.automap')->with('hosts',$hosts)->with('parent_hosts',$parent_hosts);
+        return view('cartes.automap')->with('hosts', $hosts)->with('parent_hosts', $parent_hosts);
 
         // return dd($parent_hosts);
     }

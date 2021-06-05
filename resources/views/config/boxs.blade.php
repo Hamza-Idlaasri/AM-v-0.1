@@ -51,12 +51,12 @@
 
                 <td style="width: 80px">
                     {{-- Edit --}}
-                    <form action="" class="float-left">
+                    <form action="{{ route('boxDetails', $box->host_id) }}" class="float-left">
                         <button type="submit" class="text-primary btn"><i class="fas fa-pen"></i></button>
                     </form>
 
                     {{-- Delete --}}
-                    <form action="{{ route('deleteBox', $box->host_id) }}" class="float-right">
+                    <form action="{{ route('editBox', $box->host_id) }}" class="float-right">
                         <button type="submit" class="text-danger btn"><i class="fas fa-trash"></i></button>
                     </form>
                 </td>

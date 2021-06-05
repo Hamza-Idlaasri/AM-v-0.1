@@ -9,7 +9,7 @@
             <div class="container w-50 my-2 p-3 float-left rounded bg-white">
                 
                 <h4>Define Host :</h4>
-                <label for="host_name"><b>Host name <span class="text-danger">*</span></b></label>
+                <label for="host_name"><b>Host Name <span class="text-danger">*</span></b></label>
                 <input type="text" name="hostName" class="form-control @error('hostName') border-danger @enderror" id="host_name">
                 @error('hostName')
                     <div class="text-danger">
