@@ -111,4 +111,32 @@ class EditBox extends Controller
 
         return back();
     }
+
+    public function deleteBox($box_id)
+    {
+        $box_deleted = DB::table('nagios_hosts')
+            ->where('host_id', $box_id)
+            ->select('nagios_hosts.display_name')
+            ->get();
+        
+        $path = "C:\Users\pc\Desktop\Laravel\objects\boxs\\".$box_deleted[0]->display_name;
+
+        if(is_dir($path))
+        {
+            $objects = scandir($path);
+
+            foreach ($objects as $object) { 
+                if ($object != "." && $object != "..") { 
+                    unlink($path. DIRECTORY_SEPARATOR .$object); 
+                } 
+            }
+
+            rmdir($path);
+
+        } else {
+            return 'WORNING: No box found';
+        }
+
+        return back();
+    }
 }

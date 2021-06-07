@@ -83,4 +83,23 @@ class EditEquip extends Controller
 
         return back();
     }
+
+    public function deleteEquip($equip_id)
+    {
+        $equip_deleted = DB::table('nagios_services')
+            ->where('service_id',$equip_id)
+            ->join('nagios_hosts','nagios_services.host_object_id','=','nagios_hosts.host_object_id')
+            ->select('nagios_hosts.display_name as box_name','nagios_services.display_name as equip_name')
+            ->get();
+
+        $path = "C:\Users\pc\Desktop\Laravel\objects\boxs\\".$equip_deleted[0]->box_name."\\".$equip_deleted[0]->equip_name.".txt";
+
+        if (is_file($path)) 
+            unlink($path);
+        else
+            return 'WORNING: No equipment found';
+        
+
+        return back();
+    }
 }

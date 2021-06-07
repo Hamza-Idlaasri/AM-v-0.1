@@ -21,10 +21,14 @@
                 <th>Edit</th>
             </tr>    
         </thead>
+
         <?php $i=0?>
+
         @forelse ($users as $user)
             @if (auth()->user() != $user)
+
             <?php $i++ ?>
+            
             <tr>
                 <td>{{ $user->id }}</td>
                 <td>{{ $user->name }}</td>

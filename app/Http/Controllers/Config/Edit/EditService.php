@@ -76,4 +76,22 @@ class EditService extends Controller
 
         return back();
     }
+
+    public function deleteService($service_id)
+    {
+        $service_deleted = DB::table('nagios_services')
+            ->where('service_id',$service_id)
+            ->join('nagios_hosts','nagios_services.host_object_id','=','nagios_hosts.host_object_id')
+            ->select('nagios_hosts.display_name as host_name','nagios_services.display_name as service_name')
+            ->get();
+
+        $path = "C:\Users\pc\Desktop\Laravel\objects\hosts\\".$service_deleted[0]->host_name."\\".$service_deleted[0]->service_name.".txt";
+
+        if (is_file($path)) 
+            unlink($path);
+        else
+            return 'WORNING: No service found';
+        
+        return back();
+    }
 }
