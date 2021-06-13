@@ -110,8 +110,13 @@ class EditHost extends Controller
                 file_put_contents("C:\Users\pc\Desktop\Laravel\objects\hosts\\".$request->hostName."\\".$service->service_name.".txt", $content);
     
             }
-        }
 
+            // Editing in nagios.cfg file
+            $nagios_file_content = file_get_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt");
+            $nagios_file_content = str_replace($old_host_details[0]->display_name, $request->hostName, $nagios_file_content);
+            file_put_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt", $nagios_file_content);
+
+        }
 
         return back();
 
@@ -137,6 +142,11 @@ class EditHost extends Controller
             }
 
             rmdir($path);
+
+            // Editing in nagios.cfg file
+            $nagios_file_content = file_get_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt");
+            $nagios_file_content = str_replace("cfg_file=C:\Users\pc\Desktop\Laravel\objects\hosts\\{$host_deleted[0]->display_name}\\{$host_deleted[0]->display_name}.txt", '', $nagios_file_content);
+            file_put_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt", $nagios_file_content);
 
         } else {
             return 'WORNING: No host found';

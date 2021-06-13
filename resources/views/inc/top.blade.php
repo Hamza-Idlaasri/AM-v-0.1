@@ -49,14 +49,14 @@
             <!-- Equipements summary -->
 
             <td  title="Equipements">
-                <i class="far fa-microchip text-muted"></i>
+                <i class="far fa-microchip fa-lg text-muted"></i>
             </td>
 
             <td  title="total des equipements : {{ $total_equipements }}">
                 <span class="badge">{{ $total_equipements }}</span>  
             </td>
 
-            <td  title="{{ $equipements_ok }} {{ Str::plural('equipement',$equipements_ok)}} Ok">
+            <td  title="{{ $equipements_ok }} {{ Str::plural('equipement',$equipements_ok)}} ok">
                 <span class="badge badge-success">{{ $equipements_ok }}</span> 
             </td>
 

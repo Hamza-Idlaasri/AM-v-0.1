@@ -57,19 +57,19 @@ class Boxs extends Controller
 
         if(!is_dir($box_dir))
             mkdir($box_dir);
-    
-        $box_file = fopen($box_dir."\\".$request->boxName.".txt", 'w');    
-        
+            
         // Parent relationship
         if($request->input('hosts'))
             $define_host = "define host {\n\tuse\t\t\tlinux-server\n\thost_name\t\t".$request->boxName."\n\talias\t\t\tbox\n\taddress\t\t\t".$request->addressIP."\n\tparents\t\t\t".$request->input('hosts')."\n}\n\n";
         else
             $define_host = "define host {\n\tuse\t\t\tlinux-server\n\thost_name\t\t".$request->boxName."\n\talias\t\t\tbox\n\taddress\t\t\t".$request->addressIP."\n}\n\n";
 
-        fwrite($box_file, $define_host);
+        file_put_contents($box_dir."\\".$request->boxName.".txt", $define_host);
 
-        fclose($box_file);
-
+        // Add box path to nagios.cfg file
+        $cfg_file = "\n\ncfg_file=C:\Users\pc\Desktop\Laravel\objects\boxs\\{$request->boxName}\\{$request->boxName}.txt";
+        file_put_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt", $cfg_file, FILE_APPEND);
+        
         // if($request->input('hostgroupName') || $request->input('groups'))
         // {
         //     if($request->input('hostgroupName'))    
@@ -90,6 +90,10 @@ class Boxs extends Controller
             fwrite($equip_file, $define_service);
             
             fclose($equip_file);
+
+            // Add equip path to nagios.cfg file
+            $cfg_file = "\ncfg_file=C:\Users\pc\Desktop\Laravel\objects\boxs\\{$request->boxName}\\{$equipNames[$i]}.txt";
+            file_put_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt", $cfg_file, FILE_APPEND);
 
         }
 

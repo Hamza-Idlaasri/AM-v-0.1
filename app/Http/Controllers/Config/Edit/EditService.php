@@ -72,6 +72,10 @@ class EditService extends Controller
 
             rename("C:\Users\pc\Desktop\Laravel\objects\hosts\\".$old_service_details[0]->host_name."\\".$old_service_details[0]->service_name.".txt", "C:\Users\pc\Desktop\Laravel\objects\hosts\\".$old_service_details[0]->host_name."\\".$request->serviceName.".txt");
 
+            // Editing in nagios.cfg file
+            $nagios_file_content = file_get_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt");
+            $nagios_file_content = str_replace($old_service_details[0]->display_name, $request->serviceName, $nagios_file_content);
+            file_put_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt", $nagios_file_content);
         }
 
         return back();
@@ -88,8 +92,15 @@ class EditService extends Controller
         $path = "C:\Users\pc\Desktop\Laravel\objects\hosts\\".$service_deleted[0]->host_name."\\".$service_deleted[0]->service_name.".txt";
 
         if (is_file($path)) 
+        {
             unlink($path);
-        else
+
+            // Editing in nagios.cfg file
+            $nagios_file_content = file_get_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt");
+            $nagios_file_content = str_replace("cfg_file=C:\Users\pc\Desktop\Laravel\objects\hosts\\{$service_deleted[0]->host_name}\\{$service_deleted[0]->service_name}.txt", '', $nagios_file_content);
+            file_put_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt", $nagios_file_content);
+
+        } else
             return 'WORNING: No service found';
         
         return back();

@@ -107,6 +107,11 @@ class EditBox extends Controller
                 file_put_contents("C:\Users\pc\Desktop\Laravel\objects\boxs\\".$request->boxName."\\".$equip->equip_name.".txt", $content);
     
             }
+
+            // Editing in nagios.cfg file
+            $nagios_file_content = file_get_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt");
+            $nagios_file_content = str_replace($old_box_details[0]->display_name, $request->boxName, $nagios_file_content);
+            file_put_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt", $nagios_file_content);
         }
 
         return back();
@@ -132,6 +137,11 @@ class EditBox extends Controller
             }
 
             rmdir($path);
+
+            // Editing in nagios.cfg file
+            $nagios_file_content = file_get_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt");
+            $nagios_file_content = str_replace("cfg_file=C:\Users\pc\Desktop\Laravel\objects\boxs\\{$box_deleted[0]->display_name}\\{$box_deleted[0]->display_name}.txt", '', $nagios_file_content);
+            file_put_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt", $nagios_file_content);
 
         } else {
             return 'WORNING: No box found';

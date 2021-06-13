@@ -79,6 +79,10 @@ class EditEquip extends Controller
 
             rename("C:\Users\pc\Desktop\Laravel\objects\boxs\\".$old_equip_details[0]->host_name."\\".$old_equip_details[0]->service_name.".txt", "C:\Users\pc\Desktop\Laravel\objects\boxs\\".$old_equip_details[0]->host_name."\\".$request->equipName.".txt");
 
+            // Editing in nagios.cfg file
+            $nagios_file_content = file_get_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt");
+            $nagios_file_content = str_replace($old_equip_details[0]->display_name, $request->equipName, $nagios_file_content);
+            file_put_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt", $nagios_file_content);
         }
 
         return back();
@@ -95,7 +99,14 @@ class EditEquip extends Controller
         $path = "C:\Users\pc\Desktop\Laravel\objects\boxs\\".$equip_deleted[0]->box_name."\\".$equip_deleted[0]->equip_name.".txt";
 
         if (is_file($path)) 
+        {
             unlink($path);
+
+            // Editing in nagios.cfg file
+            $nagios_file_content = file_get_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt");
+            $nagios_file_content = str_replace("cfg_file=C:\Users\pc\Desktop\Laravel\objects\boxs\\{$equip_deleted[0]->box_name}\\{$equip_deleted[0]->equip_name}.txt", '', $nagios_file_content);
+            file_put_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt", $nagios_file_content);
+        }
         else
             return 'WORNING: No equipment found';
         
