@@ -53,7 +53,7 @@ class Boxs extends Controller
             'inputNbr.*.required' => 'the input number field is empty',
         ]);
 
-        $box_dir = "C:\Users\pc\Desktop\Laravel\objects\boxs\\".$request->boxName;
+        $box_dir = "/usr/local/nagios/etc/objects/boxs/".$request->boxName;
 
         if(!is_dir($box_dir))
             mkdir($box_dir);
@@ -64,11 +64,11 @@ class Boxs extends Controller
         else
             $define_host = "define host {\n\tuse\t\t\tlinux-server\n\thost_name\t\t".$request->boxName."\n\talias\t\t\tbox\n\taddress\t\t\t".$request->addressIP."\n}\n\n";
 
-        file_put_contents($box_dir."\\".$request->boxName.".txt", $define_host);
+        file_put_contents($box_dir."/".$request->boxName.".cfg", $define_host);
 
         // Add box path to nagios.cfg file
-        $cfg_file = "\n\ncfg_file=C:\Users\pc\Desktop\Laravel\objects\boxs\\{$request->boxName}\\{$request->boxName}.txt";
-        file_put_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt", $cfg_file, FILE_APPEND);
+        $cfg_file = "\n\ncfg_file=/usr/local/nagios/etc/objects/boxs/{$request->boxName}/{$request->boxName}.cfg";
+        file_put_contents("/usr/local/nagios/etc/nagios.cfg", $cfg_file, FILE_APPEND);
         
         // if($request->input('hostgroupName') || $request->input('groups'))
         // {
@@ -85,15 +85,15 @@ class Boxs extends Controller
 
             $define_service = "define service {\n\tuse\t\t\tbox-service\n\thost_name\t\t".$request->boxName."\n\tservice_description\t".$equipNames[$i]."\n\tcheck_command\t\tIN".$equiINnbr[$i]."\n}\n\n"; 
  
-            $equip_file = fopen($box_dir."\\".$equipNames[$i].".txt", "w");
+            $equip_file = fopen($box_dir."/".$equipNames[$i].".cfg", "w");
  
             fwrite($equip_file, $define_service);
             
             fclose($equip_file);
 
             // Add equip path to nagios.cfg file
-            $cfg_file = "\ncfg_file=C:\Users\pc\Desktop\Laravel\objects\boxs\\{$request->boxName}\\{$equipNames[$i]}.txt";
-            file_put_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt", $cfg_file, FILE_APPEND);
+            $cfg_file = "\ncfg_file=/usr/local/nagios/etc/objects/boxs/{$request->boxName}/{$equipNames[$i]}.cfg";
+            file_put_contents("/usr/local/nagios/etc/nagios.cfg", $cfg_file, FILE_APPEND);
 
         }
 

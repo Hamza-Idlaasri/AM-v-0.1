@@ -83,7 +83,7 @@ class EditHost extends Controller
 
         if($old_host_details[0]->display_name == $request->hostName) {
 
-            $path = "C:\Users\pc\Desktop\Laravel\objects\hosts\\".$request->hostName."\\".$request->hostName.".txt";  
+            $path = "/usr/local/nagios/etc/objects/hosts/".$request->hostName."/".$request->hostName.".cfg";  
             
             $file = fopen($path, 'w');
 
@@ -93,28 +93,28 @@ class EditHost extends Controller
 
         } else {
 
-            $path = "C:\Users\pc\Desktop\Laravel\objects\hosts\\".$old_host_details[0]->display_name."\\".$old_host_details[0]->display_name.".txt";
+            $path = "/usr/local/nagios/etc/objects/hosts/".$old_host_details[0]->display_name."/".$old_host_details[0]->display_name.".cfg";
             
             file_put_contents($path, $define_host);
 
-            rename("C:\Users\pc\Desktop\Laravel\objects\hosts\\".$old_host_details[0]->display_name."\\".$old_host_details[0]->display_name.".txt", "C:\Users\pc\Desktop\Laravel\objects\hosts\\".$old_host_details[0]->display_name."\\".$request->hostName.".txt");
+            rename("/usr/local/nagios/etc/objects/hosts/".$old_host_details[0]->display_name."/".$old_host_details[0]->display_name.".cfg", "/usr/local/nagios/etc/objects/hosts/".$old_host_details[0]->display_name."/".$request->hostName.".cfg");
 
-            rename("C:\Users\pc\Desktop\Laravel\objects\hosts\\".$old_host_details[0]->display_name, "C:\Users\pc\Desktop\Laravel\objects\hosts\\".$request->hostName);
+            rename("/usr/local/nagios/etc/objects/hosts/".$old_host_details[0]->display_name, "/usr/local/nagios/etc/objects/hosts/".$request->hostName);
           
             foreach ($services as $service) {
             
-                $content = file_get_contents("C:\Users\pc\Desktop\Laravel\objects\hosts\\".$request->hostName."\\".$service->service_name.".txt");
+                $content = file_get_contents("/usr/local/nagios/etc/objects/hosts/".$request->hostName."/".$service->service_name.".cfg");
             
                 $content = str_replace($old_host_details[0]->display_name, $request->hostName, $content);
     
-                file_put_contents("C:\Users\pc\Desktop\Laravel\objects\hosts\\".$request->hostName."\\".$service->service_name.".txt", $content);
+                file_put_contents("/usr/local/nagios/etc/objects/hosts/".$request->hostName."/".$service->service_name.".cfg", $content);
     
             }
 
             // Editing in nagios.cfg file
-            $nagios_file_content = file_get_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt");
+            $nagios_file_content = file_get_contents("/usr/local/nagios/etc/nagios.cfg");
             $nagios_file_content = str_replace($old_host_details[0]->display_name, $request->hostName, $nagios_file_content);
-            file_put_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt", $nagios_file_content);
+            file_put_contents("/usr/local/nagios/etc/nagios.cfg", $nagios_file_content);
 
         }
 
@@ -129,7 +129,7 @@ class EditHost extends Controller
             ->select('nagios_hosts.display_name')
             ->get();
         
-        $path = "C:\Users\pc\Desktop\Laravel\objects\hosts\\".$host_deleted[0]->display_name;
+        $path = "/usr/local/nagios/etc/objects/hosts/".$host_deleted[0]->display_name;
 
         if(is_dir($path))
         {
@@ -144,9 +144,9 @@ class EditHost extends Controller
             rmdir($path);
 
             // Editing in nagios.cfg file
-            $nagios_file_content = file_get_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt");
-            $nagios_file_content = str_replace("cfg_file=C:\Users\pc\Desktop\Laravel\objects\hosts\\{$host_deleted[0]->display_name}\\{$host_deleted[0]->display_name}.txt", '', $nagios_file_content);
-            file_put_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt", $nagios_file_content);
+            $nagios_file_content = file_get_contents("/usr/local/nagios/etc/nagios.cfg");
+            $nagios_file_content = str_replace("cfg_file=/usr/local/nagios/etc/objects/hosts/{$host_deleted[0]->display_name}/{$host_deleted[0]->display_name}.cfg", '', $nagios_file_content);
+            file_put_contents("/usr/local/nagios/etc/nagios.cfg", $nagios_file_content);
 
         } else {
             return 'WORNING: No host found';
