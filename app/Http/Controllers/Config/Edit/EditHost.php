@@ -36,11 +36,11 @@ class EditHost extends Controller
         // validation
         $this->validate($request,[
 
-            'hostName' => 'required',
+            'hostName' => 'required|alpha',
             'addressIP' => 'required',
-            'check_interval' => 'required',
-            'retry_interval' => 'required',
-            'max_attempts' => 'required',
+            'check_interval' => 'required|integer',
+            'retry_interval' => 'required|integer',
+            'max_attempts' => 'required|integer',
             'notif_interval' => 'required'
 
         ],[
@@ -57,6 +57,7 @@ class EditHost extends Controller
             ->select('nagios_services.display_name as service_name')
             ->get();
 
+        
         // Parent relationship
         if($request->input('hosts'))
             $define_host = "define host {\n\tuse\t\t\t\t\tlinux-server\n\thost_name\t\t".$request->hostName."\n\talias\t\t\thost\n\taddress\t\t\t".$request->addressIP."\n\tparents\t\t\t".$request->input('hosts');

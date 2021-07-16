@@ -6,7 +6,7 @@
 
         @include('inc.searchbar',['route' => 'monitoring.hosts'])
 
-        <table class="table table-bordered text-center">
+        <table class="table table-striped table-bordered text-center table-hover">
 
             <thead class="bg-primary text-white">
                 <tr>

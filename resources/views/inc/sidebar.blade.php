@@ -102,7 +102,7 @@
                 <a href="#"><img src="{{asset('images/interface/commands.png')}}" alt=""> Commandes</a>
             </li> --}}
             <li>
-                <a href="/configuration/notifications"><img src="{{asset('images/interface/notif.png')}}" alt=""> Notifications</a>
+                <a href="/configuration/notifications"><i class="fas fa-bell"></i> Notifications</a>
             </li>
             
         </ul>

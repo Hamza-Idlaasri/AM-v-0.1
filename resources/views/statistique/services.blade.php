@@ -58,7 +58,7 @@
             
             
             <div class="chart" style="width:97%;">
-                <h6>Nombre des alarmes</h6>
+                <h6>Historique des alarmes</h6>
                 <div class="w-100" style="height:400px">
                     <canvas id="LineChart"></canvas>
                 </div>
@@ -277,7 +277,7 @@ let lineChart = new Chart(ctxline, {
             },
             elements: {
                 point:{
-                    radius: 3
+                    radius: 1
                 }
             }
         }

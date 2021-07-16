@@ -6,7 +6,7 @@
     
     @include('inc.searchbar',['route' => 'problems.hosts'])
 
-    <table class="table table-striped table-bordered">
+    <table class="table table-striped table-bordered table-hover">
         <tr class="bg-primary text-light text-center">
             <th>Host</th>
             <th>Adresse IP</th>

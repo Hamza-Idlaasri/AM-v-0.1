@@ -18,6 +18,20 @@
     padding: 10px;
 }
 
+.switch img:hover{
+   filter: brightness(500%);
+}
+
+.router img:hover{
+   filter: brightness(500%);
+}
+
+.windows img:hover{
+   filter: brightness(500%);
+}
+
+
+
 </style>
 
 <div class="container p-3 text-center">
@@ -26,11 +40,37 @@
 
 <div class="container w-100 d-flex justify-content-center align-items-center" style="height: 50vh">
 
-    <a href="{{ route('manageHost', ['type' => 'windows']) }}" class="btn btn-outline-primary item">Windows</a>
-    <a href="{{ route('manageHost', ['type' => 'linux']) }}" class="btn btn-outline-primary item">Linux</a>
-    <a href="{{ route('manageHost', ['type' => 'switch']) }}" class="btn btn-outline-primary item">Switch</a>
-    <a href="{{ route('manageHost', ['type' => 'router']) }}" class="btn btn-outline-primary item">Router</a>
-    <a href="{{ route('manageHost', ['type' => 'printer']) }}" class="btn btn-outline-primary item">Printer</a>
+    <div class="d-flex flex-column justify-content-center align-items-center windows">
+        <a href="{{ route('manageHost', ['type' => 'windows']) }}" class="btn btn-outline-primary item">
+            <img src="{{ asset('images/interface/windows.png') }}" alt="">
+        </a>
+        <h5 class="text-primary font-weight-bolder">Windows</h5>
+    </div>
+
+    <div class="d-flex flex-column justify-content-center align-items-center">
+        <a href="{{ route('manageHost', ['type' => 'linux']) }}" class="btn btn-outline-primary item"><i class="fab fa-linux fa-2x"></i></a>
+        <h5 class="text-primary font-weight-bolder">Linux</h5>
+    </div>
+
+    <div class="d-flex flex-column justify-content-center align-items-center switch">
+        
+        <a href="{{ route('manageHost', ['type' => 'switch']) }}" class="btn btn-outline-primary item">
+            <img src="{{ asset('images/interface/switch.png')}}" alt="">
+        </a>
+        <h5 class="text-primary font-weight-bolder">Switch</h5>
+    </div>
+
+    <div class="d-flex flex-column justify-content-center align-items-center router">
+        <a href="{{ route('manageHost', ['type' => 'router']) }}" class="btn btn-outline-primary item">
+            <img src="{{ asset('images/interface/wifi-router.png') }}" alt="">
+        </a>
+        <h5 class="text-primary font-weight-bolder">Router</h5>
+    </div>
+
+    <div class="d-flex flex-column justify-content-center align-items-center">
+        <a href="{{ route('manageHost', ['type' => 'printer']) }}" class="btn btn-outline-primary item"><i class="far fa-print fa-2x"></i></a>
+        <h5 class="text-primary font-weight-bolder">Printer</h5>
+    </div>
 
 </div>
 

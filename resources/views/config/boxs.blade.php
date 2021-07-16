@@ -24,7 +24,7 @@
 </div>
 
 <div class="container my-3">
-    <table class="table table-striped table-bordered">
+    <table class="table table-striped table-bordered table-hover">
 
         <tr class="bg-primary text-light text-center">
             <th>Host</th>

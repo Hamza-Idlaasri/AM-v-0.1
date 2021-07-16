@@ -22,7 +22,7 @@ class LoginController extends Controller
         // validation
         $this->validate($request,[
 
-            'name' => 'required',
+            'name' => 'required|max:100',
             'password' => 'required',
 
         ]);

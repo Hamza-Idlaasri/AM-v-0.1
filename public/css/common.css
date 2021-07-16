@@ -8,21 +8,25 @@ fieldset {
 }
 
 #logo {
-    margin-top: -5px;
-    margin-left: 10px;
+    /* margin-top: -5px;
+    margin-left: 10px; */
 }
 
 #logo img {}
 
 #top_right {
-    width: 40%;
+    /* width: 40%; */
     padding: 0px 20px;
     height: 65px;
     background-color: #ebebeb;
 }
 
 #top_right table {
-    margin: auto;
+    /* margin: auto; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 65px;
 }
 
 td {
@@ -38,6 +42,16 @@ table img {
     width: 20px;
 }
 
+#top_left {
+    position: relative;
+}
+
+#top_left img {
+    position: absolute;
+    top: 0;
+    left: 10px;
+}
+
 
 /******************** GRID ***************/
 
@@ -47,7 +61,7 @@ table img {
 }
 
 .top {
-    width: 99%;
+    /* width: 99%; */
     height: 65px;
     background-color: rgb(0, 151, 211);
     grid-area: top;

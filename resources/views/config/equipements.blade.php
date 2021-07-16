@@ -26,7 +26,7 @@
 </div>
 
 <div class="my-3 mx-4">
-    <table class="table table-striped table-bordered" >
+    <table class="table table-striped table-bordered table-hover">
 
         <tr class="bg-primary text-light text-center">
             <th>Host</th>

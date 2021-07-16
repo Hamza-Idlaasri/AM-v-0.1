@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta http-equiv="refresh" content="15">
+    {{-- <meta http-equiv="refresh" content="15"> --}}
     <link rel="icon" href="{{ asset('images/interface/Logo.png') }}" type="image/icon type">
     <title>Alarm Manager</title>
 
@@ -52,3 +52,9 @@
     
 </body>
 </html>
+
+{{-- <script>
+    setTimeout(function(){
+    window.location.reload(1);
+    }, 5000);
+</script> --}}

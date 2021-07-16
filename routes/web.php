@@ -40,7 +40,7 @@ use App\Http\Controllers\NotificationsController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+Route::view('/test','test');
 // Overview : 
 
 Route::get('/overview',[OverviewController::class,'overview'])->name('overview');
@@ -99,7 +99,6 @@ Route::prefix('problems')->group(function () {
 });
 
 
-
 // Configuration Section: 
 
 Route::prefix('configuration')->group(function () {
@@ -153,18 +152,44 @@ Route::prefix('configuration')->group(function () {
     Route::view('/sites/{site}/equip','config.test.equip');
 
     // HostGroups
-    Route::get('/hostgroups',[GroupsController::class,'hostgroups']);
-    Route::get('/hostgroups/add-new', [GroupsController::class,'addHG'])->name('addHG');
-    Route::get('/hostgroups/add-new/create', [GroupsController::class,'createHG'])->name('createHG');
-    Route::get('/hostgroups/{id}',[GroupsController::class,'HGdetails'])->name('HGdetails');
+    Route::prefix('/hostgroups')->group(function () {
+
+        Route::get('/',[GroupsController::class,'hostgroups']);
+        Route::get('/add-new', [GroupsController::class,'addHG'])->name('addHG');
+        Route::get('/add-new/create', [GroupsController::class,'createHG'])->name('createHG');
+        Route::get('/{id}',[GroupsController::class,'HGdetails'])->name('HGdetails');
+        Route::get('/delete/{id}',[GroupsController::class,'deleteHG'])->name('deleteHG');
+        Route::get('/manage/{id}',[GroupsController::class,'manageHG'])->name('manageHG');
+        Route::get('/edit/{id}',[GroupsController::class,'editHG'])->name('editHG');
+
+    });
+    
     
     // ServiceGroups
-    Route::get('/servicegroups',[GroupsController::class,'servicegroups']);
-    Route::get('/servicegroups/{id}',[GroupsController::class,'SGdetails'])->name('SGdetails');
+    Route::prefix('/servicegroups')->group(function () {
+
+        Route::get('/',[GroupsController::class,'servicegroups']);
+        Route::get('/add-new', [GroupsController::class,'addSG'])->name('addSG');
+        Route::get('/{id}',[GroupsController::class,'SGdetails'])->name('SGdetails');
+        Route::get('/add-new/create', [GroupsController::class,'createSG'])->name('createSG');
+        Route::get('/delete/{id}',[GroupsController::class,'deleteSG'])->name('deleteSG');
+        Route::get('/manage/{id}',[GroupsController::class,'manageSG'])->name('manageSG');
+        Route::get('/edit/{id}',[GroupsController::class,'editSG'])->name('editSG');
+
+    });
     
     // EquipGroups
-    Route::get('/equipgroups',[GroupsController::class,'equipgroups']);
-    Route::get('/equipgroups/{id}',[GroupsController::class,'EGdetails'])->name('EGdetails');
+    Route::prefix('/equipgroups')->group(function () {
+
+        Route::get('/',[GroupsController::class,'equipgroups']);
+        Route::get('/add-new', [GroupsController::class,'addEG'])->name('addEG');
+        Route::get('/{id}',[GroupsController::class,'EGdetails'])->name('EGdetails');
+        Route::get('/add-new/create', [GroupsController::class,'createEG'])->name('createEG');
+        Route::get('/delete/{id}',[GroupsController::class,'deleteEG'])->name('deleteEG');
+        Route::get('/manage/{id}',[GroupsController::class,'manageEG'])->name('manageEG');
+        Route::get('/edit/{id}',[GroupsController::class,'editEG'])->name('editEG');
+
+    });
 
     // Edit Host/Box/Service/Equip
     /** Edit Host */
@@ -242,12 +267,10 @@ Route::get('/historiques/services/CSV',[ServicesController::class,'csv'])->name(
 Route::get('/historiques/equipements/CSV',[EquipementsController::class,'csv'])->name('equips.csv');
 
 // Login & Registration :
-
 /** Login : **/
 Route::get('/login',[LoginController::class,'index'])->name('login');
 Route::get('/',[LoginController::class,'index']);
 Route::post('/login',[LoginController::class,'store']);
-
 /** Register : **/
 Route::get('/register',[RegisterController::class,'index'])->name('register');
 Route::post('/register',[RegisterController::class,'store']);

@@ -1,13 +1,12 @@
 
 <div id="top_left" class="float-left">
-    <div id="logo">
+    {{-- <div id="logo"> --}}
         <img src="{{asset('images/interface/AlarmManager.png')}}" alt="Logo" />
-    </div>
+    {{-- </div> --}}
     
 </div>
 
 <div id="top_right" class="float-right">
-    
     
     <table>
 
@@ -144,5 +143,3 @@
 </div>
 
 <div class="clearfix"></div>
-
-

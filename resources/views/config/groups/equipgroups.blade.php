@@ -1,17 +1,36 @@
 @extends('layouts.app')
 
+<style>
+    .setting {
+        opacity: .2;
+        transition-duration: .3s
+    }
+    .setting:hover{
+        opacity: 1;
+    }
+</style>
+
 @section('content')
+
+<div class="container p-3">
+    <a href="{{ route('addEG') }}" class="btn btn-success"><i class="fas fa-plus"></i> Add New</a>
+</div>
 
 <div class="container p-4 d-flex justify-content-center flex-wrap">
 
     @forelse ($equipgroups as $group)
         <div class="container w-50">
-            <h5 class="text-center"><a href="{{ route('EGdetails', $group->servicegroup_id) }}">{{ $group->servicegroup }}</a></h5>
+            <h5 class="text-center"><a href="{{ route('EGdetails', $group->servicegroup_id) }}">{{ $group->servicegroup }}</a>
+                <span class="float-right setting">
+                    <a href="{{route('manageEG', $group->servicegroup_id)}}" class="mx-2"><i class="fas fa-pen fa-xs"></i></a>
+                    <a href="{{route('deleteEG', $group->servicegroup_id)}}" class="mx-2 text-danger"><i class="fas fa-trash-alt fa-xs"></i></a>
+                </span>
+            </h5>
             <table class="table table-bordered text-center">
                 <tr class="text-primary">
-                    <th>Host</th>
+                    <th>Box</th>
                     <th>Status</th>
-                    <th>Service</th>
+                    <th>Equipment</th>
                 </tr>
 
                 @forelse ($members as $member)
