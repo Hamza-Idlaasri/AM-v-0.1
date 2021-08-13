@@ -39,4 +39,11 @@
 
 <script src="https://cdn.jsdelivr.net/gh/emn178/chartjs-plugin-labels/src/chartjs-plugin-labels.js"></script>
 
+{{-- reload page --}}
+<script>
+    setTimeout(function(){
+    window.location.reload(1);
+    }, 15000);
+</script>
+
 @endsection

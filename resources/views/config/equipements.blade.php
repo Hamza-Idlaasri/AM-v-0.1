@@ -17,10 +17,8 @@
 </style>
 
 <div class="mx-4 my-3">
-
-    {{-- <form action="" class="float-left">
-        <button type="submit" class="btn btn-success"><i class="fas fa-plus"></i> Add New</button>
-    </form> --}}
+    
+    <a href="/configuration/equipements/select-box" class="btn btn-success"><i class="fas fa-plus"></i> Add New</a>
 
     @include('inc.searchbar',['route' => 'configEquips'])
 </div>

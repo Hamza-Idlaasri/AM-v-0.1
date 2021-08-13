@@ -11,22 +11,29 @@ use App\Http\Controllers\Monitoring\EquipementsController;
 
 use App\Http\Controllers\Config\Hosts;
 use App\Http\Controllers\Config\Boxs;
-use App\Http\Controllers\Config\GroupsController;
+
+use App\Http\Controllers\Config\Groups\HostGroups;
+use App\Http\Controllers\Config\Groups\ServiceGroups;
+use App\Http\Controllers\Config\Groups\EquipGroups;
 
 use App\Http\Controllers\Config\Edit\EditHost;
 use App\Http\Controllers\Config\Edit\EditBox;
 use App\Http\Controllers\Config\Edit\EditService;
 use App\Http\Controllers\Config\Edit\EditEquip;
 
+use App\Http\Controllers\Config\Add\AddEquip;
+use App\Http\Controllers\Config\Add\AddService;
+
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LogoutController;
 
-use App\Http\Controllers\MapController;
+use App\Http\Controllers\AutoMap\MapController;
+
 use App\Http\Controllers\UsersConfigController;
 use App\Http\Controllers\UserProfileController;
 
-use App\Http\Controllers\NotificationsController;
+use App\Http\Controllers\Config\Notifications\Notifications;
 
 
 
@@ -41,12 +48,15 @@ use App\Http\Controllers\NotificationsController;
 |
 */
 Route::view('/test','test');
-// Overview : 
 
+
+
+/************************************************************ START Overview : ****************************************************************/
 Route::get('/overview',[OverviewController::class,'overview'])->name('overview');
+/************************************************************ END Overview : ******************************************************************/
 
-// Monitoring Section :
 
+/********************************************************* START Monitoring Section : **********************************************************/
 Route::prefix('monitoring')->group(function () {
 
     /** Hosts */
@@ -69,12 +79,11 @@ Route::prefix('monitoring')->group(function () {
     Route::get('/equipements/{id}',[EquipementsController::class,'details']);
     
 });
+/********************************************************* END Monitoring Section : ***********************************************************/
 
 
 
-
-// Problems Section : 
-
+/****************************************************** START Problems Section : **************************************************************/
 Route::prefix('problems')->group(function () {
     
     /** Hosts */
@@ -97,10 +106,11 @@ Route::prefix('problems')->group(function () {
     Route::get('/equipements/{id}',[EquipementsController::class,'details']);
     
 });
+/****************************************************** END Problems Section : ****************************************************************/
 
 
-// Configuration Section: 
 
+/*********************************************************** START Configuration Section : ****************************************************/ 
 Route::prefix('configuration')->group(function () {
 
     // Users :
@@ -126,18 +136,98 @@ Route::prefix('configuration')->group(function () {
     
     // Services : 
     Route::get('/services', [ServicesController::class,'index'])->name('configServices');
-    // Route::get('/services/{service_id}', [ServicesController::class,'delete'])->name('deleteService');
-    // Route::get('/services/{servcie_id}/edit/', [ServicesController::class,'edit'])->name('editService');
-    // Route::get('/services/add', [ServicesController::class,'add'])->name('addService');
+    Route::get('/services/select-host', [AddService::class,'manage'])->name('selectHost');
+    Route::get('/services/add', [AddService::class,'add'])->name('addService');
     
     // Equipements : 
     Route::get('/equipements', [EquipementsController::class,'index'])->name('configEquips');
-    // Route::get('/equipements/{equip_id}', [EquipementsController::class,'delete'])->name('deleteEquip');
-    // Route::get('/equipements/{equip_id}/edit/', [EquipementsController::class,'edit'])->name('editEquip');
-    // Route::get('/equipements/add', [EquipementsController::class,'add'])->name('addEquip');
+    Route::get('/equipements/select-box', [AddEquip::class,'index']);
+    Route::get('/equipements/select-box/{id}', [AddEquip::class,'manage'])->name('selectBox');
+    Route::get('/equipements/add/{id}', [AddEquip::class,'addEquip'])->name('addEquip');
 
-    Route::get('/notifications', [NotificationsController::class,'index']);
 
+    // Edit Host/Box/Service/Equip
+    /** Edit Host */
+    Route::prefix('hosts')->group(function () {
+        
+        Route::get('/edit/{id}', [EditHost::class,'index'])->name('hostDetails');
+        Route::get('/edit/{id}/modify', [EditHost::class,'editHost'])->name('editHost');
+        Route::get('/delete/{id}', [EditHost::class,'deleteHost'])->name('deleteHost');
+
+    });
+    
+    /** Edit Host */
+    Route::prefix('boxs')->group(function () {
+
+        Route::get('/edit/{id}', [EditBox::class,'index'])->name('boxDetails');
+        Route::get('/edit/{id}/modify', [EditBox::class,'editBox'])->name('editBox');
+        Route::get('/delete/{id}', [EditBox::class,'deleteBox'])->name('deleteBox');
+
+    });
+    
+    /** Edit Service */
+    Route::prefix('services')->group(function () {
+
+        Route::get('/edit/{id}', [EditService::class,'index'])->name('serviceDetails');
+        Route::get('/edit/{id}/modify', [EditService::class,'editService'])->name('editService');
+        Route::get('/delete/{id}', [EditService::class,'deleteService'])->name('deleteService');
+
+    });
+
+    
+    /** Edit Equipement */
+    Route::prefix('equipements')->group(function () {
+
+        Route::get('/edit/{id}', [EditEquip::class,'index'])->name('equipDetails');
+        Route::get('/edit/{id}/modify', [EditEquip::class,'editEquip'])->name('editEquip');
+        Route::get('/delete/{id}', [EditEquip::class,'deleteEquip'])->name('deleteEquip');
+
+    });
+
+    // Notifications :
+    Route::get('/notifications', [Notifications::class,'index']);
+
+    // HostGroups
+    Route::prefix('/hostgroups')->group(function () {
+
+        Route::get('/',[HostGroups::class,'hostgroups']);
+        Route::get('/add-new', [HostGroups::class,'addHG'])->name('addHG');
+        Route::get('/add-new/create', [HostGroups::class,'createHG'])->name('createHG');
+        Route::get('/{id}',[HostGroups::class,'HGdetails'])->name('HGdetails');
+        Route::get('/delete/{id}',[HostGroups::class,'deleteHG'])->name('deleteHG');
+        Route::get('/manage/{id}',[HostGroups::class,'manageHG'])->name('manageHG');
+        Route::get('/edit/{id}',[HostGroups::class,'editHG'])->name('editHG');
+
+    });
+    
+    
+    // ServiceGroups
+    Route::prefix('/servicegroups')->group(function () {
+
+        Route::get('/',[ServiceGroups::class,'servicegroups']);
+        Route::get('/add-new', [ServiceGroups::class,'addSG'])->name('addSG');
+        Route::get('/{id}',[ServiceGroups::class,'SGdetails'])->name('SGdetails');
+        Route::get('/add-new/create', [ServiceGroups::class,'createSG'])->name('createSG');
+        Route::get('/delete/{id}',[ServiceGroups::class,'deleteSG'])->name('deleteSG');
+        Route::get('/manage/{id}',[ServiceGroups::class,'manageSG'])->name('manageSG');
+        Route::get('/edit/{id}',[ServiceGroups::class,'editSG'])->name('editSG');
+
+    });
+    
+    // EquipGroups
+    Route::prefix('/equipgroups')->group(function () {
+
+        Route::get('/',[EquipGroups::class,'equipgroups']);
+        Route::get('/add-new', [EquipGroups::class,'addEG'])->name('addEG');
+        Route::get('/{id}',[EquipGroups::class,'EGdetails'])->name('EGdetails');
+        Route::get('/add-new/create', [EquipGroups::class,'createEG'])->name('createEG');
+        Route::get('/delete/{id}',[EquipGroups::class,'deleteEG'])->name('deleteEG');
+        Route::get('/manage/{id}',[EquipGroups::class,'manageEG'])->name('manageEG');
+        Route::get('/edit/{id}',[EquipGroups::class,'editEG'])->name('editEG');
+
+    });
+
+    // Sites
     Route::view('/sites','config.sites');
 
     Route::get('/sites/{site}', function($site){
@@ -151,71 +241,11 @@ Route::prefix('configuration')->group(function () {
     Route::view('/sites/{site}/services','config.test.services');
     Route::view('/sites/{site}/equip','config.test.equip');
 
-    // HostGroups
-    Route::prefix('/hostgroups')->group(function () {
-
-        Route::get('/',[GroupsController::class,'hostgroups']);
-        Route::get('/add-new', [GroupsController::class,'addHG'])->name('addHG');
-        Route::get('/add-new/create', [GroupsController::class,'createHG'])->name('createHG');
-        Route::get('/{id}',[GroupsController::class,'HGdetails'])->name('HGdetails');
-        Route::get('/delete/{id}',[GroupsController::class,'deleteHG'])->name('deleteHG');
-        Route::get('/manage/{id}',[GroupsController::class,'manageHG'])->name('manageHG');
-        Route::get('/edit/{id}',[GroupsController::class,'editHG'])->name('editHG');
-
-    });
-    
-    
-    // ServiceGroups
-    Route::prefix('/servicegroups')->group(function () {
-
-        Route::get('/',[GroupsController::class,'servicegroups']);
-        Route::get('/add-new', [GroupsController::class,'addSG'])->name('addSG');
-        Route::get('/{id}',[GroupsController::class,'SGdetails'])->name('SGdetails');
-        Route::get('/add-new/create', [GroupsController::class,'createSG'])->name('createSG');
-        Route::get('/delete/{id}',[GroupsController::class,'deleteSG'])->name('deleteSG');
-        Route::get('/manage/{id}',[GroupsController::class,'manageSG'])->name('manageSG');
-        Route::get('/edit/{id}',[GroupsController::class,'editSG'])->name('editSG');
-
-    });
-    
-    // EquipGroups
-    Route::prefix('/equipgroups')->group(function () {
-
-        Route::get('/',[GroupsController::class,'equipgroups']);
-        Route::get('/add-new', [GroupsController::class,'addEG'])->name('addEG');
-        Route::get('/{id}',[GroupsController::class,'EGdetails'])->name('EGdetails');
-        Route::get('/add-new/create', [GroupsController::class,'createEG'])->name('createEG');
-        Route::get('/delete/{id}',[GroupsController::class,'deleteEG'])->name('deleteEG');
-        Route::get('/manage/{id}',[GroupsController::class,'manageEG'])->name('manageEG');
-        Route::get('/edit/{id}',[GroupsController::class,'editEG'])->name('editEG');
-
-    });
-
-    // Edit Host/Box/Service/Equip
-    /** Edit Host */
-    Route::get('/hosts/edit/{id}', [EditHost::class,'index'])->name('hostDetails');
-    Route::get('/hosts/edit/{id}/modify', [EditHost::class,'editHost'])->name('editHost');
-    Route::get('/hosts/delete/{id}', [EditHost::class,'deleteHost'])->name('deleteHost');
-    
-    /** Edit Host */
-    Route::get('/boxs/edit/{id}', [EditBox::class,'index'])->name('boxDetails');
-    Route::get('/boxs/edit/{id}/modify', [EditBox::class,'editBox'])->name('editBox');
-    Route::get('/boxs/delete/{id}', [EditBox::class,'deleteBox'])->name('deleteBox');
-    
-    /** Edit Service */
-    Route::get('/services/edit/{id}', [EditService::class,'index'])->name('serviceDetails');
-    Route::get('/services/edit/{id}/modify', [EditService::class,'editService'])->name('editService');
-    Route::get('/services/delete/{id}', [EditService::class,'deleteService'])->name('deleteService');
-    
-    /** Edit Equipement */
-    Route::get('/equipements/edit/{id}', [EditEquip::class,'index'])->name('equipDetails');
-    Route::get('/equipements/edit/{id}/modify', [EditEquip::class,'editEquip'])->name('editEquip');
-    Route::get('/equipements/delete/{id}', [EditEquip::class,'deleteEquip'])->name('deleteEquip');
-    
 });
+/*********************************************************** END Configuration Section : ******************************************************/ 
 
 
-// Statistique Section:
+/******************************************************* START Statistique Section : **********************************************************/ 
 Route::prefix('statistiques')->group(function () {
 
     /** Hosts */
@@ -228,11 +258,11 @@ Route::prefix('statistiques')->group(function () {
     // Route::get('/boxs',[BoxsController::class,'statistic']);
 
 });
+/******************************************************* END Statistique Section : ************************************************************/ 
 
 
 
-
-// Historique Section:
+/******************************************************* START Historique Section : ***********************************************************/ 
 Route::prefix('historiques')->group(function () {
 
     /** Hosts */
@@ -244,29 +274,30 @@ Route::prefix('historiques')->group(function () {
     /** Equipements */
     Route::get('/equipements',[EquipementsController::class,'historic'])->name('historic.equipements');
 
+
+    // Download PDF / CVS :
+    /** PDF */
+    Route::get('/hosts/download-PDF/{name}/{status}/{from}/{to}',[HostsController::class,'download'])->name('hosts.pdf');
+    Route::get('/services/download-PDF/{name}/{status}/{from}/{to}',[ServicesController::class,'download'])->name('services.pdf');
+    Route::get('/equipements/download-PDF/{name}/{status}/{from}/{to}',[EquipementsController::class,'download'])->name('equips.pdf');
+    /** CSV */
+    Route::get('/hosts/CSV',[HostsController::class,'csv'])->name('hosts.csv');
+    Route::get('/services/CSV',[ServicesController::class,'csv'])->name('services.csv');
+    Route::get('/equipements/CSV',[EquipementsController::class,'csv'])->name('equips.csv');
+
 });
+/******************************************************* END Historique Section : *************************************************************/ 
 
 
-
-
-// Cartes Section : 
+/******************************************************* START Cartes Section : ***************************************************************/ 
 /** Automap */
 Route::get('/cartes/automap',[MapController::class,'automap']);
 /** Carte */
 Route::get('/cartes/carte',[MapController::class,'carte']);
+/******************************************************* END Cartes Section : *****************************************************************/ 
 
 
-// Download PDF / CVS :
-/** PDF */
-Route::get('/historiques/hosts/download-PDF',[HostsController::class,'download'])->name('hosts.pdf');
-Route::get('/historiques/services/download-PDF',[ServicesController::class,'download'])->name('services.pdf');
-Route::get('/historiques/equipements/download-PDF',[EquipementsController::class,'download'])->name('equips.pdf');
-/** CSV */
-Route::get('/historiques/hosts/CSV',[HostsController::class,'csv'])->name('hosts.csv');
-Route::get('/historiques/services/CSV',[ServicesController::class,'csv'])->name('services.csv');
-Route::get('/historiques/equipements/CSV',[EquipementsController::class,'csv'])->name('equips.csv');
-
-// Login & Registration :
+/****************************************************** START Login & Registration : **********************************************************/ 
 /** Login : **/
 Route::get('/login',[LoginController::class,'index'])->name('login');
 Route::get('/',[LoginController::class,'index']);
@@ -287,14 +318,15 @@ Route::get('/profile', [UserProfileController::class,'userProfile'])->name('user
 /** Delete his Account : **/
 Route::delete('/{user}',[UserProfileController::class,'deleteMyAccount'])->name('deleteMyAccount');
 
+
 /** Edit his Info : **/
+// Change Password
+Route::get('/edit-password', [UserProfileController::class,'indexPass'])->name('edit-password');
+Route::put('/change-password',[UserProfileController::class,'changePassword'])->name('changePassword');
 
-    // Change Password
-    Route::get('/edit-password', [UserProfileController::class,'indexPass'])->name('edit-password');
-    Route::put('/change-password',[UserProfileController::class,'changePassword'])->name('changePassword');
-
-    // Change Username/Email 
-    Route::get('/edit-info', [UserProfileController::class,'indexInfo'])->name('edit-info');
-    Route::put('/change-info',[UserProfileController::class,'changeNameEmail'])->name('changeInfo');
+// Change Username/Email 
+Route::get('/edit-info', [UserProfileController::class,'indexInfo'])->name('edit-info');
+Route::put('/change-info',[UserProfileController::class,'changeNameEmail'])->name('changeInfo');
 
 });
+/****************************************************** END Login & Registration : **********************************************************/ 

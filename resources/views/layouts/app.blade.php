@@ -53,8 +53,9 @@
 </body>
 </html>
 
+{{-- reload page --}}
 {{-- <script>
     setTimeout(function(){
     window.location.reload(1);
-    }, 5000);
+    }, 1000);
 </script> --}}

@@ -30,14 +30,27 @@
 
     <div class="d-flex justify-content-around">
         {{-- Download PDF Button --}}
-        <a href="{{ route($route) }}" target="_blank" class="btn btn-danger fa-lg"><i class="fas fa-file-pdf"></i> PDF</a>
+        @php
+            if (!$name) {
+                $name = 'All';
+            }
+            if (!$status) {
+                $status = 'All';
+            }
+            if (!$dateFrom) {
+                $dateFrom = 'All';
+            }
+            if (!$dateTo) {
+                $dateTo = 'All';
+            }
+        @endphp
+        <a href="{{ route($route, [$name,$status,$dateFrom,$dateTo]) }}" target="_blank" class="btn btn-danger fa-lg"><i class="fas fa-file-pdf"></i> PDF</a>
 
         {{-- Download Excel Button --}}
         <form action="{{ route($csv) }}" method="get" >
             <button type="submit" class="btn btn-success fa-lg"><i class="fas fa-file-excel"></i> CSV</button>
         </form>
     </div>
-
 </div>
 
 <script>

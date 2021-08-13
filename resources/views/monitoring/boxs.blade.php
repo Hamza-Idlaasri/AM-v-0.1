@@ -62,4 +62,11 @@
     {{$boxs->appends(['search' => request()->query('search')])->links('vendor.pagination.bootstrap-4')}}
 </div>
 
+{{-- reload page --}}
+<script>
+    setTimeout(function(){
+    window.location.reload(1);
+    }, 15000);
+</script>
+
 @endsection

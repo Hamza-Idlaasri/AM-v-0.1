@@ -97,9 +97,9 @@ class Hosts extends Controller
                 $cfg_file = "\ncfg_file=/usr/local/nagios/etc/objects/hosts/{$request->hostName}\W3SVC.cfg";
                 file_put_contents("/usr/local/nagios/etc/nagios_cfg.cfg", $cfg_file, FILE_APPEND);
 
-                file_put_contents($path."\Explorer.cfg", "define service {\n\tuse\t\t\tgeneric-service\n\thost_name\t\t".$request->hostName."\n\tservice_description\tExplorer\n\tcheck_command\t\tcheck_nt!PROCSTATE!-d SHOWALL -l Explorer.exe\n}\n\n");
-                $cfg_file = "\ncfg_file=/usr/local/nagios/etc/objects/hosts/{$request->hostName}\Explorer.cfg";
-                file_put_contents("/usr/local/nagios/etc/nagios_cfg.cfg", $cfg_file, FILE_APPEND);
+                // file_put_contents($path."\Explorer.cfg", "define service {\n\tuse\t\t\tgeneric-service\n\thost_name\t\t".$request->hostName."\n\tservice_description\tExplorer\n\tcheck_command\t\tcheck_nt!PROCSTATE!-d SHOWALL -l Explorer.exe\n}\n\n");
+                // $cfg_file = "\ncfg_file=/usr/local/nagios/etc/objects/hosts/{$request->hostName}\Explorer.cfg";
+                // file_put_contents("/usr/local/nagios/etc/nagios_cfg.cfg", $cfg_file, FILE_APPEND);
                 
                 break;
 

@@ -223,10 +223,63 @@ class EquipementsController extends Controller
     
     }
 
-    public function download()
+    public function download($name,$status,$dateFrom,$dateTo)
     {
 
-        $equipements_history = $this->getEquipHistory()->get();
+        if($status || $name || $dateFrom || $dateTo)
+        {
+            $equipements_history = $this->getEquipHistory();
+
+            if($name != 'All')
+            {
+                $equipements_history = $equipements_history->where('nagios_services.display_name', $name);
+            }
+
+            if($dateFrom != 'All' || $dateTo != 'All')
+            {
+                if(!$dateFrom)
+                {
+                    $dateFrom = '2000-01-01';
+                }
+
+
+                if(!$dateTo)
+                    $dateTo = date('Y-m-d');
+
+                $equipements_history = $equipements_history
+                    ->where('nagios_statehistory.state_time','>=', $dateFrom)
+                    ->where('nagios_statehistory.state_time','<=', $dateTo);
+            }
+
+            if($status != 'All')
+            {
+                switch ($status) {
+                    case 'ok':
+                        $equipements_history = $equipements_history->where('state','0');
+                        break;
+                    
+                    case 'warning':
+                        $equipements_history = $equipements_history->where('state','1');
+                        break;
+                    
+                    case 'critical':
+                        $equipements_history = $equipements_history->where('state','2');
+                        break;
+                    
+                    case 'unreachable':
+                        $equipements_history = $equipements_history->where('state','3');
+                        break;
+                    
+                }
+            }
+
+            $equipements_history = $equipements_history->get();
+
+        } else{
+
+            $equipements_history = $this->getEquipHistory()->get();
+
+        }
         
         $pdf = PDF::loadView('download.equips', compact('equipements_history'))->setPaper('a4', 'landscape');
 

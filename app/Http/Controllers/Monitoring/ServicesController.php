@@ -215,10 +215,63 @@ class ServicesController extends Controller
     
     }
 
-    public function download()
+    public function download($name,$status,$dateFrom,$dateTo)
     {
 
-        $services_history = $this->getServicesHistory()->get();
+        if($status || $name || $dateFrom || $dateTo)
+        {
+            $services_history = $this->getServicesHistory();
+
+            if($name != 'All')
+            {
+                $services_history = $services_history->where('nagios_services.display_name', $name);
+            }
+
+            if($dateFrom != 'All' || $dateTo != 'All')
+            {
+                if(!$dateFrom)
+                {
+                    $dateFrom = '2000-01-01';
+                }
+
+
+                if(!$dateTo)
+                    $dateTo = date('Y-m-d');
+
+                $services_history = $services_history
+                    ->where('nagios_statehistory.state_time','>=', $dateFrom)
+                    ->where('nagios_statehistory.state_time','<=', $dateTo);
+            }
+
+            if($status != 'All')
+            {
+                switch ($status) {
+                    case 'ok':
+                        $services_history = $services_history->where('state','0');
+                        break;
+                    
+                    case 'warning':
+                        $services_history = $services_history->where('state','1');
+                        break;
+                    
+                    case 'critical':
+                        $services_history = $services_history->where('state','2');
+                        break;
+                    
+                    case 'unreachable':
+                        $services_history = $services_history->where('state','3');
+                        break;
+                    
+                }
+            }
+
+            $services_history = $services_history->get();
+
+        } else{
+
+            $services_history = $this->getServicesHistory()->get();
+
+        }
         
         $pdf = PDF::loadView('download.services', compact('services_history'))->setPaper('a4', 'landscape');
 

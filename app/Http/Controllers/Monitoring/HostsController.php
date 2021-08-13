@@ -219,10 +219,64 @@ class HostsController extends Controller
         return view('statistique.hosts', compact('all_hosts_names','cas','range','hosts_up','hosts_down','hosts_unreachable'));
     }
 
-    public function download()
+
+    public function download($name,$status,$dateFrom,$dateTo)
     {
 
-        $hosts_history = $this->getHostsHistory()->get();
+        if($status || $name || $dateFrom || $dateTo)
+        {
+            $hosts_history = $this->getHostsHistory();
+
+            if($name != 'All')
+            {
+                $hosts_history = $hosts_history->where('nagios_hosts.display_name', $name);
+            }
+
+            if($dateFrom != 'All' || $dateTo != 'All')
+            {
+                if(!$dateFrom)
+                {
+                    $dateFrom = '2000-01-01';
+                }
+
+
+                if(!$dateTo)
+                    $dateTo = date('Y-m-d');
+
+                $hosts_history = $hosts_history
+                    ->where('nagios_statehistory.state_time','>=', $dateFrom)
+                    ->where('nagios_statehistory.state_time','<=', $dateTo);
+            }
+
+            if($status != 'All')
+            {
+                switch ($status) {
+                    case 'ok':
+                        $hosts_history = $hosts_history->where('state','0');
+                        break;
+                    
+                    case 'warning':
+                        $hosts_history = $hosts_history->where('state','1');
+                        break;
+                    
+                    case 'critical':
+                        $hosts_history = $hosts_history->where('state','2');
+                        break;
+                    
+                    case 'unreachable':
+                        $hosts_history = $hosts_history->where('state','3');
+                        break;
+                    
+                }
+            }
+
+            $hosts_history = $hosts_history->get();
+
+        } else{
+
+            $hosts_history = $this->getHostsHistory()->get();
+
+        }
         
         $pdf = PDF::loadView('download.hosts', compact('hosts_history'))->setPaper('a4', 'landscape');
 

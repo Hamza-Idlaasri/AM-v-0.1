@@ -15,7 +15,7 @@
 
     <!-- Download button -->
     <div class="float-left">
-        @include('inc.download', ['route' => 'services.pdf','csv' => 'services.csv'])
+        @include('inc.download', ['route' => 'services.pdf','csv' => 'services.csv','name' => request()->query('name'), 'status' => request()->query('status'), 'dateFrom' => request()->query('from'), 'dateTo' => request()->query('to')])
     </div>
 
 </div>

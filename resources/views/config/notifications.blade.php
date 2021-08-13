@@ -9,10 +9,10 @@
 @section('content')
 
     <div class="container d-flex justify-content-around w-50 my-3">
-        <button class="btn btn-primary font-weight-bold" id="Hs">Hosts</button>
-        <button class="btn btn-light font-weight-bold" id="Ss">Services</button>
-        <button class="btn btn-light font-weight-bold" id="Bs">Boxs</button>
-        <button class="btn btn-light font-weight-bold" id="Es">Equipements</button>
+        <button class="btn btn-primary font-weight-bold shadow-none" id="Hs">Hosts</button>
+        <button class="btn btn-light font-weight-bold shadow-none" id="Ss">Services</button>
+        <button class="btn btn-light font-weight-bold shadow-none" id="Bs">Boxs</button>
+        <button class="btn btn-light font-weight-bold shadow-none" id="Es">Equipements</button>
     </div>
 
     {{-- Hosts --}}
@@ -386,6 +386,7 @@
     const Equips = document.getElementById('equips');
 
     Hs.onclick = () =>{
+
         Hosts.style.display = 'block';
         Boxs.style.display = 'none';
         Services.style.display = 'none';
@@ -403,11 +404,10 @@
         Es.classList.remove("btn-primary");
         Es.classList.add("btn-light");
 
-        
-
     }
 
     Ss.onclick = () =>  {
+
         Services.style.display = 'block';
         Boxs.style.display = 'none';
         Hosts.style.display = 'none';
@@ -428,6 +428,7 @@
     }
 
     Bs.onclick = () =>  {
+
         Boxs.style.display = 'block';
         Hosts.style.display = 'none';
         Services.style.display = 'none';
@@ -447,6 +448,7 @@
     }
 
     Es.onclick = () => {
+        
         Equips.style.display = 'block';
         Boxs.style.display = 'none';
         Services.style.display = 'none';

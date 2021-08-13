@@ -81,7 +81,7 @@
                     </div>
                 </div>
             </div>
-            <span class="btn text-primary float-right add" title="Add another equipement for monitoring"><i class="fas fa-plus"></i></span>
+            <span class="btn text-primary bg-white float-right add" title="Add another equipement for monitoring"><i class="fas fa-plus"></i></span>
         </div>
         <br>
         <button type="submit" class="btn btn-primary">Create</button>
@@ -130,9 +130,6 @@ addEquip.onclick = () => {
     test.classList.add('equip'+i,'w-100','d-flex','my-3');
     test.innerHTML = Equip.innerHTML;
     document.querySelector('.defineEquip').appendChild(test);
-
-    // document.querySelector('.equip'+i).childNodes[1].childNodes[3].setAttribute('name','equipName'+i);
-    // document.querySelector('.equip'+i).childNodes[3].childNodes[3].setAttribute('name','inputNbr'+i);
 
     i++;
     

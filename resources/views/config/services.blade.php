@@ -16,10 +16,8 @@
 </style>
 
 <div class="m-3">
-
-    {{-- <form action="" class="float-left">
-        <button type="submit" class="btn btn-success"><i class="fas fa-plus"></i> Add New</button>
-    </form> --}}
+    
+    <a href="{{ route('selectHost') }}" class="btn btn-success"><i class="fas fa-plus"></i> Add New</a>
 
     @include('inc.searchbar', ['route' => 'configServices'])
 

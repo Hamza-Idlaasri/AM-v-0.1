@@ -84,34 +84,34 @@ class EditBox extends Controller
 
         if($old_box_details[0]->display_name == $request->boxName) {
 
-            $path = "/usr/local/nagios/etc/objects/boxs/".$request->boxName."/".$request->boxName.".cfg";  
+            $path = "C:\Users\pc\Desktop\Laravel\objects\boxs\\".$request->boxName."\\".$request->boxName.".txt";  
             
             file_put_contents($path, $define_host);
 
         } else {
 
-            $path = "/usr/local/nagios/etc/objects/boxs/".$old_box_details[0]->display_name."/".$old_box_details[0]->display_name.".cfg";
+            $path = "C:\Users\pc\Desktop\Laravel\objects\boxs\\".$old_box_details[0]->display_name."\\".$old_box_details[0]->display_name.".txt";
             
             file_put_contents($path, $define_host);
 
-            rename("/usr/local/nagios/etc/objects/boxs/".$old_box_details[0]->display_name."/".$old_box_details[0]->display_name.".cfg", "/usr/local/nagios/etc/objects/boxs/".$old_box_details[0]->display_name."/".$request->boxName.".cfg");
+            rename("C:\Users\pc\Desktop\Laravel\objects\boxs\\".$old_box_details[0]->display_name."\\".$old_box_details[0]->display_name.".txt", "C:\Users\pc\Desktop\Laravel\objects\boxs\\".$old_box_details[0]->display_name."\\".$request->boxName.".txt");
 
-            rename("/usr/local/nagios/etc/objects/boxs/".$old_box_details[0]->display_name, "/usr/local/nagios/etc/objects/boxs/".$request->boxName);
+            rename("C:\Users\pc\Desktop\Laravel\objects\boxs\\".$old_box_details[0]->display_name, "C:\Users\pc\Desktop\Laravel\objects\boxs\\".$request->boxName);
 
             foreach ($equips as $equip) {
             
-                $content = file_get_contents("/usr/local/nagios/etc/objects/boxs/".$request->boxName."/".$equip->equip_name.".cfg");
+                $content = file_get_contents("C:\Users\pc\Desktop\Laravel\objects\boxs\\".$request->boxName."\\".$equip->equip_name.".txt");
             
                 $content = str_replace($old_box_details[0]->display_name, $request->boxName, $content);
     
-                file_put_contents("/usr/local/nagios/etc/objects/boxs/".$request->boxName."/".$equip->equip_name.".cfg", $content);
+                file_put_contents("C:\Users\pc\Desktop\Laravel\objects\boxs\\".$request->boxName."\\".$equip->equip_name.".txt", $content);
     
             }
 
             // Editing in nagios.cfg file
-            $nagios_file_content = file_get_contents("/usr/local/nagios/etc/nagios.cfg");
+            $nagios_file_content = file_get_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt");
             $nagios_file_content = str_replace($old_box_details[0]->display_name, $request->boxName, $nagios_file_content);
-            file_put_contents("/usr/local/nagios/etc/nagios.cfg", $nagios_file_content);
+            file_put_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt", $nagios_file_content);
         }
 
         return redirect()->route('monitoring.boxs');
@@ -130,7 +130,7 @@ class EditBox extends Controller
             ->select('nagios_hosts.display_name as box_name','nagios_services.display_name as equip_name')
             ->get();
 
-        $path = "/usr/local/nagios/etc/objects/boxs/".$box_deleted[0]->display_name;
+        $path = "C:\Users\pc\Desktop\Laravel\objects\boxs\\".$box_deleted[0]->display_name;
 
         if(is_dir($path))
         {
@@ -145,15 +145,15 @@ class EditBox extends Controller
             rmdir($path);
 
             // Editing in nagios.cfg file
-            $nagios_file_content = file_get_contents("/usr/local/nagios/etc/nagios.cfg");
-            $nagios_file_content = str_replace("cfg_file=/usr/local/nagios/etc/objects/boxs/{$box_deleted[0]->display_name}/{$box_deleted[0]->display_name}.cfg", '', $nagios_file_content);
-            file_put_contents("/usr/local/nagios/etc/nagios.cfg", $nagios_file_content);
+            $nagios_file_content = file_get_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt");
+            $nagios_file_content = str_replace("cfg_file=C:\Users\pc\Desktop\Laravel\objects\boxs\\{$box_deleted[0]->display_name}/{$box_deleted[0]->display_name}.cfg", '', $nagios_file_content);
+            file_put_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt", $nagios_file_content);
 
             // Remove box equips
             foreach ($box_equips as $equip) {
-                $nagios_file_content = file_get_contents("/usr/local/nagios/etc/nagios.cfg");
-                $nagios_file_content = str_replace("cfg_file=/usr/local/nagios/etc/objects/boxs/{$equip->box_name}/{$equip->equip_name}.cfg", '', $nagios_file_content);
-                file_put_contents("/usr/local/nagios/etc/nagios.cfg", $nagios_file_content);
+                $nagios_file_content = file_get_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt");
+                $nagios_file_content = str_replace("cfg_file=C:\Users\pc\Desktop\Laravel\objects\boxs\\{$equip->box_name}/{$equip->equip_name}.cfg", '', $nagios_file_content);
+                file_put_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt", $nagios_file_content);
             }
 
         } else {
