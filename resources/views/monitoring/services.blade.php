@@ -27,7 +27,9 @@
 
             @if ($check == 0 || $service->host_object_id != $check)       
                 
-                    <td><a href="/monitoring/hosts/{{$service->host_id}}">{{$service->host_name}}</a></td> 
+                    <td>
+                        <a href="/monitoring/hosts/{{$service->host_id}}">{{$service->host_name}}</a>
+                    </td> 
 
                     <?php $check = $service->host_object_id ?>
                 
@@ -36,7 +38,14 @@
             @endif
             
 
-            <td><a href="/monitoring/services/{{$service->service_id}}">{{$service->service_name}}</a></td>
+            <td>
+                <a href="/monitoring/services/{{$service->service_id}}">{{$service->service_name}}</a>
+                @if ($service->is_flapping)
+                    <span class="float-right text-danger" title="This Service is flapping" style="cursor: pointer">
+                        <i class="fas fa-retweet"></i>
+                    </span>
+                @endif
+            </td>
             
             @switch($service->current_state)
                 @case(0)

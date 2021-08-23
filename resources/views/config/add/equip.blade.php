@@ -9,7 +9,7 @@
   @if (sizeof($inputs_not_used) > 0)
     <form action="{{ route('addEquip', $box->box_id) }}" method="get">
 
-      <div class="container p-3 rounded bg-white m-3">
+      <div class="container p-3 rounded bg-white m-3 shadow-sm">
           <h4>Define Equipements :</h4>
           <div class="container p-3 defineEquip">
               <div class="equip1 d-flex w-100 my-3">
@@ -36,8 +36,10 @@
           </div>
 
           @if (sizeof($inputs_not_used) > 1)
-            <span class="btn text-primary bg-white float-right add" title="Add another equipement for monitoring"><i class="fas fa-plus"></i></span>
+            <span class="btn text-primary bg-white float-right shadow-sm add" title="Add another equipement for monitoring"><i class="fas fa-plus"></i></span>
           @endif
+
+          <span class="btn text-primary bg-white float-right shadow-sm" id="rmv" title="Remove last equipement" style="display: none"><i class="fas fa-minus"></i></span>            
 
       </div>
 
@@ -104,6 +106,8 @@
 {{-- this script for adding new equipement --}}
 <script>
 
+const rmv = document.getElementById('rmv');
+
 let i = 2;
 const addEquip = document.querySelector('.add');
 const Equip = document.querySelector('.equip1');
@@ -121,7 +125,32 @@ addEquip.onclick = () => {
     
     if(i > inputs_not_used.length)
         addEquip.style.display = 'none';
+    
+    if (i > 2) {
+      rmv.style.display = 'block';
+    }
 }
+
+
+// Remove equip
+
+rmv.onclick = () => {
+
+  if (i > 2) {
+    document.querySelector('.defineEquip').lastElementChild.remove();
+    i--;
+  }
+
+  if (i >= 2) {
+    addEquip.style.display = 'block';
+  }
+
+  if (i == 2) {
+      rmv.style.display = 'none';
+  }
+
+}
+
 
 </script>
 

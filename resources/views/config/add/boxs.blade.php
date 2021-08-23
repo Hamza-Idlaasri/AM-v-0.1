@@ -6,7 +6,7 @@
     
     <form action="{{ route('addBox') }}" method="get">
         <div class="clearfix">
-            <div class="container w-50 my-2 p-3 float-left rounded bg-white">
+            <div class="container w-50 my-2 p-3 float-left rounded bg-white shadow-sm">
                 
                 <h4>Define Box :</h4>
                 <label for="box_name"><b>Box name <span class="text-danger">*</span></b> </label>
@@ -28,22 +28,8 @@
         
             </div>
 
-            <div class="container w-50 my-0 p-3 float-right">
-                {{-- <div class="container rounded bg-white p-3">
-                    <h4>Host Group :</h4>    
-                    <label for="hgName"><b>Host Group Name (New) :</b></label>
-                    <input type="text" name="hostgroupName" class="form-control" id="hgName">
-                    <br>
-                    <label for=""><b>Add it to Existed HostGroups :</b></label>
-                    <div class="sizing">
-                        @foreach ($host_groups as $group)
-                            <input type="radio" name="groups" value="{{$group->alias}}"> {{$group->alias}}
-                            <br>
-                        @endforeach
-                    </div>
-                </div> --}}
-                
-                <div class="container rounded bg-white p-3" style="height:250px">
+            <div class="container w-50 p-0 float-right">
+                <div class="container rounded bg-white m-2 p-3 shadow-sm" style="height:200px">
                     <h4>Parent :</h4>
                     <div class="sizing" style="height:200px;overflow: auto">
                         
@@ -56,7 +42,7 @@
                 </div>
             </div>
         </div>
-        <div class="container p-3 rounded bg-white">
+        <div class="container p-3 rounded bg-white shadow-sm">
             <h4>Define Equipements :</h4>
             <div class="container p-3 defineEquip">
                 <div class="equip1 d-flex w-100 my-3">
@@ -82,6 +68,8 @@
                 </div>
             </div>
             <span class="btn text-primary bg-white float-right add" title="Add another equipement for monitoring"><i class="fas fa-plus"></i></span>
+            <span class="btn text-primary bg-white float-right shadow-sm" id="rmv" title="Remove last equipement" style="display: none"><i class="fas fa-minus"></i></span>            
+
         </div>
         <br>
         <button type="submit" class="btn btn-primary">Create</button>
@@ -120,6 +108,9 @@
 
 $('[type=radio]').uncheckableRadio();
 
+// Add Equip
+const rmv = document.getElementById('rmv');
+
 let i = 2;
 const addEquip = document.querySelector('.add');
 const Equip = document.querySelector('.equip1');
@@ -135,6 +126,29 @@ addEquip.onclick = () => {
     
     if(i > 10)
         addEquip.style.display = 'none';
+        
+    if (i > 2) {
+      rmv.style.display = 'block';
+    }
+}
+
+// Remove equip
+
+rmv.onclick = () => {
+
+    if (i > 2) {
+    document.querySelector('.defineEquip').lastElementChild.remove();
+    i--;
+    }
+
+    if (i >= 2) {
+    addEquip.style.display = 'block';
+    }
+
+    if (i == 2) {
+        rmv.style.display = 'none';
+    }
+
 }
 
 </script>

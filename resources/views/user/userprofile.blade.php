@@ -29,9 +29,9 @@
 
 <div class="card m-3">
     <div class="card-header">
-        <h3 class="float-left">My Profile</h3>
+        <h4 class="float-left m-0">My Profile</h4>
         <div class="float-right">
-            
+
             <a href="{{ route('edit-info') }}" class="d-inline text-info p-2"><i class="fas fa-pen"></i></a>
             
             @if ($userProfile->id != 1)

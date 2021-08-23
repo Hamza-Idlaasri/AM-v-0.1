@@ -22,7 +22,7 @@
                     <a href="/monitoring/boxs/{{$box->host_id}}">{{$box->display_name}}</a>
                     
                     @if ($box->is_flapping)
-                        <span class="float-right text-danger" title="This Host is flapping"><i class="fas fa-retweet"></i></span>
+                        <span class="float-right text-danger" title="This Box is flapping"><i class="fas fa-retweet"></i></span>
                     @endif
                 </td>
                 <td>{{$box->address}}</td>

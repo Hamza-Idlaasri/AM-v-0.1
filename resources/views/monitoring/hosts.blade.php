@@ -25,8 +25,9 @@
                         <a href="/monitoring/hosts/{{ $host->host_id }}">{{ $host->display_name }}</a>
 
                         @if ($host->is_flapping)
-                            <span class="float-right text-danger" title="This Host is flapping"><i
-                                    class="fas fa-retweet"></i></span>
+                            <span class="float-right text-danger" title="This Host is flapping" style="cursor: pointer">
+                                <i class="fas fa-retweet"></i>
+                            </span>
                         @endif
 
                     </td>

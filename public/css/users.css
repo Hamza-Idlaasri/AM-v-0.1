@@ -1,6 +1,5 @@
 .check {
     position: relative;
-    top: 10px;
     height: 15px;
 }
 
@@ -13,6 +12,7 @@ input[type="checkbox"] {
     border-radius: 30px;
     box-shadow: inset 0 0 5px rgb(0, 0, 0, 0.2);
     transition: .5s;
+    cursor: pointer;
 }
 
 input:checked[type="checkbox"] {
@@ -48,4 +48,13 @@ input:hover[type="checkbox"]:before {
     top: 20%;
     left: 50%;
     transform: translate(-50%);
+}
+
+.d-btn {
+    border: 0;
+    outline: none;
+}
+
+.d-btn i:hover {
+    color: rgb(192, 0, 0);
 }

@@ -41,26 +41,28 @@
                 @endif
                 
                 <td>{{ $user->created_at }}</td>
-                <td>
-                    <div>
+                <td class="p-0">
+                    
+                    <div class="d-flex my-3 justify-content-around">
+                        {{-- Upgrade User --}}
                         @if ($user->hasRole('agent'))
-                            <div class="float-left">
+                            <div class="">
                                 <div class="check">
                                     <input type="checkbox" name="users[]" form="up" value="{{$user->id}}" checked>
                                 </div>
                             </div>
                         @else
-                           
-                            <div class="float-left">
+                            <div class="">
                                 <div class="check">
                                     <input type="checkbox" name="users[]" form="up" value="{{$user->id}}">
                                 </div>
                             </div>
-                          
                         @endif
                         
                         {{-- Delete User --}}
-                        <button title="delete" class="btn text-danger" onclick="show({{$i}})"><i class="fas fa-trash"></i></button>
+                        <div class="bg-primary">
+                            <button title="delete" class="d-btn text-danger" onclick="show({{$i}})"><i class="fas fa-trash fa-lg"></i></button>
+                        </div>
                         
                         <div class="popup{{$i}} container p-3 bg-white shadow rounded pop" style="opacity:1">
                             <h6><b>Are you sure?</b></h6>

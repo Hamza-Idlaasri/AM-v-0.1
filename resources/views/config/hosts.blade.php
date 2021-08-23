@@ -74,11 +74,6 @@
                         <button type="submit" class="text-primary btn"><i class="fas fa-pen"></i></button>
                     </form>
 
-                    {{-- Delete --}}
-                    {{-- <form action="{{ route('deleteHost', $host->host_id) }}" method="get" class="float-right">
-                        <button type="submit" class="text-danger btn"><i class="fas fa-trash"></i></button>
-                    </form> --}}
-
                     {{-- Delete User --}}
                     <button title="delete" class="float-right text-danger btn" onclick="show({{$i}})"><i class="fas fa-trash"></i></button>
                         

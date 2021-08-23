@@ -6,7 +6,7 @@
     
     <form action="{{ route('addHost',['type'=>$type]) }}" method="get">
         <div class="clearfix">
-            <div class="container w-50 my-2 p-3 float-left rounded bg-white">
+            <div class="container w-50 my-3 p-3 float-left rounded bg-white shadow-sm">
                 
                 <h4>Define Host :</h4>
                 <label for="host_name"><b>Host Name <span class="text-danger">*</span></b></label>
@@ -38,44 +38,11 @@
                         </div>
                     @enderror
                 @endif
-                
-                
-                {{-- <div class="container p-3 rounded bg-white">
-                    <div class="services">
-
-                        <h4>Define Services :</h4>
-                        <label for="service_name"><b>Service name <span class="text-danger">*</span></b></label>
-                        <input type="text" name="serviceName" class="form-control @error('serviceName') border-danger @enderror" id="service_name">
-                        @error('serviceName')
-                            <div class="text-danger">
-                                {{ $message }}
-                            </div>
-                        @enderror
-
-                        <br>
-  
-
-                    </div>
-
-                </div> --}}
+            
             </div>
 
             <div class="container w-50 my-0 p-3 float-right">
-                {{-- <div class="container rounded bg-white p-3">
-                    <h4>Host Group :</h4>    
-                    <label for="hgName"><b>Host Group Name (New) :</b></label>
-                    <input type="text" name="hostgroupName" class="form-control" id="hgName">
-                    <br>
-                    <label for=""><b>Add it to existed HostGroups :</b></label>
-                    <div class="sizing" style="height: 100px;overflow: auto">
-                        @foreach ($host_groups as $group)
-                            <input type="radio" name="groups" value="{{$group->alias}}"> {{$group->alias}}
-                            <br>
-                        @endforeach
-                    </div>
-                </div>
-                <hr> --}}
-                <div class="container rounded bg-white p-3">
+                <div class="container rounded bg-white p-3 shadow-sm">
                     <h4>Parent :</h4>
                     <div class="sizing" style="height:100px;overflow: auto">
                         

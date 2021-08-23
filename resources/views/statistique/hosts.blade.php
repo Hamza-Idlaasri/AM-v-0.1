@@ -25,7 +25,7 @@
                     </div>
             </div> --}}
             <div class="chart">
-                <h6>Porcentage des alarmes</h6>
+                <h6>Porcentage des états</h6>
                 <div>
                     <canvas id="PieChart"></canvas>
                 </div>
@@ -34,14 +34,14 @@
         
             
             {{-- <div class="chart">
-                <h6>Nombre des alarmes</h6>
+                <h6>Nombre des Hosts</h6>
                     <div>
                         {{ $Barchart->render() }}
                     </div>
             </div> --}}
 
             <div class="chart">
-                <h6>Nombre des alarmes</h6>
+                <h6>Nombre des états</h6>
                 <div>
                     <canvas id="BarChart"></canvas>
                 </div>
@@ -50,7 +50,7 @@
         
             
             {{-- <div class="chart" style="width:97%">
-                <h6>Nombre des alarmes</h6>
+                <h6>Nombre des Hosts</h6>
                     <div style="width: 100%;">
                         {{ $Linechart->render() }}
                     </div>
@@ -58,7 +58,7 @@
             
             
             <div class="chart" style="width:97%;">
-                <h6>Nombre des alarmes</h6>
+                <h6>Temps des états</h6>
                 <div class="w-100" style="height:400px">
                     <canvas id="LineChart"></canvas>
                 </div>

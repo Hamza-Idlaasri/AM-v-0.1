@@ -35,7 +35,7 @@ class AddEquip extends Controller
         ->select('nagios_hosts.display_name as box_name','nagios_services.display_name as equip_name','nagios_servicestatus.check_command as input_nbr')
         ->get();
 
-        $inputs_not_used = ['IN1','IN2','IN3','IN4','IN5','IN6','IN7','IN8','IN9','IN10','IN11'];
+        $inputs_not_used = ['IN1','IN2','IN3','IN4','IN5','IN6','IN7','IN8','IN9','IN10'];
 
         foreach ($inputs_used as $input) {
         

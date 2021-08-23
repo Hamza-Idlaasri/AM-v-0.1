@@ -34,7 +34,14 @@
                 <td></td>
             @endif
             
-            <td><a href="/monitoring/equipements/{{$equipement->service_id}}">{{$equipement->service_name}}</a></td>
+            <td>
+                <a href="/monitoring/equipements/{{$equipement->service_id}}">{{$equipement->service_name}}</a>
+                @if ($equipement->is_flapping)
+                    <span class="float-right text-danger" title="This Service is flapping" style="cursor: pointer">
+                        <i class="fas fa-retweet"></i>
+                    </span>
+                @endif
+            </td>
             
             @switch($equipement->current_state)
              

@@ -23,13 +23,21 @@ class OverviewController extends Controller
             ->join('nagios_servicestatus','nagios_services.service_object_id','=','nagios_servicestatus.service_object_id')
             ->get();
 
+        // Hosts
         $total_hosts = 0;
         $hosts_up = 0;
         $hosts_down = 0;
         $hosts_unreachable = 0;
         
+        // Boxs
+        $total_boxs = 0;
+        $boxs_up = 0;
+        $boxs_down = 0;
+        $boxs_unreachable = 0;
+        
         foreach ($hosts_summary as $host) {        
     
+            // Hosts : 
             if($host->alias == "host")
             {
              
@@ -51,6 +59,30 @@ class OverviewController extends Controller
                 }
     
                 $total_hosts++;
+            }
+            
+            // Boxs :
+            if($host->alias == "box")
+            {
+             
+                switch ($host->current_state) {
+                    case 0:
+                        $boxs_up++;
+                        break;
+                    
+                    case 1:
+                        $boxs_down++;
+                        break;
+                    
+                    case 2:
+                        $boxs_unreachable++;
+                        break;
+                    default:
+                        
+                        break;
+                }
+    
+                $total_boxs++;
             }
     
         }
@@ -146,6 +178,44 @@ class OverviewController extends Controller
                 'backgroundColor' => ['#6ccf01', 'crimson', '#C200FF'],
                 // 'hoverBackgroundColor' => ['#519b01', 'red', 'rgb(151, 4, 230)'],
                 'data' => [$hosts_up, $hosts_down, $hosts_unreachable],
+                
+            ]
+        ])
+        ->options([
+            // 'title'=> [
+            //     'display' => true,
+            //     'text' => 'Porcentage des alarmes Host',
+            //     'position' => 'top',
+            // ],
+            'legend' => [
+                'position' => 'right',
+                'labels' => [
+                    'boxWidth' => 15,
+                ]
+            ],
+            
+          
+            'plugins' => [
+                'labels' => [
+                    'fontColor' => '#fff',
+                    'fontSize' => 13,
+                ]
+            ]
+            
+        
+        ]);
+        
+        $boxs = app()->chartjs
+        ->name('boxs')
+        ->type('pie')
+        ->size(['width' => 350, 'height' => 150])
+        ->labels(['Up', 'Down', 'Unreachable'])
+        ->datasets([
+            [
+                
+                'backgroundColor' => ['#6ccf01', 'crimson', '#C200FF'],
+                // 'hoverBackgroundColor' => ['#519b01', 'red', 'rgb(151, 4, 230)'],
+                'data' => [$boxs_up, $boxs_down, $boxs_unreachable],
                 
             ]
         ])
@@ -290,7 +360,7 @@ class OverviewController extends Controller
             
         ]);
 
-        return view('overview',compact('hosts','services','equipements','contacts'));
+        return view('overview',compact('hosts','boxs','services','equipements','contacts'));
        
     }
 }
