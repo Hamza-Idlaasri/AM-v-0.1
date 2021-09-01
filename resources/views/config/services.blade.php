@@ -15,7 +15,7 @@
     
 </style>
 
-<div class="m-3">
+<div class="container my-2">
     
     <a href="{{ route('selectHost') }}" class="btn btn-success"><i class="fas fa-plus"></i> Add New</a>
 
@@ -23,7 +23,7 @@
 
 </div>
 
-<div class="m-3">
+<div class="container my-2">
     <table class="table table-striped table-bordered table-hover">
 
         <tr class="bg-primary text-light text-center">

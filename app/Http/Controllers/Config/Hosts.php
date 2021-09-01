@@ -161,7 +161,6 @@ class Hosts extends Controller
                 file_put_contents($path."\Swap Usage.cfg", "define service {\n\tuse\t\t\tgeneric-service\n\thost_name\t\t".$request->hostName."\n\tservice_description\tSwap Usage\n\tcheck_command\t\tcheck_local_swap!20!10\n}\n\n");
                 $cfg_file = "\ncfg_file=/usr/local/nagios/etc/objects/hosts/{$request->hostName}\Swap Usage.cfg";
                 file_put_contents("/usr/local/nagios/etc/nagios_cfg.cfg", $cfg_file, FILE_APPEND);
-
             
                 break;
 
@@ -171,18 +170,17 @@ class Hosts extends Controller
                 $this->validate($request,[
                     'hostName' => 'required',
                     'addressIP' => 'required',
-                    'community' => 'required'
+                    'community' => 'required',
+                    'portsNbr' => 'required'
                 ],[
                     'addressIP.required' => 'the IP address field is empty',
                 ]);
 
-                $path = "/usr/local/nagios/etc/objects/hosts/".$request->hostName;
+                $path = "C:\Users\pc\Desktop\Laravel\objects\hosts\\".$request->hostName;
 
                 if(!is_dir($path))
                     mkdir($path);
                 
-                $file = fopen($path."/".$request->hostName.".cfg", 'w');
-
                 // Parent relationship
                 if($request->input('hosts'))
                     $define_host = "define host {\n\tuse\t\t\tswitch-server\n\thost_name\t\t".$request->hostName."\n\talias\t\t\thost\n\taddress\t\t\t".$request->addressIP."\n\tparents\t\t\t".$request->input('hosts')."\n}\n\n";
@@ -190,26 +188,29 @@ class Hosts extends Controller
                     $define_host = "define host {\n\tuse\t\t\tswitch-server\n\thost_name\t\t".$request->hostName."\n\talias\t\t\thost\n\taddress\t\t\t".$request->addressIP."\n}\n\n";
                 
                 // Hosts : 
-                file_put_contents($path."/".$request->hostName.".cfg", $define_host);
+                file_put_contents($path."\\".$request->hostName.".cfg", $define_host);
                 $cfg_file = "\n\ncfg_file=/usr/local/nagios/etc/objects/hosts/{$request->hostName}/{$request->hostName}.cfg";
-                file_put_contents("/usr/local/nagios/etc/nagios_cfg.cfg", $cfg_file, FILE_APPEND);
+                file_put_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt", $cfg_file, FILE_APPEND);
 
                 // Services :
                 file_put_contents($path."\PING.cfg","define service {\n\tuse\t\t\tgeneric-service\n\thost_name\t\t".$request->hostName."\n\tservice_description\tPING\n\tcheck_command\t\tcheck_ping!200.0,20%!600.0,60%\n}\n\n");
                 $cfg_file = "\ncfg_file=/usr/local/nagios/etc/objects/hosts/{$request->hostName}\PING.cfg";
-                file_put_contents("/usr/local/nagios/etc/nagios_cfg.cfg", $cfg_file, FILE_APPEND);
+                file_put_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt", $cfg_file, FILE_APPEND);
 
-                file_put_contents($path."\Port 1 Link Status.cfg", "define service {\n\tuse\t\t\tgeneric-service\n\thost_name\t\t".$request->hostName."\n\tservice_description\tPort 1 Link Status\n\tcheck_command\t\tcheck_snmp!-C ".$request->community." -o ifOperStatus.1 -r 1 -m RFC1213-MIB\n}\n\n");
-                $cfg_file = "\ncfg_file=/usr/local/nagios/etc/objects/hosts/{$request->hostName}\Port 1 Link Status.cfg";
-                file_put_contents("/usr/local/nagios/etc/nagios_cfg.cfg", $cfg_file, FILE_APPEND);
+                for ($i = 1; $i < $request->portsNbr; $i++) { 
+                    
+                    file_put_contents($path."\Port ".$i." Link Status.cfg", "define service {\n\tuse\t\t\tgeneric-service\n\thost_name\t\t".$request->hostName."\n\tservice_description\tPort ".$i." Link Status\n\tcheck_command\t\tcheck_snmp!-C ".$request->community." -o ifOperStatus.".$i." -r ".$i." -m RFC1213-MIB\n}\n\n");
+                    $cfg_file = "\ncfg_file=/usr/local/nagios/etc/objects/hosts/{$request->hostName}\Port ".$i." Link Status.cfg";
+                    file_put_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt", $cfg_file, FILE_APPEND);
+    
+                    file_put_contents($path."\Port ".$i." Bandwidth Usage.cfg","define service {\n\tuse\t\t\tgeneric-service\n\thost_name\t\t".$request->hostName."\n\tservice_description\tPort ".$i." Bandwidth Usage\n\tcheck_command\t\tcheck_local_mrtgtraf!/var/lib/mrtg/".$request->addressIP."_".$i.".log!AVG!1000000,1000000!5000000,5000000!10\n}\n\n");
+                    $cfg_file = "\ncfg_file=/usr/local/nagios/etc/objects/hosts/{$request->hostName}\Port ".$i." Bandwidth Usage.cfg";
+                    file_put_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt", $cfg_file, FILE_APPEND);
+                }
 
                 file_put_contents($path."\Uptime.cfg","define service {\n\tuse\t\t\tgeneric-service\n\thost_name\t\t".$request->hostName."\n\tservice_description\tUptime\n\tcheck_command\t\tcheck_snmp!-C ".$request->community." -o sysUpTime.0\n}\n\n");
                 $cfg_file = "\ncfg_file=/usr/local/nagios/etc/objects/hosts/{$request->hostName}\Uptime.cfg";
-                file_put_contents("/usr/local/nagios/etc/nagios_cfg.cfg", $cfg_file, FILE_APPEND);
-
-                file_put_contents($path."\Port 1 Bandwidth Usage.cfg","define service {\n\tuse\t\t\tgeneric-service\n\thost_name\t\t".$request->hostName."\n\tservice_description\tPort 1 Bandwidth Usage\n\tcheck_command\t\tcheck_local_mrtgtraf!/var/lib/mrtg/192.168.1.253_1.log!AVG!1000000,1000000!5000000,5000000!10\n}\n\n");
-                $cfg_file = "\ncfg_file=/usr/local/nagios/etc/objects/hosts/{$request->hostName}\Port 1 Bandwidth Usage.cfg";
-                file_put_contents("/usr/local/nagios/etc/nagios_cfg.cfg", $cfg_file, FILE_APPEND);
+                file_put_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt", $cfg_file, FILE_APPEND);
 
 
                 break;
@@ -220,12 +221,13 @@ class Hosts extends Controller
                 $this->validate($request,[
                     'hostName' => 'required',
                     'addressIP' => 'required',
-                    'community' => 'required'
+                    'community' => 'required',
+                    'portsNbr' => 'required'
                 ],[
                     'addressIP.required' => 'the IP address field is empty',
                 ]);
 
-                $path = "/usr/local/nagios/etc/objects/hosts/".$request->hostName;
+                $path = "C:\Users\pc\Desktop\Laravel\objects\hosts\\".$request->hostName;
 
                 if(!is_dir($path))
                     mkdir($path);
@@ -237,23 +239,25 @@ class Hosts extends Controller
                     $define_host = "define host {\n\tuse\t\t\trouter-server\n\thost_name\t\t".$request->hostName."\n\talias\t\t\thost\n\taddress\t\t\t".$request->addressIP."\n}\n\n";
                 
                 // Host :
-                file_put_contents($path."/".$request->hostName.".cfg", $define_host);
+                file_put_contents($path."\\".$request->hostName.".txt", $define_host);
                 $cfg_file = "\n\ncfg_file=/usr/local/nagios/etc/objects/hosts/{$request->hostName}/{$request->hostName}.cfg";
-                file_put_contents("/usr/local/nagios/etc/nagios_cfg.cfg", $cfg_file, FILE_APPEND);
+                file_put_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt", $cfg_file, FILE_APPEND);
 
                 // Services :
                 file_put_contents($path."\PING.cfg", "define service {\n\tuse\t\t\tgeneric-service\n\thost_name\t\t".$request->hostName."\n\tservice_description\tPING\n\tcheck_command\t\tcheck_ping!200.0,20%!600.0,60%\n\tnormal_check_interval\t5\n\tretry_check_interval\t1\n}\n\n");
                 $cfg_file = "\ncfg_file=/usr/local/nagios/etc/objects/hosts/{$request->hostName}\PING.cfg";
-                file_put_contents("/usr/local/nagios/etc/nagios_cfg.cfg", $cfg_file, FILE_APPEND);
+                file_put_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt", $cfg_file, FILE_APPEND);
                 
-                file_put_contents($path."\Port 1 Link Status.cfg", "define service {\n\tuse\t\t\tgeneric-service\n\thost_name\t\t".$request->hostName."\n\tservice_description\tPort 1 Link Status\n\tcheck_command\t\tcheck_snmp!-C ".$request->community." -o ifOperStatus.1 -r 1 -m RFC1213-MIB\n}\n\n");
-                $cfg_file = "\ncfg_file=/usr/local/nagios/etc/objects/hosts/{$request->hostName}\Port 1 Link Status.cfg";
-                file_put_contents("/usr/local/nagios/etc/nagios_cfg.cfg", $cfg_file, FILE_APPEND);
+                for ($i= 1; $i < $request->portsNbr; $i++) { 
+                    
+                    file_put_contents($path."\Port ".$i." Link Status.cfg", "define service {\n\tuse\t\t\tgeneric-service\n\thost_name\t\t".$request->hostName."\n\tservice_description\tPort ".$i." Link Status\n\tcheck_command\t\tcheck_snmp!-C ".$request->community." -o ifOperStatus.".$i." -r ".$i." -m RFC1213-MIB\n}\n\n");
+                    $cfg_file = "\ncfg_file=/usr/local/nagios/etc/objects/hosts/{$request->hostName}\Port ".$i." Link Status.cfg";
+                    file_put_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt", $cfg_file, FILE_APPEND);
+                }
                 
                 file_put_contents($path."\Uptime.cfg", "define service {\n\tuse\t\t\tgeneric-service\n\thost_name\t\t".$request->hostName."\n\tservice_description\tUptime\n\tcheck_command\t\tcheck_snmp!-C ".$request->community." -o sysUpTime.0\n}\n\n");
                 $cfg_file = "\ncfg_file=/usr/local/nagios/etc/objects/hosts/{$request->hostName}\Uptime.cfg";
-                file_put_contents("/usr/local/nagios/etc/nagios_cfg.cfg", $cfg_file, FILE_APPEND);
-                
+                file_put_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt", $cfg_file, FILE_APPEND);
                  
                 break;
 
