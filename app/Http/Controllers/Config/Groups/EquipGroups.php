@@ -100,11 +100,13 @@ class EquipGroups extends Controller
 
         $define_equipgroup = "\ndefine servicegroup {\n\tservicegroup_name\t\t".$request->equipgroup_name."\n\talias\t\t\t\t".$request->equipgroup_name."\n\tmembers\t\t\t\t".implode(',',$members)."\n}\n";
 
-        $path = "C:\Users\pc\Desktop\Laravel\objects\\equipgroups\\".$request->equipgroup_name.".txt";
+        $path = "/usr/local/nagios/etc/objects/equipgroups/".$request->equipgroup_name.".cfg";
 
         file_put_contents($path, $define_equipgroup);
-        $cfg_file = "\ncfg_file=C:\Users\pc\Desktop\Laravel\objects\\equipgroups\\".$request->equipgroup_name.".cfg";
-        file_put_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt", $cfg_file, FILE_APPEND);
+        $cfg_file = "\ncfg_file=/usr/local/nagios/etc/objects/equipgroups/".$request->equipgroup_name.".cfg";
+        file_put_contents("/usr/local/nagios/etc/nagios.cfg", $cfg_file, FILE_APPEND);
+
+        shell_exec('sudo service nagios restart');
 
         return redirect('/configuration/equipgroups');
     }
@@ -147,13 +149,15 @@ class EquipGroups extends Controller
         ->where('servicegroup_id', $equipgroup_id)
         ->get();
 
-        $path = "C:\Users\pc\Desktop\Laravel\objects\\equipgroups\\".$EG_deleted[0]->alias.".txt";
+        $path = "/usr/local/nagios/etc/objects/equipgroups/".$EG_deleted[0]->alias.".cfg";
 
         unlink($path);
 
-        $nagios_file_content = file_get_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt");
-        $nagios_file_content = str_replace("cfg_file=C:\Users\pc\Desktop\Laravel\objects\\equipgroups\\".$EG_deleted[0]->alias.".cfg", '', $nagios_file_content);
-        file_put_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt", $nagios_file_content);
+        $nagios_file_content = file_get_contents("/usr/local/nagios/etc/nagios.cfg");
+        $nagios_file_content = str_replace("cfg_file=/usr/local/nagios/etc/objects/equipgroups/".$EG_deleted[0]->alias.".cfg", '', $nagios_file_content);
+        file_put_contents("/usr/local/nagios/etc/nagios.cfg", $nagios_file_content);
+
+        shell_exec('sudo service nagios restart');
 
         return back();
     }
@@ -185,23 +189,25 @@ class EquipGroups extends Controller
 
         $define_servicegroup = "\ndefine servicegroup {\n\tservicegroup_name\t\t".$request->equipgroup_name."\n\talias\t\t\t\t".$request->equipgroup_name."\n\tmembers\t\t\t\t".implode(',',$members)."\n}\n";
 
-        $path = "C:\Users\pc\Desktop\Laravel\objects\\equipgroups";
+        $path = "/usr/local/nagios/etc/objects/equipgroups";
 
         $old_equipgroup = DB::table('nagios_servicegroups')
         ->where('nagios_servicegroups.servicegroup_id', $equipgroup_id)
         ->select('nagios_servicegroups.alias as equipgroup_name')
         ->get();
 
-        file_put_contents($path."\\".$old_equipgroup[0]->equipgroup_name.'.txt', $define_servicegroup);
+        file_put_contents($path."/".$old_equipgroup[0]->equipgroup_name.'.cfg', $define_servicegroup);
 
         if ($old_equipgroup[0]->equipgroup_name != $request->equipgroup_name) {
 
-            $nagios_file_content = file_get_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt");
-            $nagios_file_content = str_replace("cfg_file=".$path."\\".$old_equipgroup[0]->equipgroup_name.".cfg", "cfg_file=".$path."\\".$request->equipgroup_name.".cfg", $nagios_file_content);
-            file_put_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt", $nagios_file_content);
+            $nagios_file_content = file_get_contents("/usr/local/nagios/etc/nagios.cfg");
+            $nagios_file_content = str_replace("cfg_file=".$path."/".$old_equipgroup[0]->equipgroup_name.".cfg", "cfg_file=".$path."/".$request->equipgroup_name.".cfg", $nagios_file_content);
+            file_put_contents("/usr/local/nagios/etc/nagios.cfg", $nagios_file_content);
 
-            rename($path."\\".$old_equipgroup[0]->equipgroup_name.'.txt', $path."\\".$request->equipgroup_name.'.txt');
+            rename($path."/".$old_equipgroup[0]->equipgroup_name.'.cfg', $path."/".$request->equipgroup_name.'.cfg');
         }
+
+        shell_exec('sudo service nagios restart');
 
         return redirect('/configuration/equipgroups');
     }

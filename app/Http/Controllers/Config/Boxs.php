@@ -97,6 +97,8 @@ class Boxs extends Controller
 
         }
 
+        shell_exec('sudo service nagios restart');
+
         return redirect()->route('configBoxs');
     }
 

@@ -83,7 +83,7 @@ class HostGroups extends Controller
 
         $define_hostgroup = "\ndefine hostgroup {\n\thostgroup_name\t\t".$request->hostgroup_name."\n\talias\t\t\t".$request->hostgroup_name."\n\tmembers\t\t\t".implode(',',$members)."\n}\n";
 
-        $path = "C:\Users\pc\Desktop\Laravel\objects\hostgroups\\".$request->hostgroup_name.".txt";
+        $path = "/usr/local/nagios/etc/objects/hostgroups/".$request->hostgroup_name.".cfg";
 
         // $file = fopen($path, 'a');
         
@@ -92,8 +92,10 @@ class HostGroups extends Controller
         // fclose($file);
 
         file_put_contents($path, $define_hostgroup);
-        $cfg_file = "\ncfg_file=C:\Users\pc\Desktop\Laravel\objects\hostgroups\\".$request->hostgroup_name.".cfg";
-        file_put_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt", $cfg_file, FILE_APPEND);
+        $cfg_file = "\ncfg_file=/usr/local/nagios/etc/objects/hostgroups/".$request->hostgroup_name.".cfg";
+        file_put_contents("/usr/local/nagios/etc/nagios.cfg", $cfg_file, FILE_APPEND);
+
+        shell_exec('sudo service nagios restart');
 
         return redirect('/configuration/hostgroups');
     }
@@ -105,13 +107,15 @@ class HostGroups extends Controller
         ->where('hostgroup_id', $hostgroup_id)
         ->get();
 
-        $path = "C:\Users\pc\Desktop\Laravel\objects\hostgroups\\".$HG_deleted[0]->alias.".txt";
+        $path = "/usr/local/nagios/etc/objects/hostgroups/".$HG_deleted[0]->alias.".cfg";
 
         unlink($path);
 
-        $nagios_file_content = file_get_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt");
-        $nagios_file_content = str_replace("cfg_file=C:\Users\pc\Desktop\Laravel\objects\hostgroups\\".$HG_deleted[0]->alias.".cfg", '', $nagios_file_content);
-        file_put_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt", $nagios_file_content);
+        $nagios_file_content = file_get_contents("/usr/local/nagios/etc/nagios.cfg");
+        $nagios_file_content = str_replace("cfg_file=/usr/local/nagios/etc/objects/hostgroups/".$HG_deleted[0]->alias.".cfg", '', $nagios_file_content);
+        file_put_contents("/usr/local/nagios/etc/nagios.cfg", $nagios_file_content);
+
+        shell_exec('sudo service nagios restart');
 
         return back();
     }
@@ -165,22 +169,24 @@ class HostGroups extends Controller
 
         $define_hostgroup = "\ndefine hostgroup {\n\thostgroup_name\t\t".$request->hostgroup_name."\n\talias\t\t\t".$request->hostgroup_name."\n\tmembers\t\t\t".implode(',',$members)."\n}\n";
 
-        $path = "C:\Users\pc\Desktop\Laravel\objects\hostgroups";
+        $path = "/usr/local/nagios/etc/objects/hostgroups";
 
         $old_hostgroup = DB::table('nagios_hostgroups')
         ->where('hostgroup_id',$hostgroup_id)
         ->get();
 
-        file_put_contents($path."\\".$old_hostgroup[0]->alias.".txt", $define_hostgroup);
+        file_put_contents($path."/".$old_hostgroup[0]->alias.".cfg", $define_hostgroup);
 
         if($old_hostgroup[0]->alias != $request->hostgroup_name)
         {
-            $nagios_file_content = file_get_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt");
-            $nagios_file_content = str_replace("cfg_file=".$path."\\".$old_hostgroup[0]->alias.".cfg", "cfg_file=".$path."\\".$request->hostgroup_name.".cfg", $nagios_file_content);
-            file_put_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt", $nagios_file_content);
+            $nagios_file_content = file_get_contents("/usr/local/nagios/etc/nagios.cfg");
+            $nagios_file_content = str_replace("cfg_file=".$path."/".$old_hostgroup[0]->alias.".cfg", "cfg_file=".$path."/".$request->hostgroup_name.".cfg", $nagios_file_content);
+            file_put_contents("/usr/local/nagios/etc/nagios.cfg", $nagios_file_content);
 
-            rename($path."\\".$old_hostgroup[0]->alias.".txt", $path."\\".$request->hostgroup_name.".txt");
+            rename($path."/".$old_hostgroup[0]->alias.".cfg", $path."/".$request->hostgroup_name.".cfg");
         }
+
+        shell_exec('sudo service nagios restart');
 
         return redirect('/configuration/hostgroups');   
     }

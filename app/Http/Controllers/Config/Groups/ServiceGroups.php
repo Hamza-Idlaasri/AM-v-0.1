@@ -99,11 +99,13 @@ class ServiceGroups extends Controller
 
         $define_servicegroup = "\ndefine servicegroup {\n\tservicegroup_name\t\t".$request->servicegroup_name."\n\talias\t\t\t\t".$request->servicegroup_name."\n\tmembers\t\t\t\t".implode(',',$members)."\n}\n";
 
-        $path = "C:\Users\pc\Desktop\Laravel\objects\servicegroups\\".$request->servicegroup_name.".txt";
+        $path = "/usr/local/nagios/etc/objects/servicegroups/".$request->servicegroup_name.".cfg";
 
         file_put_contents($path, $define_servicegroup);
-        $cfg_file = "\ncfg_file=C:\Users\pc\Desktop\Laravel\objects\servicegroups\\".$request->servicegroup_name.".cfg";
-        file_put_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt", $cfg_file, FILE_APPEND);
+        $cfg_file = "\ncfg_file=/usr/local/nagios/etc/objects/servicegroups/".$request->servicegroup_name.".cfg";
+        file_put_contents("/usr/local/nagios/etc/nagios.cfg", $cfg_file, FILE_APPEND);
+
+        shell_exec('sudo service nagios restart');
 
         return redirect('/configuration/servicegroups');
     }
@@ -146,13 +148,15 @@ class ServiceGroups extends Controller
         ->where('servicegroup_id', $servicegroup_id)
         ->get();
 
-        $path = "C:\Users\pc\Desktop\Laravel\objects\servicegroups\\".$SG_deleted[0]->alias.".txt";
+        $path = "/usr/local/nagios/etc/objects/servicegroups/".$SG_deleted[0]->alias.".cfg";
 
         unlink($path);
 
-        $nagios_file_content = file_get_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt");
-        $nagios_file_content = str_replace("cfg_file=C:\Users\pc\Desktop\Laravel\objects\servicegroups\\".$SG_deleted[0]->alias.".cfg", '', $nagios_file_content);
-        file_put_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt", $nagios_file_content);
+        $nagios_file_content = file_get_contents("/usr/local/nagios/etc/nagios.cfg");
+        $nagios_file_content = str_replace("cfg_file=/usr/local/nagios/etc/objects/servicegroups/".$SG_deleted[0]->alias.".cfg", '', $nagios_file_content);
+        file_put_contents("/usr/local/nagios/etc/nagios.cfg", $nagios_file_content);
+
+        shell_exec('sudo service nagios restart');
 
         return back();
     }
@@ -184,23 +188,25 @@ class ServiceGroups extends Controller
 
         $define_servicegroup = "\ndefine servicegroup {\n\tservicegroup_name\t\t".$request->servicegroup_name."\n\talias\t\t\t\t".$request->servicegroup_name."\n\tmembers\t\t\t\t".implode(',',$members)."\n}\n";
 
-        $path = "C:\Users\pc\Desktop\Laravel\objects\servicegroups";
+        $path = "/usr/local/nagios/etc/objects/servicegroups";
 
         $old_servicegroup = DB::table('nagios_servicegroups')
         ->where('nagios_servicegroups.servicegroup_id', $servicegroup_id)
         ->select('nagios_servicegroups.alias as servicegroup_name')
         ->get();
 
-        file_put_contents($path."\\".$old_servicegroup[0]->servicegroup_name.'.txt', $define_servicegroup);
+        file_put_contents($path."/".$old_servicegroup[0]->servicegroup_name.'.cfg', $define_servicegroup);
 
         if ($old_servicegroup[0]->servicegroup_name != $request->servicegroup_name) {
 
-            $nagios_file_content = file_get_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt");
-            $nagios_file_content = str_replace("cfg_file=".$path."\\".$old_servicegroup[0]->servicegroup_name.".cfg", "cfg_file=".$path."\\".$request->servicegroup_name.".cfg", $nagios_file_content);
-            file_put_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt", $nagios_file_content);
+            $nagios_file_content = file_get_contents("/usr/local/nagios/etc/nagios.cfg");
+            $nagios_file_content = str_replace("cfg_file=".$path."/".$old_servicegroup[0]->servicegroup_name.".cfg", "cfg_file=".$path."/".$request->servicegroup_name.".cfg", $nagios_file_content);
+            file_put_contents("/usr/local/nagios/etc/nagios.cfg", $nagios_file_content);
 
-            rename($path."\\".$old_servicegroup[0]->servicegroup_name.'.txt', $path."\\".$request->servicegroup_name.'.txt');
+            rename($path."/".$old_servicegroup[0]->servicegroup_name.'.cfg', $path."/".$request->servicegroup_name.'.cfg');
         }
+
+        shell_exec('sudo service nagios restart');
 
         return redirect('/configuration/servicegroups');
     }

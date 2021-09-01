@@ -60,23 +60,25 @@ class EditService extends Controller
 
         if($old_service_details[0]->service_name == $request->serviceName)
         {
-            $path = "C:\Users\pc\Desktop\Laravel\objects\hosts\\".$old_service_details[0]->host_name."\\".$request->serviceName.".txt";
+            $path = "/usr/local/nagios/etc/objects/hosts/".$old_service_details[0]->host_name."/".$request->serviceName.".cfg";
 
             file_put_contents($path, $define_service);
 
         } else {
 
-            $path = "C:\Users\pc\Desktop\Laravel\objects\hosts\\".$old_service_details[0]->host_name."\\".$old_service_details[0]->service_name.".txt";
+            $path = "/usr/local/nagios/etc/objects/hosts/".$old_service_details[0]->host_name."/".$old_service_details[0]->service_name.".cfg";
 
             file_put_contents($path, $define_service);
 
-            rename("C:\Users\pc\Desktop\Laravel\objects\hosts\\".$old_service_details[0]->host_name."\\".$old_service_details[0]->service_name.".txt", "C:\Users\pc\Desktop\Laravel\objects\hosts\\".$old_service_details[0]->host_name."\\".$request->serviceName.".txt");
+            rename("/usr/local/nagios/etc/objects/hosts/".$old_service_details[0]->host_name."/".$old_service_details[0]->service_name.".cfg", "/usr/local/nagios/etc/objects/hosts/".$old_service_details[0]->host_name."/".$request->serviceName.".cfg");
 
             // Editing in nagios.cfg file
-            $nagios_file_content = file_get_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt");
+            $nagios_file_content = file_get_contents("/usr/local/nagios/etc/nagios.cfg");
             $nagios_file_content = str_replace($old_service_details[0]->display_name, $request->serviceName, $nagios_file_content);
-            file_put_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt", $nagios_file_content);
+            file_put_contents("/usr/local/nagios/etc/nagios.cfg", $nagios_file_content);
         }
+
+        shell_exec('sudo service nagios restart');
 
         return back();
     }
@@ -89,19 +91,21 @@ class EditService extends Controller
             ->select('nagios_hosts.display_name as host_name','nagios_services.display_name as service_name')
             ->get();
 
-        $path = "C:\Users\pc\Desktop\Laravel\objects\hosts\\".$service_deleted[0]->host_name."\\".$service_deleted[0]->service_name.".txt";
+        $path = "/usr/local/nagios/etc/objects/hosts/".$service_deleted[0]->host_name."/".$service_deleted[0]->service_name.".cfg";
 
         if (is_file($path)) 
         {
             unlink($path);
 
             // Editing in nagios.cfg file
-            $nagios_file_content = file_get_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt");
-            $nagios_file_content = str_replace("cfg_file=C:\Users\pc\Desktop\Laravel\objects\hosts\\{$service_deleted[0]->host_name}/{$service_deleted[0]->service_name}.cfg", '', $nagios_file_content);
-            file_put_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt", $nagios_file_content);
+            $nagios_file_content = file_get_contents("/usr/local/nagios/etc/nagios.cfg");
+            $nagios_file_content = str_replace("cfg_file=/usr/local/nagios/etc/objects/hosts/{$service_deleted[0]->host_name}/{$service_deleted[0]->service_name}.cfg", '', $nagios_file_content);
+            file_put_contents("/usr/local/nagios/etc/nagios.cfg", $nagios_file_content);
 
         } else
             return 'WORNING: No service found';
+        
+        shell_exec('sudo service nagios restart');
         
         return back();
     }

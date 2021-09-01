@@ -59,7 +59,7 @@ class EditEquip extends Controller
 
         if($old_equip_details[0]->service_name == $request->equipName)
         {
-            $path = "C:\Users\pc\Desktop\Laravel\objects\boxs\\".$old_equip_details[0]->host_name."\\".$request->equipName.".txt";
+            $path = "/usr/local/nagios/etc/objects/boxs/".$old_equip_details[0]->host_name."/".$request->equipName.".cfg";
 
             $file = fopen($path, 'w');
 
@@ -69,7 +69,7 @@ class EditEquip extends Controller
 
         } else {
 
-            $path = "C:\Users\pc\Desktop\Laravel\objects\boxs\\".$old_equip_details[0]->host_name."\\".$old_equip_details[0]->service_name.".txt";
+            $path = "/usr/local/nagios/etc/objects/boxs/".$old_equip_details[0]->host_name."/".$old_equip_details[0]->service_name.".cfg";
 
             $file = fopen($path, 'w');
 
@@ -77,13 +77,15 @@ class EditEquip extends Controller
 
             fclose($file);
 
-            rename("C:\Users\pc\Desktop\Laravel\objects\boxs\\".$old_equip_details[0]->host_name."\\".$old_equip_details[0]->service_name.".txt", "C:\Users\pc\Desktop\Laravel\objects\boxs\\".$old_equip_details[0]->host_name."\\".$request->equipName.".txt");
+            rename("/usr/local/nagios/etc/objects/boxs/".$old_equip_details[0]->host_name."/".$old_equip_details[0]->service_name.".cfg", "/usr/local/nagios/etc/objects/boxs/".$old_equip_details[0]->host_name."/".$request->equipName.".cfg");
 
             // Editing in nagios.cfg file
-            $nagios_file_content = file_get_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt");
+            $nagios_file_content = file_get_contents("/usr/local/nagios/etc/nagios.cfg");
             $nagios_file_content = str_replace($old_equip_details[0]->display_name, $request->equipName, $nagios_file_content);
-            file_put_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt", $nagios_file_content);
+            file_put_contents("/usr/local/nagios/etc/nagios.cfg", $nagios_file_content);
         }
+
+        shell_exec('sudo service nagios restart');
 
         return back();
     }
@@ -96,20 +98,21 @@ class EditEquip extends Controller
             ->select('nagios_hosts.display_name as box_name','nagios_services.display_name as equip_name')
             ->get();
 
-        $path = "C:\Users\pc\Desktop\Laravel\objects\boxs\\".$equip_deleted[0]->box_name."\\".$equip_deleted[0]->equip_name.".txt";
+        $path = "/usr/local/nagios/etc/objects/boxs/".$equip_deleted[0]->box_name."/".$equip_deleted[0]->equip_name.".cfg";
 
         if (is_file($path)) 
         {
             unlink($path);
 
             // Editing in nagios.cfg file
-            $nagios_file_content = file_get_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt");
-            $nagios_file_content = str_replace("cfg_file=C:\Users\pc\Desktop\Laravel\objects\boxs\\{$equip_deleted[0]->box_name}/{$equip_deleted[0]->equip_name}.cfg", '', $nagios_file_content);
-            file_put_contents("C:\Users\pc\Desktop\Laravel\objects\\nagios_cfg.txt", $nagios_file_content);
+            $nagios_file_content = file_get_contents("/usr/local/nagios/etc/nagios.cfg");
+            $nagios_file_content = str_replace("cfg_file=/usr/local/nagios/etc/objects/boxs/{$equip_deleted[0]->box_name}/{$equip_deleted[0]->equip_name}.cfg", '', $nagios_file_content);
+            file_put_contents("/usr/local/nagios/etc/nagios.cfg", $nagios_file_content);
             
         } else
             return 'WORNING: No equipment found';
         
+        shell_exec('sudo service nagios restart');
 
         return back();
     }
