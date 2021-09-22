@@ -48,8 +48,8 @@ class Hosts extends Controller
 
                 // validation
                 $this->validate($request,[
-                    'hostName' => 'required',
-                    'addressIP' => 'required',
+                    'hostName' => 'required|min:2|max:20|unique:nagios_hosts,display_name|regex:/^[a-zA-Z0-9-_+ ]/',
+                    'addressIP' => 'required|min:7|max:15',
                 ],[
                     'addressIP.required' => 'the IP address field is empty',
                 ]);
@@ -106,8 +106,8 @@ class Hosts extends Controller
 
                 // validation
                 $this->validate($request,[
-                    'hostName' => 'required',
-                    'addressIP' => 'required',
+                    'hostName' => 'required|min:2|max:20|unique:nagios_hosts,display_name|regex:/^[a-zA-Z0-9-_+ ]/',
+                    'addressIP' => 'required|min:7|max:15',
                 ],[
                     'addressIP.required' => 'the IP address field is empty',
                 ]);
@@ -167,9 +167,9 @@ class Hosts extends Controller
 
                 // validation
                 $this->validate($request,[
-                    'hostName' => 'required',
-                    'addressIP' => 'required',
-                    'community' => 'required',
+                    'hostName' => 'required|min:2|max:20|unique:nagios_hosts,display_name|regex:/^[a-zA-Z0-9-_+ ]/',
+                    'addressIP' => 'required|min:7|max:15',
+                    'community' => 'required|max:25',
                     'portsNbr' => 'required'
                 ],[
                     'addressIP.required' => 'the IP address field is empty',
@@ -196,7 +196,7 @@ class Hosts extends Controller
                 $cfg_file = "\ncfg_file=/usr/local/nagios/etc/objects/hosts/{$request->hostName}\PING.cfg";
                 file_put_contents("/usr/local/nagios/etc/nagios.cfg", $cfg_file, FILE_APPEND);
 
-                for ($i = 1; $i < $request->portsNbr; $i++) { 
+                for ($i = 1; $i <= $request->portsNbr; $i++) { 
                     
                     file_put_contents($path."/Port ".$i." Link Status.cfg", "define service {\n\tuse\t\t\tgeneric-service\n\thost_name\t\t".$request->hostName."\n\tservice_description\tPort ".$i." Link Status\n\tcheck_command\t\tcheck_snmp!-C ".$request->community." -o ifOperStatus.".$i." -r ".$i." -m RFC1213-MIB\n}\n\n");
                     $cfg_file = "\ncfg_file=/usr/local/nagios/etc/objects/hosts/{$request->hostName}\Port ".$i." Link Status.cfg";
@@ -218,9 +218,9 @@ class Hosts extends Controller
 
                 // validation
                 $this->validate($request,[
-                    'hostName' => 'required',
-                    'addressIP' => 'required',
-                    'community' => 'required',
+                    'hostName' => 'required|min:2|max:20|unique:nagios_hosts,display_name|regex:/^[a-zA-Z0-9-_+ ]/',
+                    'addressIP' => 'required|min:7|max:15',
+                    'community' => 'required|max:25',
                     'portsNbr' => 'required'
                 ],[
                     'addressIP.required' => 'the IP address field is empty',
@@ -247,7 +247,7 @@ class Hosts extends Controller
                 $cfg_file = "\ncfg_file=/usr/local/nagios/etc/objects/hosts/{$request->hostName}\PING.cfg";
                 file_put_contents("/usr/local/nagios/etc/nagios.cfg", $cfg_file, FILE_APPEND);
                 
-                for ($i= 1; $i < $request->portsNbr; $i++) { 
+                for ($i= 1; $i <= $request->portsNbr; $i++) { 
                     
                     file_put_contents($path."/Port ".$i." Link Status.cfg", "define service {\n\tuse\t\t\tgeneric-service\n\thost_name\t\t".$request->hostName."\n\tservice_description\tPort ".$i." Link Status\n\tcheck_command\t\tcheck_snmp!-C ".$request->community." -o ifOperStatus.".$i." -r ".$i." -m RFC1213-MIB\n}\n\n");
                     $cfg_file = "\ncfg_file=/usr/local/nagios/etc/objects/hosts/{$request->hostName}\Port ".$i." Link Status.cfg";
@@ -264,9 +264,9 @@ class Hosts extends Controller
 
                 // validation
                 $this->validate($request,[
-                    'hostName' => 'required',
-                    'addressIP' => 'required',
-                    'community' => 'required'
+                    'hostName' => 'required|min:2|max:20|unique:nagios_hosts,display_name|regex:/^[a-zA-Z0-9-_+ ]/',
+                    'addressIP' => 'required|min:7|max:15',
+                    'community' => 'required|max:25'
                 ],[
                     'addressIP.required' => 'the IP address field is empty',
                 ]);
@@ -329,7 +329,9 @@ class Hosts extends Controller
     {
         return DB::table('nagios_hosts')
             ->where('alias','host')
-            ->join('nagios_hoststatus','nagios_hosts.host_object_id','=','nagios_hoststatus.host_object_id');
+            ->join('nagios_hoststatus','nagios_hosts.host_object_id','=','nagios_hoststatus.host_object_id')
+            ->orderBy('display_name');
+            
     }
 }
 

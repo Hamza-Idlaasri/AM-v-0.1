@@ -45,6 +45,7 @@ class HostGroups extends Controller
             ->join('nagios_servicestatus','nagios_services.service_object_id','=','nagios_servicestatus.service_object_id')
             ->select('nagios_hosts.alias as type','nagios_hostgroups.alias as hostgroup','nagios_hosts.display_name as host_name','nagios_hosts.host_object_id','nagios_hosts.host_id','nagios_hostgroups.hostgroup_id','nagios_services.display_name as service_name','nagios_servicestatus.current_state','nagios_servicestatus.output','nagios_servicestatus.last_check','nagios_hosts.host_object_id')
             ->where('nagios_hostgroups.hostgroup_id',$hostgroup_id)
+            ->orderBy('nagios_hosts.display_name')
             ->get();
 
         $hostgroup = DB::table('nagios_hostgroups')
@@ -69,10 +70,10 @@ class HostGroups extends Controller
     {
         // validation
         $this->validate($request,[
-            'hostgroup_name' => 'required',
+            'hostgroup_name' => 'required|min:2|max:20|unique:nagios_hostgroups,alias|regex:/^[a-zA-Z0-9-_+ ]/',
             'members' => 'required',
         ],[
-            'members.required' => 'Please check hosts members for your hostgroup',
+            'members.required' => 'Please check group members for your hostgroup',
         ]);
 
         $members = [];

@@ -38,13 +38,13 @@ class Boxs extends Controller
     {
         $equipNames = $request->input('equipName');
         $equiINnbr = $request->input('inputNbr');
-               
+        
         // validation
         $this->validate($request,[
 
-            'boxName' => 'required',
+            'boxName' => 'required|min:2|max:20|unique:nagios_hosts,display_name|regex:/^[a-zA-Z0-9-_+ ]/',
             'addressIP' => 'required',
-            'equipName.*' => 'required',
+            'equipName.*' => 'required|min:2|max:20|unique:nagios_services,display_name|regex:/^[a-zA-Z0-9-_+ ]/',
             'inputNbr.*' => 'required',
             
         ],[
@@ -106,6 +106,8 @@ class Boxs extends Controller
     {
         return DB::table('nagios_hosts')
         ->where('alias','box')
-        ->join('nagios_hoststatus','nagios_hosts.host_object_id','=','nagios_hoststatus.host_object_id');
+        ->join('nagios_hoststatus','nagios_hosts.host_object_id','=','nagios_hoststatus.host_object_id')
+        ->orderBy('display_name');
+
     }
 }

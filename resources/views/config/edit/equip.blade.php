@@ -2,7 +2,6 @@
 
 @section('content')
 
-
 <style>
     .unity{
         background: rgb(211, 210, 210);
@@ -33,7 +32,7 @@
 
                 {{-- equip Name --}}
                 <label for="equip_name"><b>Equipements name {{--<span class="text-danger">*</span>--}}</b></label>
-                <input type="text" name="equipName" class="form-control @error('equipName') border-danger @enderror" id="equip_name" value="{{ $equip[0]->display_name }}">
+                <input type="text" name="equipName" class="form-control @error('equipName') border-danger @enderror" id="equip_name" value="{{ $equip[0]->display_name }}" pattern="[a-zA-Z][a-zA-Z0-9-_+ ]{2,20}" title="Host name must be between 2 & 20 charcarters in length and containes only letters, numbers, and these symbols -_+">
                 @error('equipName')
                     <div class="text-danger">
                         {{ $message }}

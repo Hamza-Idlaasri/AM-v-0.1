@@ -9,6 +9,7 @@ use App\Models\User;
 
 class RegisterController extends Controller
 {
+    
     public function __construct()
     {
         $this->middleware(['agent']);
@@ -24,9 +25,9 @@ class RegisterController extends Controller
         // validation
         $this->validate($request,[
 
-            'name' => 'required|max:255',
-            'email' => 'required|email|max:255',
-            'password' => 'required|confirmed',
+            'name' => 'required|min:3|max:15|unique:mysql2.users|regex:/^[a-zA-Z][a-zA-Z0-9-_(). ÀÂÇÉÈÊÎÔÛÙàâçéèêôûù]/',
+            'email' => 'required|email|max:100|unique:mysql2.users',
+            'password' => 'required|string|confirmed|min:5|max:12|regex:/^[a-zA-Z0-9-_().@$=%&#+{}*ÀÂÇÉÈÊÎÔÛÙàâçéèêôûù]/|unique:mysql2.users',
 
         ]);
 

@@ -22,11 +22,11 @@ class EditEquip extends Controller
         // validation
         $this->validate($request,[
          
-            'equipName' => 'required',
-            'check_interval' => 'required',
-            'retry_interval' => 'required',
-            'max_attempts' => 'required',
-            'notif_interval' => 'required',
+            'equipName' => 'required|min:2|max:20|unique:nagios_services,display_name|regex:/^[a-zA-Z0-9-_+ ]/',
+            'check_interval' => 'required|min:1|max:100',
+            'retry_interval' => 'required|min:1|max:100',
+            'max_attempts' => 'required|min:1|max:100',
+            'notif_interval' => 'required|min:1|max:1000',
             // 'inputNbr' => 'required',
         ]);
 
@@ -54,6 +54,14 @@ class EditEquip extends Controller
         // Notification Interval
         if($old_equip_details[0]->notification_interval != $request->notif_interval)
             $define_service = $define_service."\n\tnotification_interval\t\t\t".$request->notif_interval;
+
+        // Check this host
+        if($request->query('check_it'))
+            $define_service = $define_service."\n\tactive_checks_enabled\t\t\t".$request->query('check_it');
+        
+        // Enable notifications
+        if($request->query('active_notif'))
+            $define_service = $define_service."\n\tnotifications_enabled\t\t\t".$request->query('active_notif');
 
         $define_service = $define_service."\n}\n\n";
 

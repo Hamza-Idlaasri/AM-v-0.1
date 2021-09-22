@@ -22,8 +22,8 @@ class LoginController extends Controller
         // validation
         $this->validate($request,[
 
-            'name' => 'required|max:100',
-            'password' => 'required',
+            'name' => 'required|min:3|max:15|regex:/^[a-zA-Z][a-zA-Z0-9-_(). ÀÂÇÉÈÊÎÔÛÙàâçéèêôûù]/',
+            'password' => 'required|string|min:4|max:12|regex:/^[a-zA-Z0-9-_().@$=%&#+{}*ÀÂÇÉÈÊÎÔÛÙàâçéèêôûù]/',
 
         ]);
 

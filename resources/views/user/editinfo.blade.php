@@ -15,7 +15,7 @@
 
         <div class="form-group">
             <label for="username">Username :</label><br>
-            <input type="text" class="form-control @error('username') border-danger @enderror" name="username" id="username" value="{{ $user->name }}">
+            <input type="text" class="form-control @error('username') border-danger @enderror" name="username" id="username" value="{{ $user->name }}" pattern="[a-zA-Z][a-zA-Z0-9 ]{3,15}" title="Username must be between 3 & 15 charcarters in length and containes only letters, numbers">
             @error('username')
                 <div class="text-danger">
                         {{ $message }}

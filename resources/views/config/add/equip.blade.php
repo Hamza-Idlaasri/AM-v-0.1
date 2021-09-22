@@ -9,13 +9,13 @@
   @if (sizeof($inputs_not_used) > 0)
     <form action="{{ route('addEquip', $box->box_id) }}" method="get">
 
-      <div class="container p-3 rounded bg-white m-3 shadow-sm">
-          <h4>Define Equipements :</h4>
+      <div class="card rounded bg-white m-3 shadow-sm">
+          <div class="card-header">Define Equipements :</div>
           <div class="container p-3 defineEquip">
               <div class="equip1 d-flex w-100 my-3">
                   <div class="w-50">
                       <label for="equip_name"><b>Equipement name <span class="text-danger">*</span></b></label>
-                      <input type="text" name="equipName[]" class="eqName1 form-control w-75 @error('equipName.*') border-danger @enderror" id="equip_name" value="{{ old('equipName.*')}}">
+                      <input type="text" name="equipName[]" class="eqName1 form-control w-75 @error('equipName.*') border-danger @enderror" id="equip_name" value="{{ old('equipName.*')}}"  pattern="[a-zA-Z][a-zA-Z0-9-_+ ]{2,20}" title="Equip. name must be between 2 & 20 charcarters in length and containes only letters, numbers, and the symbols -_+">
                       @error('equipName.*')
                           <div class="text-danger">
                               {{ $message }}
@@ -35,11 +35,13 @@
               </div>
           </div>
 
-          @if (sizeof($inputs_not_used) > 1)
-            <span class="btn text-primary bg-white float-right shadow-sm add" title="Add another equipement for monitoring"><i class="fas fa-plus"></i></span>
-          @endif
-
-          <span class="btn text-primary bg-white float-right shadow-sm" id="rmv" title="Remove last equipement" style="display: none"><i class="fas fa-minus"></i></span>            
+          <div class="float-right">
+            @if (sizeof($inputs_not_used) > 1)
+              <span class="btn text-primary bg-white float-right shadow-sm add" title="Add another equipement for monitoring"><i class="fas fa-plus"></i></span>
+            @endif
+  
+            <span class="btn text-primary bg-white float-right shadow-sm" id="rmv" title="Remove last equipement" style="display: none"><i class="fas fa-minus"></i></span>            
+          </div>
 
       </div>
 

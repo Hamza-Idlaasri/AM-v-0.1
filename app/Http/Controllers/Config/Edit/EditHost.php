@@ -36,12 +36,12 @@ class EditHost extends Controller
         // validation
         $this->validate($request,[
 
-            'hostName' => 'required|alpha',
-            'addressIP' => 'required',
-            'check_interval' => 'required|integer',
-            'retry_interval' => 'required|integer',
-            'max_attempts' => 'required|integer',
-            'notif_interval' => 'required'
+            'hostName' => 'required|min:2|max:20|regex:/^[a-zA-Z0-9-_+ ]/',
+            'addressIP' => 'required|min:7|max:15|regex:/^[0-9.]/',
+            'check_interval' => 'required|min:1|max:100',
+            'retry_interval' => 'required|min:1|max:100',
+            'max_attempts' => 'required|min:1|max:100',
+            'notif_interval' => 'required|min:1|max:1000',
 
         ],[
             'addressIP.required' => 'the IP address field is empty',
@@ -79,6 +79,15 @@ class EditHost extends Controller
         // Notification Interval
         if($old_host_details[0]->notification_interval != $request->notif_interval)
             $define_host = $define_host."\n\tnotification_interval\t\t\t".$request->notif_interval;
+
+        // Check this host
+        if($request->query('check'))
+            $define_host = $define_host."\n\tactive_checks_enabled\t\t\t".$request->query('check');
+        
+        // Enable notifications
+        if($request->query('active_notif'))
+            $define_host = $define_host."\n\tnotifications_enabled\t\t\t".$request->query('active_notif');
+
 
         $define_host = $define_host."\n}\n\n";
 

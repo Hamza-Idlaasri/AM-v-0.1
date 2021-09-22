@@ -56,6 +56,7 @@ class EquipGroups extends Controller
             ->join('nagios_hoststatus','nagios_hosts.host_object_id','=','nagios_hoststatus.host_object_id')
             ->select('nagios_hosts.alias as type','nagios_hosts.display_name as host_name','nagios_hoststatus.current_state as host_state','nagios_services.display_name as service_name','nagios_servicestatus.current_state as service_state','nagios_servicestatus.last_check','nagios_servicestatus.output','nagios_servicegroups.alias as servicegroup_name','nagios_servicegroups.servicegroup_id')
             ->where('nagios_servicegroups.servicegroup_id',$servicegroup_id)
+            ->orderBy('nagios_hosts.display_name')
             ->get();
 
         return view('config.groups.EGdetails', compact('equipgroup','members'));
@@ -78,7 +79,7 @@ class EquipGroups extends Controller
     {
         // validation
         $this->validate($request,[
-            'equipgroup_name' => 'required',
+            'equipgroup_name' => 'required|min:2|max:20|unique:nagios_servicegroups,alias|regex:/^[a-zA-Z0-9-_+ ]/',
             'members' => 'required',
         ],[
             'members.required' => 'Please check hosts members for your equipgroup',

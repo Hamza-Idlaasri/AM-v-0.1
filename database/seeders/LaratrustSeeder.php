@@ -14,6 +14,8 @@ class LaratrustSeeder extends Seeder
      *
      * @return void
      */
+    protected $connection = 'mysql2';
+    
     public function run()
     {
         $this->truncateLaratrustTables();

@@ -2,6 +2,24 @@
 
 @section('content')
 
+<style>
+    .unity{
+        background: rgb(211, 210, 210);
+        color: black;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding:0 10px;
+        border-radius: 0 10px 10px 0;
+    }
+    
+    .p-unity
+    {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+</style>
+
 <div class="container my-3 w-50">
 
     <form action="{{ route('editHost', $host[0]->host_id) }}" method="get">
@@ -13,7 +31,7 @@
             <div class="card-body">
                 {{-- Host Name --}}
                 <label for="host_name"><b>Host Name {{--<span class="text-danger">*</span>--}}</b></label>
-                <input type="text" name="hostName" class="form-control @error('hostName') border-danger @enderror" id="host_name" value="{{ $host[0]->display_name }}">
+                <input type="text" name="hostName" class="form-control p-unity @error('hostName') border-danger @enderror" id="host_name" value="{{ $host[0]->display_name }}" pattern="[a-zA-Z][a-zA-Z0-9-_+ ]{2,20}" title="Host name must be between 4 & 20 charcarters in length and containes only letters, numbers, and these symbols (-_+)">
                 @error('hostName')
                     <div class="text-danger">
                         {{ $message }}
@@ -24,7 +42,7 @@
 
                 {{-- IP Address --}}
                 <label for="ip"><b>IP Address {{--<span class="text-danger">*</span>--}}</b></label>
-                <input type="text" name="addressIP" class="form-control @error('addressIP') border-danger @enderror" id="ip" minlength="7" maxlength="15" size="15" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" value="{{ $host[0]->address }}">
+                <input type="text" name="addressIP" class="form-control p-unity @error('addressIP') border-danger @enderror" id="ip" minlength="7" maxlength="15" size="15" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" value="{{ $host[0]->address }}" title="Please enter the IP address correctly e.g. 192.168.1.1">
                 @error('addressIP')
                     <div class="text-danger">
                         {{ $message }}
@@ -36,7 +54,7 @@
                 {{-- Community --}}
                 {{-- @if ($type == 'switch' || $type == 'router' || $type == 'printer')
                     <label for="community"><b>Community String <span class="text-danger">*</span></b></label>
-                    <input type="text" name="community" class="form-control @error('community') border-danger @enderror" id="community" value="public">
+                    <input type="text" name="community" class="form-control p-unity @error('community') border-danger @enderror" id="community" value="public">
                     @error('community')
                         <div class="text-danger">
                             {{ $message }}
@@ -49,7 +67,7 @@
                 {{-- Parent host --}}
                 <div>
                     <label for=""><b>Parent :</b></label>
-                    <div class="sizing" style="height:100px; overflow: auto">
+                    <div class="sizing" style="max-height:100px; overflow: auto">
                         
                         @forelse ($all_hosts as $item)
 
@@ -84,7 +102,10 @@
             <div class="card-body">
                 {{-- Check Interval --}}
                 <label for="CheckInterval"><b>Check Interval <!--<span class="text-danger">*</span>--></b></label>
-                <input  type="number" min="1" max="100" name="check_interval" class="form-control @error('check_interval') border-danger @enderror" id="CheckInterval" value="{{ $host[0]->check_interval }}">
+                <div class="d-flex">
+                    <input  type="number" min="1" max="100" name="check_interval" class="form-control p-unity @error('check_interval') border-danger @enderror" id="CheckInterval" value="{{ $host[0]->check_interval }}">
+                    <span class="unity">min</span>
+                </div>
                 @error('check_interval')
                     <div class="text-danger">
                         {{ $message }}
@@ -95,7 +116,10 @@
 
                 {{-- Retry Interval --}}
                 <label for="retryInterval"><b>Retry Interval <!--<span class="text-danger">*</span>--></b></label>
-                <input  type="number" min="1" max="100" name="retry_interval" class="form-control @error('retry_interval') border-danger @enderror" id="retryInterval" value="{{ $host[0]->retry_interval }}">
+                <div class="d-flex">
+                    <input  type="number" min="1" max="100" name="retry_interval" class="form-control p-unity @error('retry_interval') border-danger @enderror" id="retryInterval" value="{{ $host[0]->retry_interval }}">
+                    <span class="unity">min</span>
+                </div>
                 @error('retry_interval')
                     <div class="text-danger">
                         {{ $message }}
@@ -106,7 +130,10 @@
 
                 {{-- Max Check --}}
                 <label for="maxInterval"><b>Max Check <!--<span class="text-danger">*</span>--></b></label>
-                <input  type="number" min="1" max="100" name="max_attempts" class="form-control @error('max_attempts') border-danger @enderror" id="maxInterval" value="{{ $host[0]->max_check_attempts }}">
+                <div class="d-flex">
+                    <input  type="number" min="1" max="100" name="max_attempts" class="form-control p-unity @error('max_attempts') border-danger @enderror" id="maxInterval" value="{{ $host[0]->max_check_attempts }}">
+                    <span class="unity">attempts</span>
+                </div>
                 @error('max_attempts')
                     <div class="text-danger">
                         {{ $message }}
@@ -117,7 +144,10 @@
 
                 {{-- Notification Interval --}}
                 <label for="notifInterval"><b>Notification Interval <!--<span class="text-danger">*</span>--></b></label>
-                <input  type="number" min="1" max="1000" name="notif_interval" class="form-control @error('notif_interval') border-danger @enderror" id="notifInterval" value="{{ $host[0]->notification_interval }}">
+                <div class="d-flex">
+                    <input  type="number" min="1" max="1000" name="notif_interval" class="form-control p-unity @error('notif_interval') border-danger @enderror" id="notifInterval" value="{{ $host[0]->notification_interval }}">
+                    <span class="unity">min</span>
+                </div>
                 @error('notif_interval')
                     <div class="text-danger">
                         {{ $message }}

@@ -23,10 +23,10 @@ class EditService extends Controller
         $this->validate($request,[
          
             'serviceName' => 'required',
-            'check_interval' => 'required',
-            'retry_interval' => 'required',
-            'max_attempts' => 'required',
-            'notif_interval' => 'required',
+            'check_interval' => 'required|min:1|max:100',
+            'retry_interval' => 'required|min:1|max:100',
+            'max_attempts' => 'required|min:1|max:100',
+            'notif_interval' => 'required|min:1|max:1000',
         
         ]);
 
@@ -55,6 +55,14 @@ class EditService extends Controller
         // Notification Interval
         if($old_service_details[0]->notification_interval != $request->notif_interval)
             $define_service = $define_service."\n\tnotification_interval\t\t\t".$request->notif_interval;
+
+        // Check this host
+        if($request->query('check'))
+            $define_service = $define_service."\n\tactive_checks_enabled\t\t\t".$request->query('check');
+        
+        // Enable notifications
+        if($request->query('active_notif'))
+            $define_service = $define_service."\n\tnotifications_enabled\t\t\t".$request->query('active_notif');
 
         $define_service = $define_service."\n}\n\n";
 

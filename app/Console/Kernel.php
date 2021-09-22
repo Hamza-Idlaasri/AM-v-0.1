@@ -13,7 +13,11 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        // 'App\Console\Commands\SendEmail',
+        'App\Console\Commands\SendHostEmail',
+        'App\Console\Commands\SendServiceEmail',
+        'App\Console\Commands\SendBoxEmail',
+        'App\Console\Commands\SendEquipEmail'
     ];
 
     /**
@@ -25,6 +29,20 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
+        // $schedule->command('notif:email')
+        //     ->everyMinute();
+
+        $schedule->command('notif:box')
+            ->everyMinute();
+
+        $schedule->command('notif:host')
+            ->everyMinute();
+
+        $schedule->command('notif:service')
+            ->everyMinute();
+    
+        $schedule->command('notif:equip')
+            ->everyMinute();
     }
 
     /**

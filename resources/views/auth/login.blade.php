@@ -42,7 +42,7 @@
                     @endif
 
                     <div class="form-group">
-                        <input type="text" name="name" class="form-control @error('name') border-danger @enderror" placeholder="Username">
+                        <input type="text" name="name" class="form-control @error('name') border-danger @enderror" placeholder="Username" pattern="[a-zA-Z][a-zA-Z0-9-_(). ÀÂÇÉÈÊÎÔÛÙàâçéèêôûù]{3,15}" title="Username must be between 3 & 15 charcarters in length and containes only letters, numbers, and these symbols -_()">
                     </div>
                     @error('name')
                         <div class="text-danger">
@@ -51,7 +51,7 @@
                     @enderror
             
                     <div class="form-group">
-                        <input type="password" name="password" class="form-control @error('password') border-danger @enderror" placeholder="Password">
+                        <input type="password" name="password" class="form-control @error('password') border-danger @enderror" placeholder="Password" pattern="[a-zA-Z0-9-_().@$=%&#+{}*ÀÂÇÉÈÊÎÔÛÙàâçéèêôûù]{5,12}" title="Password must be between 6 & 12 charcarters in length and containes only letters, numbers, and symbols">
                     </div>
                     @error('password')
                         <div class="text-danger">

@@ -37,12 +37,12 @@ class EditBox extends Controller
         // validation
         $this->validate($request,[
 
-            'boxName' => 'required',
-            'addressIP' => 'required',
-            'normal_interval' => 'required',
-            'retry_interval' => 'required',
-            'max_attempts' => 'required',
-            'notif_interval' => 'required'
+            'boxName' => 'required|min:2|max:20|unique:nagios_hosts,display_name|regex:/^[a-zA-Z0-9-_+ ]/',
+            'addressIP' => 'required|min:7|max:15',
+            'normal_interval' => 'required|min:1|max:100',
+            'retry_interval' => 'required|min:1|max:100',
+            'max_attempts' => 'required|min:1|max:100',
+            'notif_interval' => 'required|min:1|max:1000'
 
         ],[
             'addressIP.required' => 'the IP address field is empty',
@@ -80,6 +80,14 @@ class EditBox extends Controller
         if($old_box_details[0]->notification_interval != $request->notif_interval)
             $define_host = $define_host."\n\tnotification_interval\t\t\t".$request->notif_interval;
 
+        // Check this host
+        if($request->query('check'))
+            $define_host = $define_host."\n\tactive_checks_enabled\t\t\t".$request->query('check');
+        
+        // Enable notifications
+        if($request->query('active_notif'))
+            $define_host = $define_host."\n\tnotifications_enabled\t\t\t".$request->query('active_notif');
+            
         $define_host = $define_host."\n}\n\n";
 
         if($old_box_details[0]->display_name == $request->boxName) {

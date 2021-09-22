@@ -15,7 +15,6 @@ class Notifications extends Controller
             ->where('nagios_hosts.alias','host')
             ->select('nagios_hosts.display_name as host_name','nagios_notifications.*')
             ->orderByDesc('start_time')
-            ->where('start_time','>',date('Y-m-d', strtotime('-1 day')))
             ->get();
 
         $services = DB::table('nagios_notifications')
@@ -24,7 +23,6 @@ class Notifications extends Controller
             ->where('nagios_hosts.alias','host')
             ->select('nagios_services.display_name as service_name','nagios_hosts.display_name as host_name','nagios_notifications.*')
             ->orderByDesc('start_time')
-            ->where('start_time','>',date('Y-m-d', strtotime('-1 day')))
             ->get();
 
         $boxs = DB::table('nagios_notifications')
@@ -32,7 +30,6 @@ class Notifications extends Controller
             ->where('nagios_hosts.alias','box')
             ->select('nagios_hosts.display_name as box_name','nagios_notifications.*')
             ->orderByDesc('start_time')
-            ->where('start_time','>',date('Y-m-d', strtotime('-1 day')))
             ->get();
     
         $equips = DB::table('nagios_notifications')
@@ -41,7 +38,6 @@ class Notifications extends Controller
             ->where('nagios_hosts.alias','box')
             ->select('nagios_services.display_name as equip_name','nagios_hosts.display_name as box_name','nagios_notifications.*')
             ->orderByDesc('start_time')
-            ->where('start_time','>',date('Y-m-d', strtotime('-1 day')))
             ->get();
 
         // $notif =(object) array_merge_recursive((array)$services_notifs, (array)$hosts_notifs);

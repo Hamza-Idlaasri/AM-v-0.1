@@ -26,7 +26,7 @@
     <table class="table table-bordered table-details">
 
         <tr>
-            <td class="left-coll">Current State</td>
+            <td class="left-coll font-weight-bolder">Current State</td>
             @switch($details[0]->current_state)
                 
                     @case(0)
@@ -47,12 +47,12 @@
         </tr>
 
         <tr>
-            <td class="left-coll">State Information</td>
+            <td class="left-coll font-weight-bolder">State Information</td>
             <td>{{ $details[0]->output }}</td>
         </tr>
 
         <tr>
-            <td class="left-coll">Current Attempt</td>
+            <td class="left-coll font-weight-bolder">Current Attempt</td>
             <td>{{ $details[0]->current_check_attempt }} / {{$details[0]->max_check_attempts}} 
                 @switch($details[0]->state_type)
                     @case(0)
@@ -68,24 +68,24 @@
         </tr>
 
         <tr>
-            <td class="left-coll">Execution Time</td>
+            <td class="left-coll font-weight-bolder">Execution Time</td>
             <td>{{  $details[0]->execution_time }} s</td>
         </tr>
 
         <tr>
-            <td class="left-coll">Last Check</td>
+            <td class="left-coll font-weight-bolder">Last Check</td>
             <td>{{ $details[0]->last_check}}</td>
         </tr>
         <tr>
-            <td class="left-coll">Next Check</td>
+            <td class="left-coll font-weight-bolder">Next Check</td>
             <td>{{ $details[0]->next_check}}</td>
         </tr>
         <tr>
-            <td class="left-coll">Last Update</td>
+            <td class="left-coll font-weight-bolder">Last Update</td>
             <td>{{ $details[0]->status_update_time }}</td>
         </tr>
         <tr>
-            <td class="left-coll">Flapping</td>
+            <td class="left-coll font-weight-bolder">Flapping</td>
 
             @switch($details[0]->is_flapping)
                 @case(0)
@@ -100,7 +100,7 @@
             
         </tr>
         <tr>
-            <td class="left-coll">Check Type</td>
+            <td class="left-coll font-weight-bolder">Check Type</td>
 
             @switch($details[0]->check_type)
                 @case(0)

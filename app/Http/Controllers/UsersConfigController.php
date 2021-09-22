@@ -43,7 +43,7 @@ class UsersConfigController extends Controller
         $users_upgraded = $request->users;
 
         // $all_users = User::all()->except(1);
-        $all_users =User::all()->except(1);
+        $all_users = User::all()->except(1);
 
         $groupA = [];
         $groupS = [];

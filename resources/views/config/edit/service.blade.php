@@ -33,7 +33,7 @@
             <div class="card-body">
                 {{-- service Name --}}
                 <label for="service_name"><b>Service name {{--<span class="text-danger">*</span>--}}</b></label>
-                <input type="text" name="serviceName" class="form-control @error('serviceName') border-danger @enderror" id="service_name" value="{{ $service[0]->display_name }}">
+                <input type="text" name="serviceName" class="form-control @error('serviceName') border-danger @enderror" id="service_name" value="{{ $service[0]->display_name }}" pattern="[a-zA-Z][a-zA-Z0-9-_+ ]{2,20}" title="Service name must be between 2 & 20 charcarters in length and containes only letters, numbers, and these symbols -_+">
                 @error('serviceName')
                     <div class="text-danger">
                         {{ $message }}

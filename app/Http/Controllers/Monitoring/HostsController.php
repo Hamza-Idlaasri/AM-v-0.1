@@ -314,7 +314,8 @@ class HostsController extends Controller
     {
         return DB::table('nagios_hosts')
             ->where('alias','host')
-            ->join('nagios_hoststatus','nagios_hosts.host_object_id','=','nagios_hoststatus.host_object_id');
+            ->join('nagios_hoststatus','nagios_hosts.host_object_id','=','nagios_hoststatus.host_object_id')
+            ->orderBy('display_name');
     }
 
     public function getServices()
@@ -341,7 +342,8 @@ class HostsController extends Controller
     {
         return DB::table('nagios_hosts')
             ->where('alias','host')
-            ->select('nagios_hosts.display_name','nagios_hosts.host_object_id');
+            ->select('nagios_hosts.display_name','nagios_hosts.host_object_id')
+            ->orderBy('display_name');
     }
 
     public function getStatus($cas, $name)

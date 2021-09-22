@@ -325,10 +325,11 @@ class ServicesController extends Controller
     public function getServices()
     {
         return DB::table('nagios_hosts')
+            ->where('alias','host')
             ->join('nagios_services','nagios_hosts.host_object_id','=','nagios_services.host_object_id')
             ->join('nagios_servicestatus','nagios_services.service_object_id','=','nagios_servicestatus.service_object_id')
             ->select('nagios_hosts.display_name as host_name','nagios_hosts.*','nagios_services.display_name as service_name','nagios_services.*','nagios_servicestatus.*')
-            ->where('alias','host');
+            ->orderBy('nagios_hosts.display_name');
     }
 
     public function getServicesName()
@@ -345,7 +346,8 @@ class ServicesController extends Controller
         ->select('nagios_hosts.alias','nagios_hosts.host_object_id','nagios_services.display_name','nagios_services.service_object_id','nagios_servicechecks.*')
         ->join('nagios_services','nagios_services.service_object_id','=','nagios_servicechecks.service_object_id')
         ->join('nagios_hosts','nagios_hosts.host_object_id','=','nagios_services.host_object_id')
-        ->where('alias','host');
+        ->where('alias','host')
+        ->orderBy('nagios_hosts.display_name');
     }
 
     public function getStatus($cas, $name)

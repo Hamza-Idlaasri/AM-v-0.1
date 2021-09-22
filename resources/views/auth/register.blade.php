@@ -35,7 +35,7 @@
                 <form action="{{ route('register') }}" method="post" class="p-3">
                     @csrf
                     <div class="form-group">
-                        <input type="text" name="name" class="form-control @error('name') border-danger @enderror" placeholder="Username" value="{{ old('name') }}">
+                        <input type="text" name="name" class="form-control @error('name') border-danger @enderror" placeholder="Username" value="{{ old('name') }}" pattern="[a-zA-Z][a-zA-Z0-9-_(). ÀÂÇÉÈÊÎÔÛÙàâçéèêôûù]{3,15}" title="Username must be between 3 & 15 charcarters in length and containes only letters, numbers, and these symbols -_()">
                         @error('name')
                             <div class="text-danger">
                                     {{ $message }}
@@ -55,7 +55,7 @@
                    
 
                     <div class="form-group">
-                        <input type="password" name="password" class="form-control @error('password') border-danger @enderror" placeholder="Password">
+                        <input type="password" name="password" class="form-control @error('password') border-danger @enderror" placeholder="Password" pattern="[a-zA-Z0-9-_().@$=%&#+{}*ÀÂÇÉÈÊÎÔÛÙàâçéèêôûù]{5,12}" title="Password must be between 6 & 12 charcarters in length and containes only letters, numbers, and these symbols -_().@$=%&#+{}*">
                         @error('password')
                         <div class="text-danger">
                                 {{ $message }}

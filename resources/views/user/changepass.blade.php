@@ -15,7 +15,7 @@
            
             <div class="form-group">
                 <label for="oldPassword">Old Password :</label><br>
-                <input type="password" class="form-control @error('oldPassword') border-danger @enderror" name="oldPassword" id="oldPassword">
+                <input type="password" class="form-control @error('oldPassword') border-danger @enderror" name="oldPassword" id="oldPassword"  pattern="[a-zA-Z0-9\.]{6,12}" title="Password must be between 6 & 12 charcarters in length and containes only letters, numbers, and symbols">
                 @error('oldPassword')
                     <div class="text-danger">
                             {{ $message }}
@@ -26,7 +26,7 @@
         
             <div class="form-group">
                 <label for="newPassword">New Password :</label><br>
-                <input type="password" class="form-control @error('password') border-danger @enderror" name="password" id="newPassword">
+                <input type="password" class="form-control @error('password') border-danger @enderror" name="password" id="newPassword"  pattern="[a-zA-Z0-9\.]{6,12}" title="Password must be between 6 & 12 charcarters in length and containes only letters, numbers, and symbols">
                 @error('password')
                     <div class="text-danger">
                             {{ $message }}
