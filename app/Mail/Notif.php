@@ -17,9 +17,9 @@ class Notif extends Mailable
      *
      * @return void
      */
-    public function __construct(object $services)
+    public function __construct(object $equips)
     {
-        $this->data = $services;
+        $this->data = $equips;
     }
 
     /**
@@ -29,6 +29,6 @@ class Notif extends Mailable
      */
     public function build()
     {   
-        return $this->from('alarmmanger@gmail.com', 'AM')->markdown('email.service')->with(['services' => $this->data]);
+        return $this->from('alarmmanger@gmail.com', 'AM')->markdown('email.equip')->with(['equips' => $this->data]);
     }
 }

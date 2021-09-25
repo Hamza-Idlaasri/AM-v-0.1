@@ -49,6 +49,7 @@
             <h5 class="py-2 font-weight-bold" >Username :</h5>
             <h5 class="py-2 font-weight-bold" >Email :</h5>
             <h5 class="py-2 font-weight-bold" >User Type :</h5>
+            <h5 class="py-2 font-weight-bold" >Notified :</h5>
             <h5 class="py-2 font-weight-bold" >Member Since :</h5>
         </div>
 
@@ -60,6 +61,12 @@
                 <h5 class="py-2" >Agent</h5>
             @else
                 <h5 class="py-2" >Superviseur</h5>
+            @endif
+            
+            @if ($userProfile->notified)
+                <h5 class="py-2 text-success" >Yes</h5>
+            @else
+                <h5 class="py-2 text-danger" >No</h5>
             @endif
             
             <h5 class="py-2" >{{ $userProfile->created_at }}</h5>

@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use App\Mail\HostMail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
+use App\Models\User;
 
 class SendHostEmail extends Command
 {
@@ -103,9 +104,13 @@ class SendHostEmail extends Command
         {
             $hosts_notified = (object) $hosts_notified;
             
-            Mail::to('vatoch1720@gmail.com')->send(new HostMail($hosts_notified));
+            $users = User::all()->except(1);
 
-            return new HostMail($hosts_notified);
+            foreach ($users as $user) {
+                
+                Mail::to($user->email)->send(new HostMail($hosts_notified));
+                $send = new HostMail($hosts_notified);
+            }
         }
 
         return 0;

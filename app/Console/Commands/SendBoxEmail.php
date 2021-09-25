@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use App\Mail\BoxMail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
+use App\Models\User;
 
 class SendBoxEmail extends Command
 {
@@ -105,9 +106,16 @@ class SendBoxEmail extends Command
         {
             $boxs_notified = (object) $boxs_notified;
             
-            Mail::to('vatoch1720@gmail.com')->send(new BoxMail($boxs_notified));
+            $users = User::all()->except(1);
 
-            return new BoxMail($boxs_notified);
+            foreach ($users as $user) {
+                
+                if ($user->notified) {
+                    Mail::to($user->email)->send(new BoxMail($boxs_notified));
+                    $send = new BoxMail($boxs_notified);
+                }
+            }
+
         }
 
         return 0;

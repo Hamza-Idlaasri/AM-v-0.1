@@ -15,8 +15,9 @@
             <tr>
                 <th>ID</th>
                 <th>Username</th>
-                <th>Email</th>
+                <th style="padding-left: 0;padding-right:0 ">Email</th>
                 <th>User Type</th>
+                <th style="padding-left: 0;padding-right:0 ">Notified</th>
                 <th>Created At</th>
                 <th>Edit</th>
             </tr>    
@@ -32,7 +33,7 @@
             <tr>
                 <td>{{ $user->id }}</td>
                 <td>{{ $user->name }}</td>
-                <td>{{ $user->email }}</td>
+                <td style="padding-left: 0;padding-right:0 ">{{ $user->email }}</td>
 
                 @if($user->hasRole('agent'))
                     <td>Agent</td>
@@ -40,7 +41,20 @@
                     <td>Superviseur</td>
                 @endif
                 
+                <td>
+                    @if ($user->notified)
+                        <div class="form-check">
+                            <input class="form-check-input position-static" type="checkbox" name="notified[]" form="up" id="blankCheckbox" value="{{$user->id}}" checked>
+                        </div>
+                    @else
+                        <div class="form-check">
+                            <input class="form-check-input position-static" type="checkbox" name="notified[]" form="up" id="blankCheckbox" value="{{$user->id}}">
+                        </div>
+                    @endif
+                </td>
+                
                 <td>{{ $user->created_at }}</td>
+                
                 <td class="p-0">
                     
                     <div class="d-flex my-3 justify-content-around">
@@ -48,13 +62,13 @@
                         @if ($user->hasRole('agent'))
                             <div class="">
                                 <div class="check">
-                                    <input type="checkbox" name="users[]" form="up" value="{{$user->id}}" checked>
+                                    <input type="checkbox" id="rail" name="users[]" form="up" value="{{$user->id}}" checked>
                                 </div>
                             </div>
                         @else
                             <div class="">
                                 <div class="check">
-                                    <input type="checkbox" name="users[]" form="up" value="{{$user->id}}">
+                                    <input type="checkbox" id="rail" name="users[]" form="up" value="{{$user->id}}">
                                 </div>
                             </div>
                         @endif

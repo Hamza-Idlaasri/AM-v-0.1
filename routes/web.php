@@ -35,7 +35,7 @@ use App\Http\Controllers\UserProfileController;
 
 use App\Http\Controllers\Config\Notifications\Notifications;
 
-use App\Mail\EquipMail;
+use App\Mail\Notif;
 use Illuminate\Support\Facades\Mail;
 
 use App\Http\Controllers\TestController;
@@ -343,12 +343,12 @@ Route::put('/change-info',[UserProfileController::class,'changeNameEmail'])->nam
 Route::get('/notif',function(){
 
     $equips = DB::table('nagios_notifications')
-    ->join('nagios_services','nagios_services.service_object_id','=','nagios_notifications.object_id')
-    ->join('nagios_hosts','nagios_hosts.host_object_id','=','nagios_services.host_object_id')
-    ->where('nagios_hosts.alias','box')
-    ->select('nagios_services.display_name as equip_name','nagios_hosts.display_name as box_name','nagios_notifications.*')
-    ->orderByDesc('start_time')
-    ->get();
+        ->join('nagios_services','nagios_services.service_object_id','=','nagios_notifications.object_id')
+        ->join('nagios_hosts','nagios_hosts.host_object_id','=','nagios_services.host_object_id')
+        ->where('nagios_hosts.alias','box')
+        ->select('nagios_services.display_name as equip_name','nagios_hosts.display_name as box_name','nagios_notifications.*')
+        ->orderByDesc('start_time')
+        ->get();
     
     $equips_notified = [];
 
@@ -402,15 +402,17 @@ Route::get('/notif',function(){
 
     }
 
-    if(sizeof($equips_notified))
-    {
-        $equips_notified = (object) $equips_notified;
-        Mail::to('vatoch1720@gmail.com')->send(new EquipMail($equips_notified));
-        return new EquipMail($equips_notified);
+    // if(sizeof($equips_notified))
+    // {
+    //     $equips_notified = (object) $equips_notified;
+    //     Mail::to('vatoch1720@gmail.com')->send(new EquipMail($equips_notified));
+    //     return new EquipMail($equips_notified);
 
-    }
+    // }
 
-    return 0;
+    Mail::to('vatoch1720@gmail.com')->send(new Notif($equips));
+    return new Notif($equips);
+
 });
 
 Route::get('/test',[TestController::class,'index']);

@@ -51,7 +51,7 @@ class UserProfileController extends Controller
             // validation
             $this->validate($request,[
 
-                'password' => 'required|confirmed',
+                'password' => 'required|string|confirmed|min:5|max:12|regex:/^[a-zA-Z0-9-_().@$=%&#+{}*ÀÂÇÉÈÊÎÔÛÙàâçéèêôûù]/|unique:mysql2.users',
 
             ]);
 
@@ -82,8 +82,8 @@ class UserProfileController extends Controller
         // validation
         $this->validate($request,[
 
-            'username' => 'required|max:255',
-            'email' => 'required|email|max:255',
+            'username' => 'required|min:3|max:15|regex:/^[a-zA-Z][a-zA-Z0-9-_(). ÀÂÇÉÈÊÎÔÛÙàâçéèêôûù]/',
+            'email' => 'required|email|max:100',
            
         ]);
 
@@ -95,7 +95,18 @@ class UserProfileController extends Controller
 
         ]);
         
-        return redirect()->route('userProfile')->with('status','Username/Email changed');
+        if ($request->notified) {
+            auth()->user()->update([
+                'notified' => 1
+            ]);
+        } 
+        else {
+            auth()->user()->update([
+                'notified' => 0
+            ]);
+        }
+
+        return redirect()->route('userProfile')->with('status','Your info are changed');
 
     }
 }

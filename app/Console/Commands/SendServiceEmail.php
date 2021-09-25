@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use App\Mail\ServiceMail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
+use App\Models\User;
 
 class SendServiceEmail extends Command
 {
@@ -103,8 +104,14 @@ class SendServiceEmail extends Command
         if(sizeof($services_notified))
         {
             $services_notified = (object) $services_notified;
-            Mail::to('vatoch1720@gmail.com')->send(new ServiceMail($services_notified));
-            return new ServiceMail($services_notified);
+
+            $users = User::all()->except(1);
+
+            foreach ($users as $user) {
+                
+                Mail::to($user->email)->send(new ServiceMail($services_notified));
+                $send = new ServiceMail($services_notified);
+            }
 
         }
 

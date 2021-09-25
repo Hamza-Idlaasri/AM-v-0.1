@@ -33,16 +33,20 @@ class Kernel extends ConsoleKernel
         //     ->everyMinute();
 
         $schedule->command('notif:box')
-            ->everyMinute();
+            ->timezone('Africa/Casablanca')
+            ->everyFiveMinutes();
 
         $schedule->command('notif:host')
-            ->everyMinute();
+            ->timezone('Africa/Casablanca')
+            ->everyFiveMinutes();
 
         $schedule->command('notif:service')
-            ->everyMinute();
+            ->timezone('Africa/Casablanca')
+            ->everyFiveMinutes();
     
         $schedule->command('notif:equip')
-            ->everyMinute();
+            ->timezone('Africa/Casablanca')
+            ->everyFiveMinutes();
     }
 
     /**

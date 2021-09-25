@@ -39,20 +39,16 @@ class UsersConfigController extends Controller
 
     public function upgrade(Request $request)
     {
-
-        $users_upgraded = $request->users;
-
-        // $all_users = User::all()->except(1);
         $all_users = User::all()->except(1);
 
-        $groupA = [];
-        $groupS = [];
+        // Upgrade ----------------------
+        $users_upgraded = $request->users;
 
         if($users_upgraded)
         {
             foreach ($all_users as $user) {
 
-                if(array_search($user->id,$users_upgraded) !== false)
+                if(in_array($user->id,$users_upgraded))
                 {
                     
                     if(User::find($user->id)->hasRole('agent'))
@@ -63,8 +59,8 @@ class UsersConfigController extends Controller
                         User::find($user->id)->attachRole('agent');
                     }
                     
-                } else
-                {
+                } 
+                else {
                     if(User::find($user->id)->hasRole('superviseur'))
                         continue;
                     else
@@ -88,6 +84,47 @@ class UsersConfigController extends Controller
                     User::find($user->id)->detachRole('agent');
                     User::find($user->id)->attachRole('superviseur');
                 }
+            }
+            
+        }
+
+        // Notified ---------------------
+        $users_notified = $request->notified;
+        
+        if($users_notified)
+        {
+
+            foreach ($all_users as $user) {
+
+                if (in_array($user->id,$users_notified)) {
+
+                    if($user->notified)
+                        continue;
+                    else
+                        User::find($user->id)->update(['notified' => 1]);
+
+                }
+                else {
+
+                    if(!$user->notified)
+                        continue;
+                    else 
+                        User::find($user->id)->update(['notified' => 0]);
+                
+                }
+                
+            }
+
+        } else
+        {
+
+            foreach ($all_users as $user) {
+                
+                if(!$user->notified)
+                    continue;
+                else
+                    User::find($user->id)->update(['notified' => 0]);
+
             }
             
         }

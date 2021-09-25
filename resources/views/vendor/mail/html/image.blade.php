@@ -1,0 +1,1 @@
+<img src="{{ $message->embed('public/images/interface/AlarmManger.png') }}" alt="">

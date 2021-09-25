@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use App\Mail\EquipMail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
+use App\Models\User;
 
 class SendEquipEmail extends Command
 {
@@ -103,8 +104,14 @@ class SendEquipEmail extends Command
         if(sizeof($equips_notified))
         {
             $equips_notified = (object) $equips_notified;
-            Mail::to('vatoch1720@gmail.com')->send(new EquipMail($equips_notified));
-            return new EquipMail($equips_notified);
+
+            $users = User::all()->except(1);
+
+            foreach ($users as $user) {
+                
+                Mail::to($user->email)->send(new EquipMail($equips_notified));
+                $send = new EquipMail($equips_notified);
+            }
 
         }
 
