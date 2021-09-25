@@ -92,7 +92,7 @@ class SendHostEmail extends Command
             // months, seconds, hours and minutes 
             $seconds = floor(($diff - $years * 365*60*60*24 - $months*30*60*60*24 - $days*60*60*24 - $hours*60*60 - $minutes*60)); 
 
-            if ($years == 0 && $months == 0 && $days == 0 && $hours == 0 && $minutes <= 30) {
+            if ($years == 0 && $months == 0 && $days == 0 && $hours == 0 && $minutes <= 5) {
                 
                 array_push($hosts_notified, $host);
 
@@ -108,8 +108,11 @@ class SendHostEmail extends Command
 
             foreach ($users as $user) {
                 
-                Mail::to($user->email)->send(new HostMail($hosts_notified));
-                $send = new HostMail($hosts_notified);
+                if ($user->notified) {
+
+                    Mail::to($user->email)->send(new HostMail($hosts_notified));
+                    $send = new HostMail($hosts_notified);
+                }
             }
         }
 
