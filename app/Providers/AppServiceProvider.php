@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use App\Http\Controllers\TopController;
+// use App\Http\Controllers\TopController;
 use Illuminate\Support\Facades\DB;
 
 class AppServiceProvider extends ServiceProvider
@@ -151,13 +151,42 @@ class AppServiceProvider extends ServiceProvider
 
             }
 
+            $test = 2;
+
+            $view->with('total_hosts',$total_hosts)
+            ->with('total_services',$total_services)
+            ->with('total_equipements',$total_equipements)
+            ->with('hosts_up',$hosts_up)
+            ->with('hosts_down',$hosts_down)
+            ->with('hosts_unreachable',$hosts_unreachable)
+            ->with('services_ok',$services_ok)
+            ->with('services_warning',$services_warning)
+            ->with('services_critical',$services_critical)
+            ->with('services_unknown',$services_unknown)
+            ->with('equipements_ok',$equipements_ok)
+            ->with('equipements_warning',$equipements_warning)
+            ->with('equipements_critical',$equipements_critical)
+            ->with('equipements_unknown',$equipements_unknown)
+            ->with('test',$test);
+
+        });
+
+        view()->composer('inc.sidebar', function($view){
+
+            $day_befor = date('Y-m-d H:i:s', strtotime('-1 day'));
+
+            $notifs = DB::table('nagios_notifications')
+                ->where('start_time','>=', $day_befor)
+                ->get();
+
             
+            $i = 0;
 
+            foreach ($notifs as $notif) {
+                $i++;
+            }
 
-            $view->with('total_hosts',$total_hosts)->with('total_services',$total_services)->with('total_equipements',$total_equipements)
-            ->with('hosts_up',$hosts_up)->with('hosts_down',$hosts_down)->with('hosts_unreachable',$hosts_unreachable)
-            ->with('services_ok',$services_ok)->with('services_warning',$services_warning)->with('services_critical',$services_critical)->with('services_unknown',$services_unknown)
-            ->with('equipements_ok',$equipements_ok)->with('equipements_warning',$equipements_warning)->with('equipements_critical',$equipements_critical)->with('equipements_unknown',$equipements_unknown);
+            $view->with('total_notifs', $i);
 
         });
     }

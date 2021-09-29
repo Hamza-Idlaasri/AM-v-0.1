@@ -91,6 +91,7 @@
                                 
                         @endswitch
 
+                        <td>{{ $host->long_output }}</td>
 
                     </tr>
                     @empty
