@@ -105,7 +105,7 @@ class SendServiceEmail extends Command
         {
             $services_notified = (object) $services_notified;
 
-            $users = User::all()->except(1);
+            $users = User::all();
 
             foreach ($users as $user) {
                 

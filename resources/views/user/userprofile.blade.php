@@ -48,6 +48,7 @@
         <div class="float-left mx-4">
             <h5 class="py-2 font-weight-bold" >Username :</h5>
             <h5 class="py-2 font-weight-bold" >Email :</h5>
+            <h5 class="py-2 font-weight-bold" >Phone Number :</h5>
             <h5 class="py-2 font-weight-bold" >User Type :</h5>
             <h5 class="py-2 font-weight-bold" >Notified :</h5>
             <h5 class="py-2 font-weight-bold" >Member Since :</h5>
@@ -56,6 +57,7 @@
         <div class="flot-right mx-4 text-primary">
             <h5 class="py-2" >{{ $userProfile->name }}</h5>
             <h5 class="py-2" >{{ $userProfile->email }}</h5>
+            <h5 class="py-2" >+{{ $userProfile->phone_number }}</h5>
 
             @if ($userProfile->hasRole('agent'))
                 <h5 class="py-2" >Agent</h5>

@@ -7,6 +7,7 @@ use App\Mail\BoxMail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
+use Nexmo\Laravel\Facade\Nexmo;
 
 class SendBoxEmail extends Command
 {
@@ -106,7 +107,7 @@ class SendBoxEmail extends Command
         {
             $boxs_notified = (object) $boxs_notified;
             
-            $users = User::all()->except(1);
+            $users = User::all();
 
             foreach ($users as $user) {
                 
@@ -114,6 +115,58 @@ class SendBoxEmail extends Command
 
                     Mail::to($user->email)->send(new BoxMail($boxs_notified));
                     $send = new BoxMail($boxs_notified);
+
+                    foreach ($boxs_notified as $box) {
+
+                        switch ($box->state) {
+                            case 0:
+                                $box->state = 'Ok';
+                                break;
+                            case 1:
+                                $box->state = 'Down';
+                                break;
+                            case 2:
+                                $box->state = 'Unreachable';
+                                break;
+                        }
+
+                        switch($box->notification_reason)
+                        {
+                            case 0: 
+                                $box->notification_reason = 'Normal notification';  
+                                break; 
+                            case 1: 
+                                $box->notification_reason = 'Problem acknowledgement';
+                                break; 
+                            case 2: 
+                                $box->notification_reason = 'Flapping started';
+                                break; 
+                            case 3: 
+                                $box->notification_reason = 'Flapping stopped'; 
+                                break; 
+                            case 4: 
+                                $box->notification_reason = 'Flapping was disabled';
+                                break; 
+                            case 5: 
+                                $box->notification_reason = 'Downtime started';
+                                break; 
+                            case 6: 
+                                $box->notification_reason = 'Downtime ended';
+                                break; 
+                            case 7: 
+                                $box->notification_reason = 'Downtime was cancelled'; 
+                                break; 
+                            
+                        } 
+
+
+                        Nexmo::message()->send([
+                            'to' => '212659846118',
+                            'from' => '212676268079',
+                            'text' => 'Box name : '.$box->box_name.'Address IP : '.$box->address.'State : '.$box->state.'Date/Time : '.$box->start_time.'Info : '.$box->long_output.'Notif Type : '.$box->notification_reason,
+                        ]);
+                    }
+                    
                 }
             }
 

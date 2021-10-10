@@ -4,6 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use App\Models\User;
+use App\Mail\ServiceMail;
+use App\Mail\BoxMail;
+use App\Mail\HostMail;
+use App\Mail\EquipMail;
+
 
 class TestController extends Controller
 {
@@ -12,64 +19,103 @@ class TestController extends Controller
         $boxs = DB::table('nagios_notifications')
             ->join('nagios_hosts','nagios_hosts.host_object_id','=','nagios_notifications.object_id')
             ->where('nagios_hosts.alias','box')
-            ->select('nagios_hosts.display_name as host_name','nagios_notifications.*')
+            ->select('nagios_hosts.display_name as box_name','nagios_hosts.*','nagios_notifications.*')
             ->orderByDesc('start_time')
-            ->get();
+            ->take(1)->get();
 
         
-        $boxs_notified = [];
+        $hosts = DB::table('nagios_notifications')
+            ->join('nagios_hosts','nagios_hosts.host_object_id','=','nagios_notifications.object_id')
+            ->where('nagios_hosts.alias','host')
+            ->select('nagios_hosts.display_name as host_name','nagios_hosts.*','nagios_notifications.*')
+            ->orderByDesc('start_time')
+            ->take(1)->get();
 
-        foreach ($boxs as $box) {
-        
-            // Get current time
-            date_default_timezone_set('Africa/Casablanca');
-            $current_time = date('y-m-d H:i:s', time());
+        $equips = DB::table('nagios_notifications')
+            ->join('nagios_services','nagios_services.service_object_id','=','nagios_notifications.object_id')
+            ->join('nagios_hosts','nagios_hosts.host_object_id','=','nagios_services.host_object_id')
+            ->where('nagios_hosts.alias','box')
+            ->select('nagios_services.display_name as equip_name','nagios_hosts.display_name as box_name','nagios_notifications.*')
+            ->orderByDesc('start_time')
+            ->take(1)->get();
 
-            // Difference CT and Host start time
-            $diff = abs(strtotime($box->start_time) - strtotime($current_time)); 
+        $services = DB::table('nagios_notifications')
+            ->join('nagios_services','nagios_services.service_object_id','=','nagios_notifications.object_id')
+            ->join('nagios_hosts','nagios_hosts.host_object_id','=','nagios_services.host_object_id')
+            ->where('nagios_hosts.alias','host')
+            ->select('nagios_services.display_name as service_name','nagios_hosts.display_name as host_name','nagios_services.*','nagios_notifications.*')
+            ->orderByDesc('start_time')
+            ->take(1)->get();
 
-            // To get the year divide the resultant date into
-            // total seconds in a year (365*60*60*24)
-            $years = floor($diff / (365*60*60*24)); 
-            
-            
-            // To get the month, subtract it with years and
-            // divide the resultant date into
-            // total seconds in a month (30*60*60*24)
-            $months = floor(($diff - $years * 365*60*60*24) / (30*60*60*24)); 
-            
-            
-            // To get the day, subtract it with years and 
-            // months and divide the resultant date into
-            // total seconds in a days (60*60*24)
-            $days = floor(($diff - $years * 365*60*60*24 - $months*30*60*60*24) / (60*60*24));
-            
-            
-            // To get the hour, subtract it with years, 
-            // months & seconds and divide the resultant
-            // date into total seconds in a hours (60*60)
-            $hours = floor(($diff - $years * 365*60*60*24 - $months*30*60*60*24 - $days*60*60*24) / (60*60)); 
-            
-            
-            // To get the minutes, subtract it with years,
-            // months, seconds and hours and divide the 
-            // resultant date into total seconds i.e. 60
-            $minutes = floor(($diff - $years * 365*60*60*24 - $months*30*60*60*24 - $days*60*60*24 - $hours*60*60)/ 60); 
-            
-            
-            // To get the minutes, subtract it with years,
-            // months, seconds, hours and minutes 
-            $seconds = floor(($diff - $years * 365*60*60*24 - $months*30*60*60*24 - $days*60*60*24 - $hours*60*60 - $minutes*60)); 
+       
+        if(sizeof($hosts))
+        {
+            // $services = (object) $services;
 
-            if ($years == 0 && $months == 0 && $days == 0 && $hours == 0 && $minutes <= 3) {
+            $users = User::all();
+
+            foreach ($users as $user) {
                 
-                array_push($boxs_notified, $box);
+                if ($user->notified) {
+                    
+                    Mail::to($user->email)->send(new HostMail($hosts));
+                    $send = new HostMail($hosts);
+                }
+            }
 
-                dd($boxs_notified);
+        }
+        
+        if(sizeof($services))
+        {
+            $services = (object) $services;
+
+            $users = User::all();
+
+            foreach ($users as $user) {
+                
+                if ($user->notified) {
+                    
+                    Mail::to($user->email)->send(new ServiceMail($services));
+                    $send = new ServiceMail($services);
+                }
             }
 
         }
 
-        dd('NaN');
+        if(sizeof($boxs))
+        {
+            // $boxs = (object) $boxs;
+
+            $users = User::all();
+
+            foreach ($users as $user) {
+                
+                if ($user->notified) {
+                    
+                    Mail::to($user->email)->send(new BoxMail($boxs));
+                    $send = new BoxMail($boxs);
+                }
+            }
+
+        }
+
+        if(sizeof($equips))
+        {
+            // $equip = (object) $equip;
+
+            $users = User::all();
+
+            foreach ($users as $user) {
+                
+                if ($user->notified) {
+                    
+                    Mail::to($user->email)->send(new EquipMail($equips));
+                    $send = new EquipMail($equips);
+                }
+            }
+
+        }
+
+        return 'Email sent';
     }
 }

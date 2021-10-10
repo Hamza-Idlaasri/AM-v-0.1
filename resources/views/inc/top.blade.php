@@ -6,6 +6,7 @@
     
 </div>
 
+<span style="position:relative; top: 35px; left:155px; " class="text-light"><i>Beta</i></span>
 <div id="top_right" class="float-right">
     
     <table>
@@ -47,29 +48,27 @@
 
             <!-- Equipements summary -->
 
-            <td  title="Equipements">
+            <td  title="Boxes">
                 <i class="far fa-microchip fa-lg text-muted"></i>
             </td>
 
-            <td  title="total des equipements : {{ $total_equipements }}">
-                <span class="badge">{{ $total_equipements }}</span>  
+            <td  title="total des boxes : {{ $total_boxs }}">
+                <span class="badge">{{ $total_boxs }}</span>  
             </td>
 
-            <td  title="{{ $equipements_ok }} {{ Str::plural('equipement',$equipements_ok)}} ok">
-                <span class="badge badge-success">{{ $equipements_ok }}</span> 
+            <td  title="{{ $boxs_up }} {{ Str::plural('box',$boxs_up)}} Up">
+                <span class="badge badge-success">{{ $boxs_up }}</span> 
             </td>
 
-            <td  title="{{ $equipements_warning }} {{ Str::plural('equipement',$equipements_warning)}} warning">
-                <span class="badge badge-warning">{{ $equipements_warning }}</span>  
+            <td  title="{{ $boxs_down }} {{ Str::plural('box',$boxs_down)}} Down">
+                <span class="badge badge-danger">{{ $boxs_down }}</span>  
             </td>
 
-            <td  title="{{ $equipements_critical }} {{ Str::plural('equipement',$equipements_critical)}} critical">
-                <span class="badge badge-danger">{{ $equipements_critical }}</span>  
+            <td  title="{{ $boxs_unreachable }} {{ Str::plural('box',$boxs_unreachable)}} Unreachable">
+                <span class="badge badge-unknown">{{ $boxs_unreachable }}</span>  
             </td>
 
-            <td  title="{{ $equipements_unknown }} {{ Str::plural('equipement',$equipements_unknown)}} unknown">
-                <span class="badge badge-unknown">{{ $equipements_unknown }}</span>  
-            </td>
+            <td></td>
         </tr>
 
         <tr>
@@ -107,7 +106,7 @@
                 <span class="badge">{{ $total_services }}</span> 
             </td>
             
-            <td title="{{ $services_ok }} {{ Str::plural('service',$services_ok)}} Ok">
+            <td title="{{ $services_ok }} {{ Str::plural('service',$services_ok)}} ok">
                 <span class="badge badge-success">{{ $services_ok }}</span> 
             </td>
             
@@ -127,17 +126,30 @@
             
             <!-- Pins summary -->
 
-            <td><img src="{{asset('images/interface/pins.png')}}" alt=""></td>
-            <td >
-                <span class="badge">0</span></td>
-            <td >
-                <span class="badge badge-success">0</span></td>
-            <td >
-                <span class="badge badge-warning">0</span></td>
-            <td >
-                <span class="badge badge-danger">0</span></td>
-            <td >
-                <span class="badge badge-unknown">0</span></td>
+            <td  title="Equipements">
+                <img src="{{asset('images/interface/pins.png')}}" alt="">
+            </td>
+
+            <td  title="total des equipements : {{ $total_equipements }}">
+                <span class="badge">{{ $total_equipements }}</span>  
+            </td>
+
+            <td  title="{{ $equipements_ok }} {{ Str::plural('equipement',$equipements_ok)}} ok">
+                <span class="badge badge-success">{{ $equipements_ok }}</span> 
+            </td>
+
+            <td  title="{{ $equipements_warning }} {{ Str::plural('equipement',$equipements_warning)}} warning">
+                <span class="badge badge-warning">{{ $equipements_warning }}</span>  
+            </td>
+
+            <td  title="{{ $equipements_critical }} {{ Str::plural('equipement',$equipements_critical)}} critical">
+                <span class="badge badge-danger">{{ $equipements_critical }}</span>  
+            </td>
+
+            <td  title="{{ $equipements_unknown }} {{ Str::plural('equipement',$equipements_unknown)}} unknown">
+                <span class="badge badge-unknown">{{ $equipements_unknown }}</span>  
+            </td>
+
         </tr>
     </table>
 </div>

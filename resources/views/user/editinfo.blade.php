@@ -45,6 +45,25 @@
     input#rail:hover[type="checkbox"]:before {
         background: rgb(240, 240, 240);
     }
+
+    .unity{
+            background: rgb(238, 238, 238);
+            color: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding:0 1px;
+            border-radius: 5px 0 0 5px;
+            width: 20%;
+            border: 1px solid #ced4da;
+            border-right: 0px;
+        }
+    .p-unity
+    {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+        width: 80%;
+    }
 </style>
 
 <div class="container my-5 w-25 bg-white shadow p-3">
@@ -79,7 +98,21 @@
             @enderror   
         </div>
         
+
+        <div class="form-group">
+            <label for="phone_number" class="font-weight-bold">Phone Number :</label><br>
+            <div class="d-flex">
+                <span class="unity">+212</span>
+                <input type="text" name="phone_number" class="form-control p-unity @error('phone_number') border-danger @enderror" id="phone_number" value="{{ substr($user->phone_number,3) }}" pattern="[0-9]{9}" title="Phone Number must be at least 9 numbers">
+            </div>
+            @error('phone_number')
+                <div class="text-danger">
+                        {{ $message }}
+                </div>
+            @enderror
+        </div>
         
+        <br>
 
         <div class="form-check d-flex justify-content-between p-0">
             

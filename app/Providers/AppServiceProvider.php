@@ -44,6 +44,13 @@ class AppServiceProvider extends ServiceProvider
             $hosts_down = 0;
             $hosts_unreachable = 0;
             
+            // Boxes summary
+
+            $total_boxs = 0;
+            $boxs_up = 0;
+            $boxs_down = 0;
+            $boxs_unreachable = 0;
+            
             foreach ($hosts_summary as $host) {        
 
                 if($host->alias == "host")
@@ -68,6 +75,29 @@ class AppServiceProvider extends ServiceProvider
 
                     $total_hosts++;
                 }
+                
+                if($host->alias == "box")
+                {
+                
+                    switch ($host->current_state) {
+                        case 0:
+                            $boxs_up++;
+                            break;
+                        
+                        case 1:
+                            $boxs_down++;
+                            break;
+                        
+                        case 2:
+                            $boxs_unreachable++;
+                            break;
+                        default:
+                            
+                            break;
+                    }
+
+                    $total_boxs++;
+                }
 
             }
 
@@ -89,7 +119,7 @@ class AppServiceProvider extends ServiceProvider
             
             foreach ($services_summary as $service) {
                 
-                // Servcies :
+                // Services :
 
                 if($service->alias == "host")
                 {
@@ -154,11 +184,15 @@ class AppServiceProvider extends ServiceProvider
             $test = 2;
 
             $view->with('total_hosts',$total_hosts)
+            ->with('total_boxs',$total_boxs)
             ->with('total_services',$total_services)
             ->with('total_equipements',$total_equipements)
             ->with('hosts_up',$hosts_up)
             ->with('hosts_down',$hosts_down)
             ->with('hosts_unreachable',$hosts_unreachable)
+            ->with('boxs_up',$boxs_up)
+            ->with('boxs_down',$boxs_down)
+            ->with('boxs_unreachable',$boxs_unreachable)
             ->with('services_ok',$services_ok)
             ->with('services_warning',$services_warning)
             ->with('services_critical',$services_critical)
@@ -180,7 +214,7 @@ class AppServiceProvider extends ServiceProvider
                 ->get();
 
             
-            $i = 0;
+            $i = 4;
 
             foreach ($notifs as $notif) {
                 $i++;

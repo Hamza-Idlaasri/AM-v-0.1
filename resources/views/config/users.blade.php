@@ -13,9 +13,10 @@
     <table class="table table-bordered">
         <thead class="text-center text-primary">
             <tr>
-                <th>ID</th>
+                {{-- <th>ID</th> --}}
                 <th>Username</th>
                 <th style="padding-left: 0;padding-right:0 ">Email</th>
+                <th>Phone</th>
                 <th>User Type</th>
                 <th style="padding-left: 0;padding-right:0 ">Notified</th>
                 <th>Created At</th>
@@ -31,10 +32,14 @@
             <?php $i++ ?>
             
             <tr>
-                <td>{{ $user->id }}</td>
+                {{-- <td>{{ $user->id }}</td> --}}
+                
                 <td>{{ $user->name }}</td>
+                
                 <td style="padding-left: 0;padding-right:0 ">{{ $user->email }}</td>
-
+                
+                <td>+{{ $user->phone_number }}</td>
+                
                 @if($user->hasRole('agent'))
                     <td>Agent</td>
                 @else

@@ -104,7 +104,7 @@
             <li>
                 <a href="/configuration/notifications"><i class="fas fa-bell"></i> Notifications 
                     @if ($total_notifs)
-                        <span style="font-size: 10px;padding: 5px;" class="badge badge-danger ml-1">{{$total_notifs}}</span>
+                        <span style="font-size: 10px;font-weight: 10;padding: 5px;" class="badge badge-danger ml-1">{{$total_notifs}}</span>
                     @endif
                 </a>
             </li>

@@ -27,6 +27,7 @@ class RegisterController extends Controller
 
             'name' => 'required|min:3|max:15|unique:mysql2.users|regex:/^[a-zA-Z][a-zA-Z0-9-_(). ÀÂÇÉÈÊÎÔÛÙàâçéèêôûù]/',
             'email' => 'required|email|max:100|unique:mysql2.users',
+            'phone_number' => 'required|regex:/[0-9]{9}/',
             'password' => 'required|string|confirmed|min:5|max:12|regex:/^[a-zA-Z0-9-_().@$=%&#+{}*ÀÂÇÉÈÊÎÔÛÙàâçéèêôûù]/|unique:mysql2.users',
 
         ]);
@@ -36,6 +37,8 @@ class RegisterController extends Controller
 
             'name' => $request->name,
             'email' => $request->email,
+            'phone_number' => '212'.$request->phone_number,
+            'notified' => 0,
             'password' => Hash::make($request->password),
 
         ])->attachRole('superviseur');

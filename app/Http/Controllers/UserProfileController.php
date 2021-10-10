@@ -84,7 +84,8 @@ class UserProfileController extends Controller
 
             'username' => 'required|min:3|max:15|regex:/^[a-zA-Z][a-zA-Z0-9-_(). ÀÂÇÉÈÊÎÔÛÙàâçéèêôûù]/',
             'email' => 'required|email|max:100',
-           
+            'phone_number' => 'required|regex:/[0-9]{9}/',
+            
         ]);
 
         // Update user 
@@ -92,7 +93,7 @@ class UserProfileController extends Controller
 
             'name' => $request->username,
             'email' => $request->email,
-
+            'phone_number' => '212'.$request->phone_number,
         ]);
         
         if ($request->notified) {

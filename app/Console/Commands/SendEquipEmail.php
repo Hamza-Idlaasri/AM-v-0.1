@@ -105,7 +105,7 @@ class SendEquipEmail extends Command
         {
             $equips_notified = (object) $equips_notified;
 
-            $users = User::all()->except(1);
+            $users = User::all();
 
             foreach ($users as $user) {
                 
