@@ -187,9 +187,9 @@ class Hosts extends Controller
                 
                 // Parent relationship
                 if($request->input('hosts'))
-                    $define_host = "define host {\n\tuse\t\t\tswitch-server\n\thost_name\t\t".$request->hostName."\n\talias\t\t\thost\n\taddress\t\t\t".$request->addressIP."\n\tparents\t\t\t".$request->input('hosts')."\n}\n\n";
+                    $define_host = "define host {\n\tuse\t\t\tgeneric-switch\n\thost_name\t\t".$request->hostName."\n\talias\t\t\thost\n\taddress\t\t\t".$request->addressIP."\n\tparents\t\t\t".$request->input('hosts')."\n}\n\n";
                 else
-                    $define_host = "define host {\n\tuse\t\t\tswitch-server\n\thost_name\t\t".$request->hostName."\n\talias\t\t\thost\n\taddress\t\t\t".$request->addressIP."\n}\n\n";
+                    $define_host = "define host {\n\tuse\t\t\tgeneric-switch\n\thost_name\t\t".$request->hostName."\n\talias\t\t\thost\n\taddress\t\t\t".$request->addressIP."\n}\n\n";
                 
                 // Hosts : 
                 file_put_contents($path."/".$request->hostName.".cfg", $define_host);
