@@ -8,6 +8,11 @@ use Illuminate\Support\Facades\DB;
 
 class AddService extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['agent']);
+    }
+    
     public function manage()
     {
         $hosts = DB::table('nagios_hosts')

@@ -8,6 +8,11 @@ use Illuminate\Support\Facades\DB;
 
 class Hosts extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['agent']);
+    }
+    
     public function index()
     {
         $search = request()->query('search');

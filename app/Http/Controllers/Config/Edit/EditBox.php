@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\DB;
 
 class EditBox extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['agent']);
+    }
+    
     public function index($box_id)
     {
         $box = DB::table('nagios_hosts')

@@ -8,6 +8,11 @@ use Illuminate\Support\Facades\DB;
 
 class AddEquip extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['agent']);
+    }
+    
     public function index()
     {
         $boxs = DB::table('nagios_hosts')

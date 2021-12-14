@@ -16,13 +16,13 @@ class RolesTableSeeder extends Seeder
 
     public function run()
     {
-        $agent = Role::connection('mysql2')->create([
+        $agent = Role::create([
             'name' => 'agent',
             'display_name' => 'agent',
             'description' => 'it s an admin',
         ]);
         
-        $superviseur = Role::connection('mysql2')->create([
+        $superviseur = Role::create([
             'name' => 'superviseur',
             'display_name' => 'superviseur',
             'description' => 'just can see',

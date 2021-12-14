@@ -8,6 +8,11 @@ use Illuminate\Support\Facades\DB;
 
 class EditHost extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['agent']);
+    }
+    
     public function index($host_id)
     {
         $host = DB::table('nagios_hosts')

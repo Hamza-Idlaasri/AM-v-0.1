@@ -8,6 +8,11 @@ use Illuminate\Support\Facades\DB;
 
 class EditService extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['agent']);
+    }
+    
     public function index($service_id)
     {
         $service = DB::table('nagios_services')

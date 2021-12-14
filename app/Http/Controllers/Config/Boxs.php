@@ -8,6 +8,11 @@ use Illuminate\Support\Facades\DB;
 
 class Boxs extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['agent']);
+    }
+    
     public function index()
     {
         $search = request()->query('search');

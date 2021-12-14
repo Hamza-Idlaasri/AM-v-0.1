@@ -8,6 +8,11 @@ use Illuminate\Support\Facades\DB;
 
 class EditEquip extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['agent']);
+    }
+    
     public function index($equip_id)
     {
         $equip = DB::table('nagios_services')

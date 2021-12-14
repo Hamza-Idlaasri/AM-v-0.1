@@ -11,6 +11,9 @@ class DatabaseSeeder extends Seeder
      *
      * @return void
      */
+
+    protected $connection = 'mysql2';
+    
     public function run()
     {
         $this->call(RolesTableSeeder::class);

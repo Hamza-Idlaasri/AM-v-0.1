@@ -8,6 +8,11 @@ use Illuminate\Support\Facades\DB;
 
 class Notifications extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['agent']);
+    }
+    
     public function index()
     {
         $hosts = DB::table('nagios_notifications')

@@ -13,11 +13,11 @@ class UsersTableSeeder extends Seeder
      *
      * @return void
      */
-    // protected $connection = 'mysql2';
+    protected $connection = 'mysql2';
 
     public function run()
     {
-        $agent = User::connection('mysql2')->create([
+        $agent = User::create([
             'name' => 'agent',
             'email' => 'agent@gmail.com',
             'password' => Hash::make('agent'),
