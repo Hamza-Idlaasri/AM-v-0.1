@@ -135,7 +135,7 @@ class EditHost extends Controller
 
         shell_exec('sudo service nagios restart');
 
-        return back();
+        return redirect()->route('configHosts');
 
     }
 
@@ -184,7 +184,7 @@ class EditHost extends Controller
 
         shell_exec('sudo service nagios restart');
 
-        return back();
+        return redirect()->route('configHosts');
     }
 
 }

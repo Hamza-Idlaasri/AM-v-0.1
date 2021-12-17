@@ -129,7 +129,7 @@ class EditBox extends Controller
 
         shell_exec('sudo service nagios restart');
 
-        return redirect()->route('monitoring.boxs');
+        return redirect()->route('configBoxs');
     }
 
     public function deleteBox($box_id)
@@ -177,6 +177,7 @@ class EditBox extends Controller
 
         shell_exec('sudo service nagios restart');
 
-        return redirect()->route('monitoring.boxs');
+        return redirect()->route('configBoxs');
+
     }
 }

@@ -100,7 +100,7 @@ class EditEquip extends Controller
 
         shell_exec('sudo service nagios restart');
 
-        return back();
+        return redirect()->route('configEquips');
     }
 
     public function deleteEquip($equip_id)
@@ -127,6 +127,6 @@ class EditEquip extends Controller
         
         shell_exec('sudo service nagios restart');
 
-        return back();
+        return redirect()->route('configEquips');
     }
 }

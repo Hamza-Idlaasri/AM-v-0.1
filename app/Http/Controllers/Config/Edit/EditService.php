@@ -93,7 +93,8 @@ class EditService extends Controller
 
         shell_exec('sudo service nagios restart');
 
-        return back();
+        return redirect()->route('configServices');
+        
     }
 
     public function deleteService($service_id)
@@ -120,6 +121,7 @@ class EditService extends Controller
         
         shell_exec('sudo service nagios restart');
         
-        return back();
+        return redirect()->route('configServices');
+        
     }
 }
