@@ -53,7 +53,6 @@ label:hover{
                         <input type="radio" name="service" value="{{ $windows[$i] }}" id="{{ $windows[$i] }}" onclick="removeAll()"> <label for="{{ $windows[$i] }}">{{ $windows[$i] }}</label>
                         <br>
                     @endfor
-                        <input type="radio" name="service" value="Uptime(windows)" id="Uptime(windows)" onclick="removeAll()"> <label for="Uptime(windows)">Uptime</label>
                     
                 </div>
             </div>

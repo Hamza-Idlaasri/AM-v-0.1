@@ -43,14 +43,18 @@
                     </div>
                 @enderror
                 <br>
-                {{-- Number of ports --}}
-                <label for="pNbr"><b>Ports Number <span class="text-danger font-weight-bolder">*</span></b></label>
-                <input  type="number" min="1" max="50" name="portsNbr" class="iNbr1 form-control w-75 @error('portsNbr') border-danger @enderror" id="pNbr" value="1">
-                @error('portsNbr')
-                    <div class="text-danger">
-                        {{ $message }}
-                    </div>
-                @enderror
+                @if ($type != 'printer')
+                    
+                  {{-- Number of ports --}}
+                  <label for="pNbr"><b>Ports Number <span class="text-danger font-weight-bolder">*</span></b></label>
+                  <input  type="number" min="1" max="50" name="portsNbr" class="iNbr1 form-control w-75 @error('portsNbr') border-danger @enderror" id="pNbr" value="1">
+                  @error('portsNbr')
+                  <div class="text-danger">
+                    {{ $message }}
+                  </div>
+                  @enderror
+                  
+                @endif
               @endif
             </div>
           </div>

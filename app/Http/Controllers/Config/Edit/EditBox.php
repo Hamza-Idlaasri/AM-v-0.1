@@ -42,7 +42,8 @@ class EditBox extends Controller
         // validation
         $this->validate($request,[
 
-            'boxName' => 'required|min:2|max:20|unique:nagios_hosts,display_name|regex:/^[a-zA-Z0-9-_+ ]/',
+            // 'boxName' => 'required|min:2|max:20|unique:nagios_hosts,display_name|regex:/^[a-zA-Z0-9-_+ ]/',
+            'boxName' => 'required|min:2|max:20|regex:/^[a-zA-Z0-9-_+ ]/',
             'addressIP' => 'required|min:7|max:15',
             'normal_interval' => 'required|min:1|max:100',
             'retry_interval' => 'required|min:1|max:100',

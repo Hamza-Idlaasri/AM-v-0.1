@@ -143,14 +143,14 @@ class HostsController extends Controller
         $name = request()->query('name');
         $dateFrom = request()->query('from');
         $dateTo = request()->query('to');
-
-        $all_hosts_names = $this->getHostsName()->get();
-
+        
         $last_24_h = date('Y-m-d', strtotime('-1 day'));
         $last_week = date('Y-m-d', strtotime('-1 week'));
         $last_month = date('Y-m-d', strtotime('-1 month'));
         $last_year = date('Y-m-d', strtotime('-1 year'));
-
+        
+        $all_hosts_names = $this->getHostsName()->get();
+        
         $hosts_up = 0;
         $hosts_down = 0;
         $hosts_unreachable = 0;

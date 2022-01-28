@@ -26,8 +26,9 @@ class EditEquip extends Controller
     {
         // validation
         $this->validate($request,[
-         
-            'equipName' => 'required|min:2|max:20|unique:nagios_services,display_name|regex:/^[a-zA-Z0-9-_+ ]/',
+            
+            // 'equipName' => 'required|min:2|max:20|unique:nagios_services,display_name|regex:/^[a-zA-Z0-9-_+ ]/',
+            'equipName' => 'required|min:2|max:20|regex:/^[a-zA-Z0-9-_+ ]/',
             'check_interval' => 'required|min:1|max:100',
             'retry_interval' => 'required|min:1|max:100',
             'max_attempts' => 'required|min:1|max:100',

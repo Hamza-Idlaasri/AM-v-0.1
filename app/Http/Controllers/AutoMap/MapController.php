@@ -26,7 +26,6 @@ class MapController extends Controller
 
         return view('cartes.automap')->with('hosts', $hosts)->with('parent_hosts', $parent_hosts);
 
-        // return dd($parent_hosts);
     }
 
     public function carte()
